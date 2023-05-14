@@ -1,3 +1,7 @@
+
+#ifndef MainWindowUI_H
+#define MainWindowUI_H
+
 #include <qobject.h>
 
 class MainAppWindow;
@@ -11,3 +15,4 @@ private:
     void createCentralWidget();
     MainAppWindow* d_mainWindow;
 };
+#endif

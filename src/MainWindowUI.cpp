@@ -22,4 +22,5 @@ void MainWindowUI::createCentralWidget()
 
     //centralLayout->addWidget(GetApplyStyleButton(),		0, 0);
     //centralLayout->addWidget(GetMainTabWidget(), 1, 0);
+  
 }
