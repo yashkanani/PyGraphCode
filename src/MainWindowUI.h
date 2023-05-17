@@ -12,7 +12,11 @@ public:
     ~MainWindowUI();
 
 private:
-    void createCentralWidget();
+    void addCentralWidget();
+    void addMenuBar();
+    void addToolBar();
+    void addDockWigets();
+
     MainAppWindow* d_mainWindow;
 };
 #endif
