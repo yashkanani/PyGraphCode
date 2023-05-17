@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+		<file>qml/CustomToolBarItem.qml</file>
+         <!-- <file alias="Squidstat_Cycler_Firmware.hex">../../../firmware/firmware_for_cycler/hex_files/Squidstat_Cycler_Firmware.hex</file> -->
+    </qresource>
+</RCC>
