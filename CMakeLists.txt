@@ -20,13 +20,14 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt5 COMPONENTS Core Concurrent Widgets Quick Gui OpenGL Test Network REQUIRED)
+find_package(Qt5 COMPONENTS Core Concurrent Widgets Quick Gui OpenGL Test Network QuickWidgets REQUIRED)
 #enable_testing()
 
 # Add resource files
 set(RESOURCES 
    ${CMAKE_CURRENT_SOURCE_DIR}/src/resources.qrc
    ${CMAKE_CURRENT_SOURCE_DIR}/src/qml/CustomToolBarItem.qml
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/qml/SerachBar.qml
   
 )
 
@@ -43,6 +44,6 @@ set(SOURCES
 
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} ${RESOURCES})
-target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui Qt5::Widgets Qt5::OpenGL Qt5::Concurrent Qt5::Network Qt5::Quick)
+target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui Qt5::Widgets Qt5::OpenGL Qt5::Concurrent Qt5::Network Qt5::Quick Qt5::QuickWidgets)
 
 

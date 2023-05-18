@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/">
+		<file>qml/SerachBar.qml</file>
 		<file>qml/CustomToolBarItem.qml</file>
+		<file>resource/search.png</file>
          <!-- <file alias="Squidstat_Cycler_Firmware.hex">../../../firmware/firmware_for_cycler/hex_files/Squidstat_Cycler_Firmware.hex</file> -->
     </qresource>
 </RCC>
