@@ -28,18 +28,28 @@ set(RESOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/src/resources.qrc
    ${CMAKE_CURRENT_SOURCE_DIR}/src/qml/CustomToolBarItem.qml
    ${CMAKE_CURRENT_SOURCE_DIR}/src/qml/SerachBar.qml
-  
 )
 
 
 set(HEADERS	
       ${CMAKE_CURRENT_SOURCE_DIR}/src/MainWindow.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/MainWindowUI.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/AbstractElement.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ConditionalElement.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ForLoopElement.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/IfLoopElement.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/VariableElement.h
    )
+
 set(SOURCES
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/src/MainWindow.cpp
-	  ${CMAKE_CURRENT_SOURCE_DIR}/src/MainWindowUI.cpp	
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/MainWindowUI.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/AbstractElement.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ConditionalElement.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ForLoopElement.cpp	
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/IfLoopElement.cpp	
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/VariableElement.cpp
     )
 
 
