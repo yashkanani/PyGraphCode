@@ -1,7 +1,9 @@
 #include "MainWindowUI.h"
 #include "MainWindow.h"
 
-
+#include "ElementManager.h"
+#include "ElementDragEventHandler.h"
+#include "BuilderContainer.h"
 
 #include <iostream>
 #include <qgridlayout.h>
@@ -13,6 +15,8 @@
 #include <qlineedit.h>
 #include <qcombobox.h>
 #include <qscrollarea.h>
+#include <qmimedata.h>
+#include <qdrag.h>
 
 MainWindowUI::MainWindowUI(MainAppWindow* main)
     : d_mainWindow(main)
@@ -32,6 +36,9 @@ void MainWindowUI::createCentralWidget()
     //centralLayout->addWidget(GetApplyStyleButton(),		0, 0);
     //centralLayout->addWidget(GetMainTabWidget(), 1, 0);
     centralLayout->addWidget(getElementsWidget(centralWidget), 1, 0);
+    centralLayout->addWidget(new BuilderContainer(centralWidget), 1, 1);
+
+    centralLayout->setColumnStretch(1, 1);
 }
 
 
@@ -68,14 +75,21 @@ QWidget* MainWindowUI::getElementsWidget(QWidget* parent)
     searchBarlayout->addWidget(searchLineEdit);
     searchBarlayout->addWidget(searchClearButton);
 
+    // Set the layout as the main layout for the search bar widget
+    searchBarWidget->setLayout(searchBarlayout);
+
      // Create the filter combo box
     QComboBox* filterComboBox = new QComboBox(searchBarWidget);
     filterComboBox->addItem("Filter 1");
     filterComboBox->addItem("Filter 2");
     filterComboBox->addItem("Filter 3");
 
+    
     QWidget* elementsListHolder = new QWidget(searchBarWidget);
     QGridLayout* elementsListLayout = new QGridLayout(elementsListHolder);
+    elementsListLayout->setContentsMargins(10, 10, 10, 10);
+    elementsListLayout->setSpacing(10);
+
 
     QScrollArea* elementsListArea = new QScrollArea(searchBarWidget);
     elementsListArea->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
@@ -84,18 +98,44 @@ QWidget* MainWindowUI::getElementsWidget(QWidget* parent)
 
 
 
+     // Get all elements from the ElementManager
+    ElementManager& elementManager = ElementManager::getInstance();
+    std::vector<AbstractElement*> allElements = elementManager.getAllElements();
+
+    // Iterate through all elements and create draggable icons in the grid layout
+    int columnCount = 0;
+    int rowCount = 0;
+    for (AbstractElement* element : allElements) {
+        
+        QLabel* elementIconLabel = new QLabel(searchBarWidget);
+        
+        elementIconLabel->setAlignment(Qt::AlignCenter);
+        elementIconLabel->setStyleSheet("QLabel:hover { background-color: lightgray; }");
+        elementIconLabel->setProperty("element", QVariant::fromValue(static_cast<AbstractElement*>(element)));
+        elementIconLabel->setCursor(Qt::OpenHandCursor);
+        elementIconLabel->setAlignment(Qt::AlignCenter);
+        elementIconLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        elementIconLabel->installEventFilter(new ElementDragEventHandler(elementIconLabel)); // Install event filter
+        elementIconLabel->setPixmap(element->getImage().scaled(50, 50));
+       
+        // Add the element icon label to the grid layout at the appropriate position
+        elementsListLayout->addWidget(elementIconLabel, rowCount, columnCount);
+
+        // Increment the column count and move to the next row if necessary
+        columnCount++;
+        if (columnCount >= 3) {
+            columnCount = 0;
+            rowCount++;
+        }
+    }
+   
+    elementsListLayout->setRowStretch(elementsListLayout->rowCount(), 1);
+
+    
     elementLayout->addWidget(searchBarWidget);
     elementLayout->addWidget(filterComboBox);
     elementLayout->addWidget(elementsListArea);
-   
 
-
-
-    elementsListLayout->setRowStretch(0, 1);
-    // Set the layout as the main layout for the search bar widget
-    searchBarWidget->setLayout(searchBarlayout);
-    
-    
 
     return elementHolder;
 }
@@ -106,3 +146,4 @@ void MainWindowUI::onSearchTextChanged(const QString& searchText)
     // Handle the signal here
     // You can perform any required actions based on the searchText received from QML
 }
+

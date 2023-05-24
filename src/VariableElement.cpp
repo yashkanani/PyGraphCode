@@ -3,6 +3,7 @@
 VariableElement::VariableElement()
 {
     name = "Variable";
+    image = QPixmap(":/resource/Variable.png");
 }
 
 QString VariableElement::getName() const
@@ -10,7 +11,7 @@ QString VariableElement::getName() const
     return name;
 }
 
-QImage VariableElement::getImage() const
+QPixmap VariableElement::getImage() const
 {
     return image;
 }

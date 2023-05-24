@@ -8,11 +8,11 @@ public:
     IfLoopElement();
 
     QString getName() const override;
-    QImage getImage() const override;
+    QPixmap getImage() const override;
 
 private:
     QString name;
-    QImage image;
+    QPixmap image;
 };
 
 #endif // IF_LOOP_ELEMENT_H

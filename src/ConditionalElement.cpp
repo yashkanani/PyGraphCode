@@ -3,6 +3,7 @@
 ConditionalElement::ConditionalElement()
 {
     name = "Condition";
+    image = QPixmap(":/resource/Conditional.png");
 }
 
 QString ConditionalElement::getName() const
@@ -10,7 +11,7 @@ QString ConditionalElement::getName() const
     return name;
 }
 
-QImage ConditionalElement::getImage() const
+QPixmap ConditionalElement::getImage() const
 {
     return image;
 }
