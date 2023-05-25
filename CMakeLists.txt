@@ -42,6 +42,7 @@ set(HEADERS
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementManager.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementDragEventHandler.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderContainer.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ContainerInformation.h
    )
 
 set(SOURCES
