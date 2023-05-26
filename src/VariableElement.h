@@ -9,6 +9,7 @@ public:
 
     QString getName() const override;
     QPixmap getImage() const override;
+    QString getText() const override;
 
 private:
     QString name;

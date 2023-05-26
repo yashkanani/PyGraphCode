@@ -11,6 +11,7 @@ public:
 
     virtual QString getName() const = 0;
     virtual QPixmap getImage() const = 0;
+    virtual QString getText() const = 0;
 };
 Q_DECLARE_METATYPE(AbstractElement*);
 #endif // ABSTRACT_ELEMENT_H

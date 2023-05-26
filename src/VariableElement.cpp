@@ -15,3 +15,8 @@ QPixmap VariableElement::getImage() const
 {
     return image;
 }
+
+QString VariableElement::getText() const
+{
+    return "Variable Element: " + name;
+}

@@ -1,18 +1,20 @@
 #ifndef CONTAINER_INFORMATION_H
 #define CONTAINER_INFORMATION_H
 
-#include "AbstractElement.h"
 #include <QList>
+
+class AbstractElement;
+class BuilderContainer;
 
 enum class ElementType {
     ELEMENT,
-    PARENT
+    CONTAINERS
 };
 
 typedef struct ContainerInformation {
-    ElementType type = ElementType::PARENT;
+    ElementType type = ElementType::CONTAINERS;
     AbstractElement* elementPointer;
-    QList<ContainerInformation> children;
+    QList<BuilderContainer*> children;
 } ContainerInformation;
 
 #endif // CONTAINER_INFORMATION_H

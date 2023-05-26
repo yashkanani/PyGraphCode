@@ -1,4 +1,5 @@
 #include "ForLoopElement.h"
+#include <qpainter.h>
 
 ForLoopElement::ForLoopElement()
 {
@@ -14,4 +15,9 @@ QString ForLoopElement::getName() const
 QPixmap ForLoopElement::getImage() const
 {
     return image;
+}
+
+QString ForLoopElement::getText() const
+{
+    return "For Loop Element: " + name;
 }

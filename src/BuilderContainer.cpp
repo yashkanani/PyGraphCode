@@ -17,6 +17,34 @@ BuilderContainer::BuilderContainer(QWidget* parent) : QWidget(parent) {
     layout->addWidget(new QPushButton("hello"));
 }
 
+QString BuilderContainer::getText() const
+{
+    return getText(containerInformation);
+}
+
+QString BuilderContainer::getText(const ContainerInformation& containerInfo) const
+{
+    QString result;
+    switch (containerInfo.type) {
+    
+    case ElementType::ELEMENT:
+        // Call the getText() method of the AbstractElement
+        if (containerInfo.elementPointer)
+            result = containerInfo.elementPointer->getText();
+        break;
+    
+    case ElementType::CONTAINERS:
+        // Call the getText() method recursively for each child container
+        for (BuilderContainer* childContainer : containerInfo.children)
+            result += childContainer->getText(childContainer->containerInformation);
+        break;
+    default:
+        break;
+    }
+    return result;
+}
+
+
 void BuilderContainer::dragEnterEvent(QDragEnterEvent* event) {
     if (event->mimeData()->hasFormat("application/element")) {
         event->acceptProposedAction();
@@ -46,23 +74,12 @@ void BuilderContainer::dropEvent(QDropEvent* event) {
 }
 
 AbstractElement* BuilderContainer::createInstance(const QString& elementType) {
-    // Create and return an instance of the appropriate element based on elementType
-    // You can implement this logic based on your requirements
-    // For example:
-    // if (elementType == "VariableElement") {
-    //     return new VariableElement();
-    // }
-    // else if (elementType == "ConditionalElement") {
-    //     return new ConditionalElement();
-    // }
-    // ...
-
+    
     return nullptr;
 }
 
 bool BuilderContainer::isDropAccepted(const AbstractElement* element) const {
-    // Implement your logic to determine if the drop is accepted for the given element
-    // You can check the element type or any other criteria specific to your application
+   
 
     return true; // Return true if the drop is accepted, false otherwise
 }

@@ -15,3 +15,8 @@ QPixmap ConditionalElement::getImage() const
 {
     return image;
 }
+
+QString ConditionalElement::getText() const
+{
+    return "Conditional Element: " + name;
+}

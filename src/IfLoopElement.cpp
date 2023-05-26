@@ -15,3 +15,8 @@ QPixmap IfLoopElement::getImage() const
 {
     return image;
 }
+
+QString IfLoopElement::getText() const
+{
+    return "If Loop Element: " + name;
+}
