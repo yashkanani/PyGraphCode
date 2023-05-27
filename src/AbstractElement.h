@@ -4,14 +4,18 @@
 #include <QPixmap>
 #include <QString>
 #include <qmetatype.h>
+#include <qobject.h>
 
-class AbstractElement {
+
+class AbstractElement : public QObject {
+    Q_OBJECT
 public:
     virtual ~AbstractElement() { } // Virtual destructor
 
     virtual QString getName() const = 0;
     virtual QPixmap getImage() const = 0;
     virtual QString getText() const = 0;
+    virtual QWidget* getViewWidget();
 };
 Q_DECLARE_METATYPE(AbstractElement*);
 #endif // ABSTRACT_ELEMENT_H

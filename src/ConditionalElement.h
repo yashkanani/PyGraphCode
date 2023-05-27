@@ -10,6 +10,7 @@ public:
     QString getName() const override;
     QPixmap getImage() const override;
     QString getText() const override;
+    QWidget* getViewWidget() override;
 
 private:
     QString name;

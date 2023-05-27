@@ -14,6 +14,7 @@ public:
     static ElementManager& getInstance();
 
     std::vector<AbstractElement*> getAllElements();
+    AbstractElement* findElementByName(const QString& name);
 
 private:
     ElementManager();
@@ -23,7 +24,7 @@ private:
 
     void createElements();
 
-    std::vector<std::unique_ptr<AbstractElement>> elements;
+    std::vector<std::shared_ptr<AbstractElement>> elements;
 };
 
 #endif  // ELEMENT_MANAGER_H

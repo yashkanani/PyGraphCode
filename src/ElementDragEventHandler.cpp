@@ -21,8 +21,14 @@ bool ElementDragEventHandler::eventFilter(QObject* watched, QEvent* event)
             // Create a drag object
             QDrag* drag = new QDrag(label);
             QMimeData* mimeData = new QMimeData;
-            mimeData->setData("application/element", element->getName().toLatin1());
+            QByteArray data;
+
+            QDataStream stream(&data, QIODevice::WriteOnly);
+            stream << element->getName();
+
+            mimeData->setData("application/element", data);
             drag->setMimeData(mimeData);
+
 
             // Set the drag pixmap
             QPixmap pixmap = element->getImage().scaled(90, 90); // Adjust the size as needed

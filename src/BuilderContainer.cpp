@@ -6,15 +6,16 @@
 #include <qpushbutton.h>
 
 #include "BuilderContainer.h"
+#include "ElementManager.h"
 
 BuilderContainer::BuilderContainer(QWidget* parent) : QWidget(parent) {
     
     setAcceptDrops(true);
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
 
-    layout->addWidget(new QPushButton("hello"));
+    
 }
 
 QString BuilderContainer::getText() const
@@ -58,14 +59,21 @@ void BuilderContainer::dragMoveEvent(QDragMoveEvent* event) {
 }
 
 void BuilderContainer::dropEvent(QDropEvent* event) {
-    if (event->mimeData()->hasFormat("application/element")) {
-        QByteArray data = event->mimeData()->data("application/element");
+    const QMimeData* mimeData = event->mimeData();
+    if (mimeData->hasFormat("application/element")) {
+        
+        QByteArray data = mimeData->data("application/element");
+        if (data.isEmpty()) {
+            return; 
+        }
+
         QDataStream stream(&data, QIODevice::ReadOnly);
 
-        QString elementType;
-        stream >> elementType;
+        QString elementName;
+        stream >> elementName;
 
-        AbstractElement* element = createInstance(elementType);
+        AbstractElement* element = createInstance(elementName);
+       
         if (element && isDropAccepted(element)) {
             addElement(element);
             event->acceptProposedAction();
@@ -73,9 +81,9 @@ void BuilderContainer::dropEvent(QDropEvent* event) {
     }
 }
 
-AbstractElement* BuilderContainer::createInstance(const QString& elementType) {
-    
-    return nullptr;
+AbstractElement* BuilderContainer::createInstance(const QString& elementName) {
+    AbstractElement* elementPointer = ElementManager::getInstance().findElementByName(elementName);
+    return elementPointer;
 }
 
 bool BuilderContainer::isDropAccepted(const AbstractElement* element) const {
@@ -84,7 +92,7 @@ bool BuilderContainer::isDropAccepted(const AbstractElement* element) const {
     return true; // Return true if the drop is accepted, false otherwise
 }
 
-void BuilderContainer::addElement(AbstractElement* element) {
+void BuilderContainer::addElement( AbstractElement* element) {
     // Add the element to the container
     // You can customize the layout and visual representation based on your requirements
 
@@ -99,4 +107,10 @@ void BuilderContainer::addElement(AbstractElement* element) {
 
         elementLayout->addWidget(element);
     }*/
+    auto dd = element->getName();
+    auto wdg = element->getViewWidget();
+    if (wdg) {
+        layout->addWidget(wdg);
+    }
+  
 }
