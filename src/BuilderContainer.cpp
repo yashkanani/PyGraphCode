@@ -11,10 +11,11 @@
 BuilderContainer::BuilderContainer(QWidget* parent) : QWidget(parent) {
     
     setAcceptDrops(true);
-    layout = new QVBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
-    setLayout(layout);
-
+    builderContainerlayout = new QVBoxLayout(this);
+    builderContainerlayout->setContentsMargins(0, 0, 0, 0);
+    builderContainerlayout->addStretch(1);
+    setLayout(builderContainerlayout);
+    
     
 }
 
@@ -34,11 +35,11 @@ QString BuilderContainer::getText(const ContainerInformation& containerInfo) con
             result = containerInfo.elementPointer->getText();
         break;
     
-    case ElementType::CONTAINERS:
-        // Call the getText() method recursively for each child container
-        for (BuilderContainer* childContainer : containerInfo.children)
-            result += childContainer->getText(childContainer->containerInformation);
-        break;
+    //case ElementType::CONTAINERS:
+    //    // Call the getText() method recursively for each child container
+    //    for (BuilderContainer* childContainer : containerInfo.children)
+    //        result += childContainer->getText(childContainer->containerInformation);
+    //    break;
     default:
         break;
     }
@@ -76,6 +77,11 @@ void BuilderContainer::dropEvent(QDropEvent* event) {
        
         if (element && isDropAccepted(element)) {
             addElement(element);
+            ContainerInformation info;
+            info.type = ElementType::ELEMENT;
+            info.elementPointer = element;
+            
+            this->containerInformation.children << info;
             event->acceptProposedAction();
         }
     }
@@ -107,10 +113,19 @@ void BuilderContainer::addElement( AbstractElement* element) {
 
         elementLayout->addWidget(element);
     }*/
-    auto dd = element->getName();
-    auto wdg = element->getViewWidget();
-    if (wdg) {
-        layout->addWidget(wdg);
+
+    // Remove existing addStretch
+    QLayoutItem* stretchItem = builderContainerlayout->itemAt(builderContainerlayout->count() - 1);
+    if (stretchItem != nullptr && static_cast<QSpacerItem*>(stretchItem) != nullptr) {
+        builderContainerlayout->removeItem(stretchItem);
     }
-  
+
+    // set element horizonatally in center. 
+    QWidget* elementView = element->getViewWidget();
+    if (elementView) {
+        // set element View at second last in container layout because last element is stretch to 1.
+        builderContainerlayout->insertWidget(builderContainerlayout->count(), elementView, 0, Qt::AlignTop | Qt::AlignHCenter);
+    }
+
+    builderContainerlayout->addItem(stretchItem);
 }

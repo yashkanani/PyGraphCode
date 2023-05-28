@@ -25,11 +25,12 @@ private:
     ContainerInformation containerInformation;
 
     QString getText(const ContainerInformation& containerInfo) const;
+    
     AbstractElement* createInstance(const QString& elementType);
     bool isDropAccepted(const AbstractElement* element) const;
     void addElement( AbstractElement* element);
 
-    QVBoxLayout* layout;
+    QVBoxLayout* builderContainerlayout;
 };
 
 #endif // BUILDERCONTAINER_H

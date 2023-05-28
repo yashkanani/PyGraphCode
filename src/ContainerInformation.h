@@ -14,7 +14,7 @@ enum class ElementType {
 typedef struct ContainerInformation {
     ElementType type = ElementType::CONTAINERS;
     AbstractElement* elementPointer;
-    QList<BuilderContainer*> children;
+    QList<ContainerInformation> children;
 } ContainerInformation;
 
 #endif // CONTAINER_INFORMATION_H
