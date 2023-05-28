@@ -16,7 +16,7 @@ BuilderContainer::BuilderContainer(QWidget* parent) : QWidget(parent) {
     builderContainerlayout->addStretch(1);
     setLayout(builderContainerlayout);
     
-    
+    containerInformation.type = ElementType::PARENT;
 }
 
 QString BuilderContainer::getText() const
@@ -34,12 +34,18 @@ QString BuilderContainer::getText(const ContainerInformation& containerInfo) con
         if (containerInfo.elementPointer)
             result = containerInfo.elementPointer->getText();
         break;
+
+    case ElementType::CONTAINER:
+        // Call the getText() method of the BuilderContainer
+        if (containerInfo.containerPointer)
+            result = containerInfo.containerPointer->getText();
+        break;
     
-    //case ElementType::CONTAINERS:
-    //    // Call the getText() method recursively for each child container
-    //    for (BuilderContainer* childContainer : containerInfo.children)
-    //        result += childContainer->getText(childContainer->containerInformation);
-    //    break;
+    case ElementType::PARENT:
+        // Call the getText() method recursively for each child container
+        for (auto& childContainerInfo : containerInfo.children)
+            result += getText(childContainerInfo);
+        break;
     default:
         break;
     }
@@ -81,7 +87,7 @@ void BuilderContainer::dropEvent(QDropEvent* event) {
             info.type = ElementType::ELEMENT;
             info.elementPointer = element;
             
-            this->containerInformation.children << info;
+            containerInformation.children << info;
             event->acceptProposedAction();
         }
     }

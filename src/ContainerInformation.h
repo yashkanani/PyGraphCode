@@ -8,12 +8,14 @@ class BuilderContainer;
 
 enum class ElementType {
     ELEMENT,
-    CONTAINERS
+    CONTAINER,
+    PARENT
 };
 
 typedef struct ContainerInformation {
-    ElementType type = ElementType::CONTAINERS;
+    ElementType type = ElementType::PARENT;
     AbstractElement* elementPointer;
+    BuilderContainer* containerPointer;
     QList<ContainerInformation> children;
 } ContainerInformation;
 
