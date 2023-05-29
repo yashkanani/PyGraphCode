@@ -4,6 +4,7 @@
 #include <QDropEvent>
 #include <QMimeData>
 #include <qpushbutton.h>
+#include <qpainter.h>
 
 #include "BuilderContainer.h"
 #include "ElementManager.h"
@@ -59,43 +60,111 @@ void BuilderContainer::dragEnterEvent(QDragEnterEvent* event) {
     }
 }
 
-QWidget* BuilderContainer::getDropIndicatorWidget()
-{
-    static QWidget* dropIndicatorWidget = nullptr;
-    if (!dropIndicatorWidget) {
-        dropIndicatorWidget = new QWidget(this);
-        dropIndicatorWidget->setStyleSheet("background-color: black;");
-        dropIndicatorWidget->hide();
-    }
-    return dropIndicatorWidget;
-}
+//QWidget* BuilderContainer::getDropIndicatorWidget()
+//{
+//    static QWidget* dropIndicatorWidget = nullptr;
+//    if (!dropIndicatorWidget) {
+//        dropIndicatorWidget = new QWidget(this);
+//        dropIndicatorWidget->setStyleSheet("background-color: black;");
+//        dropIndicatorWidget->hide();
+//    }
+//    return dropIndicatorWidget;
+//}
+
+//void BuilderContainer::dragLeaveEvent(QDragLeaveEvent* event)
+//{
+//    QWidget* dropIndicatorWidget = getDropIndicatorWidget();
+//    if (dropIndicatorWidget) {
+//        dropIndicatorWidget->hide();
+//    }
+//    event->accept();
+//}
 
 void BuilderContainer::dragLeaveEvent(QDragLeaveEvent* event)
 {
-    QWidget* dropIndicatorWidget = getDropIndicatorWidget();
-    if (dropIndicatorWidget) {
-        dropIndicatorWidget->hide();
-    }
+    hideDropIndicator();
     event->accept();
 }
+void BuilderContainer::hideDropIndicator()
+{
+    isDropIndicatorVisible = false;
+    update(); // Request a repaint
+}
+void BuilderContainer::updateDropIndicator(int insertIndex)
+{
+    // Calculate the drop indicator rectangle position
+    dropIndicatorRect = calculateDropIndicatorRect(insertIndex);
+    isDropIndicatorVisible = true;
 
-void BuilderContainer::dragMoveEvent(QDragMoveEvent* event) {
+    update(); // Request a repaint
+}
+
+void BuilderContainer::paintEvent(QPaintEvent* event)
+{
+    QWidget::paintEvent(event);
+
+    if (isDropIndicatorVisible) {
+        QPainter painter(this);
+        painter.fillRect(dropIndicatorRect, Qt::black);
+    }
+}
+
+
+QRect BuilderContainer::calculateDropIndicatorRect(int insertIndex) const
+{
+    int height = 2; // Set the height of the drop indicator rectangle
+    int y = 0; // Initialize the Y-coordinate
+
+    if (insertIndex >= 0 && insertIndex < builderContainerlayout->count()) {
+        QWidget* widget = builderContainerlayout->itemAt(insertIndex)->widget();
+        if (widget) {
+            QRect widgetRect = widget->geometry();
+            y = widgetRect.y();
+        }
+    } else {
+        // If insertIndex is out of range, position the drop indicator at the bottom of the container
+        QLayoutItem* lastItem = builderContainerlayout->itemAt(builderContainerlayout->count() - 2); // Get the second-to-last item (excluding the stretch)
+        if (lastItem) {
+            QWidget* lastWidget = lastItem->widget();
+            if (lastWidget) {
+                QRect lastWidgetRect = lastWidget->geometry();
+                y = lastWidgetRect.bottom() + 10; // Add 10 for a small space between the last element and the indicator
+            }
+        }
+    }
+
+    return QRect(0, y, width(), height);
+}
+
+//void BuilderContainer::dragMoveEvent(QDragMoveEvent* event) {
+//    if (event->mimeData()->hasFormat("application/element")) {
+//
+//        int insertIndex = findInsertIndex(event);
+//
+//        QWidget* dropIndicatorWidget = getDropIndicatorWidget();
+//        if (dropIndicatorWidget) {
+//            builderContainerlayout->removeWidget(dropIndicatorWidget);
+//            //builderContainerlayout->insertWidget(insertIndex, dropIndicatorWidget);
+//            addElementWidget(dropIndicatorWidget, insertIndex);
+//            dropIndicatorWidget->show();
+//        }
+//
+//        event->acceptProposedAction();
+//    }
+//}
+
+
+
+void BuilderContainer::dragMoveEvent(QDragMoveEvent* event)
+{
     if (event->mimeData()->hasFormat("application/element")) {
-
         int insertIndex = findInsertIndex(event);
 
-        QWidget* dropIndicatorWidget = getDropIndicatorWidget();
-        if (dropIndicatorWidget) {
-            builderContainerlayout->removeWidget(dropIndicatorWidget);
-            //builderContainerlayout->insertWidget(insertIndex, dropIndicatorWidget);
-            addElementWidget(dropIndicatorWidget, insertIndex);
-            dropIndicatorWidget->show();
-        }
+        updateDropIndicator(insertIndex);
 
         event->acceptProposedAction();
     }
 }
-
 
 
 void BuilderContainer::dropEvent(QDropEvent* event) {
@@ -115,27 +184,21 @@ void BuilderContainer::dropEvent(QDropEvent* event) {
         AbstractElement* element = createInstance(elementName);
        
         if (element && isDropAccepted(element)) {
-            int insertIndex = -1; 
-            QWidget* dropIndicatorWidget = getDropIndicatorWidget();
-            if (dropIndicatorWidget) {
-                insertIndex = builderContainerlayout->indexOf(dropIndicatorWidget);
-                builderContainerlayout->removeWidget(dropIndicatorWidget);
-                dropIndicatorWidget->hide();
-            }
 
-            //int insertIndex = findInsertIndex(event);
-
-            if (insertIndex == -1) {
-                insertIndex = builderContainerlayout->count(); // Drop at the end if not found
-            }
             
+            int insertIndex = findInsertIndex(event);
 
             addElementWidget(element->getViewWidget(), insertIndex);
+
             ContainerInformation info;
             info.type = ElementType::ELEMENT;
             info.elementPointer = element;
-            
-            containerInformation.children.insert(insertIndex, info); 
+
+            containerInformation.children.insert(insertIndex, info);
+
+            hideDropIndicator(); // Hide the drop indicator
+
+
             event->acceptProposedAction();
         }
     }
@@ -184,7 +247,7 @@ void BuilderContainer::addElementWidget(QWidget* elementView, int insertIndex = 
 
     builderContainerlayout->addItem(stretchItem);
 }
-#include "qdebug.h"
+
 int BuilderContainer::findInsertIndex(QDropEvent* event)
 {
     QPoint dropPos = event->pos();
@@ -197,8 +260,6 @@ int BuilderContainer::findInsertIndex(QDropEvent* event)
         if (widget) {
             QPoint widgetCenter = widget->mapToGlobal(widget->rect().center());
             int widgetVerticalPos = widgetCenter.y();
-            qDebug() << "drop element position " << dropPos.y();
-            qDebug() << "index element " << i << "vertical position of element" << widgetVerticalPos;
             if (dropPos.y() < widgetVerticalPos) {
                 insertIndex = builderContainerlayout->indexOf(widget);
                 break;
