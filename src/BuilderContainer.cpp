@@ -59,11 +59,44 @@ void BuilderContainer::dragEnterEvent(QDragEnterEvent* event) {
     }
 }
 
+QWidget* BuilderContainer::getDropIndicatorWidget()
+{
+    static QWidget* dropIndicatorWidget = nullptr;
+    if (!dropIndicatorWidget) {
+        dropIndicatorWidget = new QWidget(this);
+        dropIndicatorWidget->setStyleSheet("background-color: black;");
+        dropIndicatorWidget->hide();
+    }
+    return dropIndicatorWidget;
+}
+
+void BuilderContainer::dragLeaveEvent(QDragLeaveEvent* event)
+{
+    QWidget* dropIndicatorWidget = getDropIndicatorWidget();
+    if (dropIndicatorWidget) {
+        dropIndicatorWidget->hide();
+    }
+    event->accept();
+}
+
 void BuilderContainer::dragMoveEvent(QDragMoveEvent* event) {
     if (event->mimeData()->hasFormat("application/element")) {
+
+        int insertIndex = findInsertIndex(event);
+
+        QWidget* dropIndicatorWidget = getDropIndicatorWidget();
+        if (dropIndicatorWidget) {
+            builderContainerlayout->removeWidget(dropIndicatorWidget);
+            //builderContainerlayout->insertWidget(insertIndex, dropIndicatorWidget);
+            addElementWidget(dropIndicatorWidget, insertIndex);
+            dropIndicatorWidget->show();
+        }
+
         event->acceptProposedAction();
     }
 }
+
+
 
 void BuilderContainer::dropEvent(QDropEvent* event) {
     const QMimeData* mimeData = event->mimeData();
@@ -82,12 +115,27 @@ void BuilderContainer::dropEvent(QDropEvent* event) {
         AbstractElement* element = createInstance(elementName);
        
         if (element && isDropAccepted(element)) {
-            addElement(element);
+            int insertIndex = -1; 
+            QWidget* dropIndicatorWidget = getDropIndicatorWidget();
+            if (dropIndicatorWidget) {
+                insertIndex = builderContainerlayout->indexOf(dropIndicatorWidget);
+                builderContainerlayout->removeWidget(dropIndicatorWidget);
+                dropIndicatorWidget->hide();
+            }
+
+            //int insertIndex = findInsertIndex(event);
+
+            if (insertIndex == -1) {
+                insertIndex = builderContainerlayout->count(); // Drop at the end if not found
+            }
+            
+
+            addElementWidget(element->getViewWidget(), insertIndex);
             ContainerInformation info;
             info.type = ElementType::ELEMENT;
             info.elementPointer = element;
             
-            containerInformation.children << info;
+            containerInformation.children.insert(insertIndex, info); 
             event->acceptProposedAction();
         }
     }
@@ -104,7 +152,8 @@ bool BuilderContainer::isDropAccepted(const AbstractElement* element) const {
     return true; // Return true if the drop is accepted, false otherwise
 }
 
-void BuilderContainer::addElement( AbstractElement* element) {
+void BuilderContainer::addElementWidget(QWidget* elementView, int insertIndex = -1)
+{
     // Add the element to the container
     // You can customize the layout and visual representation based on your requirements
 
@@ -126,12 +175,40 @@ void BuilderContainer::addElement( AbstractElement* element) {
         builderContainerlayout->removeItem(stretchItem);
     }
 
+
     // set element horizonatally in center. 
-    QWidget* elementView = element->getViewWidget();
     if (elementView) {
         // set element View at second last in container layout because last element is stretch to 1.
-        builderContainerlayout->insertWidget(builderContainerlayout->count(), elementView, 0, Qt::AlignTop | Qt::AlignHCenter);
+        builderContainerlayout->insertWidget(insertIndex, elementView, 0, Qt::AlignTop | Qt::AlignHCenter);
     }
 
     builderContainerlayout->addItem(stretchItem);
+}
+#include "qdebug.h"
+int BuilderContainer::findInsertIndex(QDropEvent* event)
+{
+    QPoint dropPos = event->pos();
+
+
+    // Find the index to insert the new label at except stretch widget
+    int insertIndex = -1;
+    for (int i = 0; i < builderContainerlayout->count() - 1; ++i) {
+        QWidget* widget = builderContainerlayout->itemAt(i)->widget();
+        if (widget) {
+            QPoint widgetCenter = widget->mapToGlobal(widget->rect().center());
+            int widgetVerticalPos = widgetCenter.y();
+            qDebug() << "drop element position " << dropPos.y();
+            qDebug() << "index element " << i << "vertical position of element" << widgetVerticalPos;
+            if (dropPos.y() < widgetVerticalPos) {
+                insertIndex = builderContainerlayout->indexOf(widget);
+                break;
+            }
+        }
+    }
+
+    
+    if (insertIndex == -1) {
+        insertIndex = builderContainerlayout->count(); // Drop at the end if no position found
+    } 
+    return insertIndex;
 }
