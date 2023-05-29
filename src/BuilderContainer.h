@@ -25,7 +25,7 @@ protected:
 private:
     ContainerInformation containerInformation;
 
-   QRect dropIndicatorRect;
+    QRect dropIndicatorRect;
     bool isDropIndicatorVisible = false;
     void hideDropIndicator();
     void updateDropIndicator(int insertIndex);
@@ -34,7 +34,7 @@ private:
 
     QString getText(const ContainerInformation& containerInfo) const;
     int findInsertIndex(QDropEvent* event);
-    QWidget* getDropIndicatorWidget();
+    
 
     AbstractElement* createInstance(const QString& elementType);
     bool isDropAccepted(const AbstractElement* element) const;
