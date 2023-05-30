@@ -15,7 +15,6 @@ BuilderContainer::BuilderContainer(QWidget* parent)
 
     setAcceptDrops(true);
     builderContainerlayout = new QVBoxLayout(this);
-    builderContainerlayout->setContentsMargins(0, 0, 0, 15);
     builderContainerlayout->addStretch(1);
     setLayout(builderContainerlayout);
 
