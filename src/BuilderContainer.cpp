@@ -217,7 +217,16 @@ int BuilderContainer::findInsertIndex(QDropEvent* event)
     for (int i = 0; i < builderContainerlayout->count() - 1; ++i) {
         QWidget* widget = builderContainerlayout->itemAt(i)->widget();
         if (widget) {
-            QPoint widgetCenter = widget->mapToGlobal(widget->rect().center());
+            /*QPoint widgetCenter = widget->mapToGlobal(widget->rect().center());
+            int widgetVerticalPos = widgetCenter.y();
+            if (dropPos.y() < widgetVerticalPos) {
+                insertIndex = builderContainerlayout->indexOf(widget);
+                break;
+            }*/
+
+            QRect widgetRect = widget->geometry();
+            QPoint widgetCenter = widgetRect.center();
+
             int widgetVerticalPos = widgetCenter.y();
             if (dropPos.y() < widgetVerticalPos) {
                 insertIndex = builderContainerlayout->indexOf(widget);
