@@ -15,7 +15,6 @@ BuilderContainer::BuilderContainer(QWidget* parent)
 
     setAcceptDrops(true);
     builderContainerlayout = new QVBoxLayout(this);
-    builderContainerlayout->setContentsMargins(0, 0, 0, 0);
     builderContainerlayout->addStretch(1);
     setLayout(builderContainerlayout);
 
@@ -96,7 +95,7 @@ QRect BuilderContainer::calculateDropIndicatorRect(int insertIndex) const
     int height = 2; // Set the height of the drop indicator rectangle
     int y = 0; // Initialize the Y-coordinate
 
-    if (insertIndex >= 0 && insertIndex < builderContainerlayout->count()) {
+    if (insertIndex >= 0 && insertIndex < builderContainerlayout->count()-1) {
         QWidget* widget = builderContainerlayout->itemAt(insertIndex)->widget();
         if (widget) {
             QRect widgetRect = widget->geometry();
@@ -217,7 +216,16 @@ int BuilderContainer::findInsertIndex(QDropEvent* event)
     for (int i = 0; i < builderContainerlayout->count() - 1; ++i) {
         QWidget* widget = builderContainerlayout->itemAt(i)->widget();
         if (widget) {
-            QPoint widgetCenter = widget->mapToGlobal(widget->rect().center());
+            /*QPoint widgetCenter = widget->mapToGlobal(widget->rect().center());
+            int widgetVerticalPos = widgetCenter.y();
+            if (dropPos.y() < widgetVerticalPos) {
+                insertIndex = builderContainerlayout->indexOf(widget);
+                break;
+            }*/
+
+            QRect widgetRect = widget->geometry();
+            QPoint widgetCenter = widgetRect.center();
+
             int widgetVerticalPos = widgetCenter.y();
             if (dropPos.y() < widgetVerticalPos) {
                 insertIndex = builderContainerlayout->indexOf(widget);
@@ -227,7 +235,7 @@ int BuilderContainer::findInsertIndex(QDropEvent* event)
     }
 
     if (insertIndex == -1) {
-        insertIndex = builderContainerlayout->count(); // Drop at the end if no position found
+        insertIndex = builderContainerlayout->count() - 1; // Drop at the end if no position found
     }
     return insertIndex;
 }       

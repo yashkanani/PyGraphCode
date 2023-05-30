@@ -5,6 +5,7 @@
 #include "ElementDragEventHandler.h"
 #include "BuilderContainer.h"
 
+
 #include <iostream>
 #include <qgridlayout.h>
 #include <qquickitem.h>
@@ -36,7 +37,13 @@ void MainWindowUI::createCentralWidget()
     //centralLayout->addWidget(GetApplyStyleButton(),		0, 0);
     //centralLayout->addWidget(GetMainTabWidget(), 1, 0);
     centralLayout->addWidget(getElementsWidget(centralWidget), 1, 0);
-    centralLayout->addWidget(new BuilderContainer(centralWidget), 1, 1);
+
+     QScrollArea* scrollArea = new QScrollArea(centralWidget);
+    scrollArea->setWidgetResizable(true); // Allow the scroll area to resize the widget
+     BuilderContainer* builderContainer = new BuilderContainer(scrollArea);
+     scrollArea->setWidget(builderContainer);
+
+    centralLayout->addWidget(scrollArea, 1, 1);
 
     centralLayout->setColumnStretch(1, 1);
 }
