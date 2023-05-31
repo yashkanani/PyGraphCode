@@ -30,7 +30,28 @@ QString ForLoopElement::getText() const
 
 QWidget* ForLoopElement::getViewWidget()
 {
+    //QFrame* wdg = new QFrame();
+    //return wdg; 
+
     QGroupBox* wdg = new QGroupBox("For Loop");
+    wdg->setObjectName("ForLoopGroupBox");
+
+    // Set the style sheet to customize the appearance
+    wdg->setStyleSheet(
+        "QGroupBox#ForLoopGroupBox {"
+        "   border: 1px solid #888888;"
+        "   border-radius: 5px;"
+        "   margin-top: 10px;"
+        "   padding: 10px;"
+        "}"
+        "QGroupBox#ForLoopGroupBox::title {"
+        "   subcontrol-origin: margin;"
+        "   subcontrol-position: top center;"
+        "   padding: 5px;"
+        "}");
+
+
+
     QGridLayout* wdgLay = new QGridLayout(wdg);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
@@ -74,37 +95,37 @@ QWidget* ForLoopElement::getViewWidget()
     QObject::connect(startComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
         if (index == 0) {
             // Show the widget for entering static value
-            startContainer->show();
+            startContainer->hide();
         } else {
             // Show the builder container for entering dynamic value
-            startContainer->hide();
+            startContainer->show();
         }
     });
 
     QObject::connect(inComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
         if (index == 0) {
             // Show the widget for entering static value
-            inContainer->show();
+            inContainer->hide();
         } else {
             // Show the builder container for entering dynamic value
-            inContainer->hide();
+            inContainer->show();
         }
     });
 
     QObject::connect(bodyComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
         if (index == 0) {
             // Show the widget for entering static value
-            bodyContainer->show();
+            bodyContainer->hide();
         } else {
             // Show the builder container for entering dynamic value
-            bodyContainer->hide();
+            bodyContainer->show();
         }
     });
 
     // Hide the BuilderContainer by default
-    startContainer->show();
-    inContainer->show();
-    bodyContainer->show();
+    startContainer->hide();
+    inContainer->hide();
+    bodyContainer->hide();
 
     return wdg;
 }
