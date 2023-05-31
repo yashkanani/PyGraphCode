@@ -12,18 +12,21 @@
 BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
     : QFrame(parent)
 {
-    setObjectName("BuilderContainerWidget");
+    
     setAcceptDrops(true);
     builderContainerlayout = new QVBoxLayout(this);
     builderContainerlayout->addStretch(1);
     setLayout(builderContainerlayout);
 
     if (isSubContainer) {
+        setObjectName("BuilderContainerWidget");
         setStyleSheet(
             "QWidget#BuilderContainerWidget {"
             "   border: 1px solid black;"
             "   border-radius: 5px;"
-            "}");
+            "}"
+        );
+        
     }
     
 
