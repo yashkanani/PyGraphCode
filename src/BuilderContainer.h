@@ -7,12 +7,13 @@
 
 #include "AbstractElement.h"
 #include "ContainerInformation.h"
+#include <qframe.h>
 
-class BuilderContainer : public QWidget {
+class BuilderContainer : public QFrame {
     Q_OBJECT
 
 public:
-    explicit BuilderContainer(QWidget* parent = nullptr);
+    explicit BuilderContainer(QWidget* parent = nullptr, bool isSubContainer = false);
     QString getText() const;
 
 protected:

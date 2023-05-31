@@ -9,14 +9,24 @@
 #include "BuilderContainer.h"
 #include "ElementManager.h"
 
-BuilderContainer::BuilderContainer(QWidget* parent)
-    : QWidget(parent)
+BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
+    : QFrame(parent)
 {
-
+    setObjectName("BuilderContainerWidget");
     setAcceptDrops(true);
     builderContainerlayout = new QVBoxLayout(this);
     builderContainerlayout->addStretch(1);
     setLayout(builderContainerlayout);
+
+    if (isSubContainer) {
+        setStyleSheet(
+            "QWidget#BuilderContainerWidget {"
+            "   border: 1px solid black;"
+            "   border-radius: 5px;"
+            "}");
+    }
+    
+
 
     containerInformation.type = ElementType::PARENT;
 }
