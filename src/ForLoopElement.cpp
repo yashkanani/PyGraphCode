@@ -30,9 +30,6 @@ QString ForLoopElement::getText() const
 
 QWidget* ForLoopElement::getViewWidget()
 {
-    //QFrame* wdg = new QFrame();
-    //return wdg; 
-
     QGroupBox* wdg = new QGroupBox("For Loop");
     wdg->setObjectName("ForLoopGroupBox");
 
@@ -43,6 +40,7 @@ QWidget* ForLoopElement::getViewWidget()
         "   border-radius: 5px;"
         "   margin-top: 10px;"
         "   padding: 10px;"
+        "   background-color: white;"
         "}"
         "QGroupBox#ForLoopGroupBox::title {"
         "   subcontrol-origin: margin;"
@@ -55,41 +53,49 @@ QWidget* ForLoopElement::getViewWidget()
     QGridLayout* wdgLay = new QGridLayout(wdg);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    QLabel* forLabel = new QLabel("for", wdg);
-    forLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-    wdgLay->addWidget(forLabel, 0, 0);
+    QGroupBox* startGroup = new QGroupBox("Take", wdg);
+    QHBoxLayout* startLay = new QHBoxLayout(startGroup);
 
     QComboBox* startComboBox = new QComboBox(wdg);
     startComboBox->addItem("Static");
     startComboBox->addItem("Dynamic");
-    wdgLay->addWidget(startComboBox, 0, 1);
+    startLay->addWidget(startComboBox, Qt::AlignLeft | Qt::AlignTop);
 
-    BuilderContainer* startContainer = new BuilderContainer(wdg);
-    wdgLay->addWidget(startContainer, 0, 2);
+    bool subContainer = true;
+    BuilderContainer* startContainer = new BuilderContainer(wdg, subContainer);
+    startLay->addWidget(startContainer);
 
-    QLabel* inLabel = new QLabel("in", wdg);
-    inLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-    wdgLay->addWidget(inLabel, 0, 3);
+    wdgLay->addWidget(startGroup, 0, 0);
+
+    QGroupBox* inGroup = new QGroupBox("in", wdg);
+    QHBoxLayout* inLay = new QHBoxLayout(inGroup);
 
     QComboBox* inComboBox = new QComboBox(wdg);
     inComboBox->addItem("Static");
     inComboBox->addItem("Dynamic");
-    wdgLay->addWidget(inComboBox, 0, 4);
+    inLay->addWidget(inComboBox, Qt::AlignLeft | Qt::AlignTop);
 
-    BuilderContainer* inContainer = new BuilderContainer(wdg);
-    wdgLay->addWidget(inContainer, 0, 5);
+    
+    BuilderContainer* inContainer = new BuilderContainer(wdg, subContainer);
+    inLay->addWidget(inContainer);
 
-    QLabel* bodyLabel = new QLabel("body", wdg);
-    bodyLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-    wdgLay->addWidget(bodyLabel, 1, 0);
+    wdgLay->addWidget(inGroup, 0, 2);
+
+    QGroupBox* bodyGroup = new QGroupBox("body", wdg);
+    bodyGroup->setContentsMargins(0, 0, 0, 0);
+    bodyGroup->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    QVBoxLayout* bodyLayout = new QVBoxLayout(bodyGroup);
 
     QComboBox* bodyComboBox = new QComboBox(wdg);
     bodyComboBox->addItem("Static");
     bodyComboBox->addItem("Dynamic");
-    wdgLay->addWidget(bodyComboBox, 1, 1);
+    bodyLayout->addWidget(bodyComboBox, Qt::AlignLeft | Qt::AlignTop);
 
-    BuilderContainer* bodyContainer = new BuilderContainer(wdg);
-    wdgLay->addWidget(bodyContainer, 1, 2, 1, 4);
+  
+    BuilderContainer* bodyContainer = new BuilderContainer(wdg, subContainer);
+    bodyLayout->addWidget(bodyContainer);
+
+    wdgLay->addWidget(bodyGroup, 1, 0, 1, 3);
 
     // Connect the combo box signals to slots or functions
     QObject::connect(startComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
