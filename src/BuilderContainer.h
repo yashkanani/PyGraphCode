@@ -29,7 +29,9 @@ private:
     QRect dropIndicatorRect;
     bool isDropIndicatorVisible = false;
     void hideDropIndicator();
+    void drawArrows();
     void updateDropIndicator(int insertIndex);
+
 
     QRect calculateDropIndicatorRect(int insertIndex) const;
 

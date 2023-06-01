@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include <qpainter.h>
 #include <qpushbutton.h>
+#include <qpainterpath.h>
 
 #include "BuilderContainer.h"
 #include "ElementManager.h"
@@ -16,6 +17,7 @@ BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
     setAcceptDrops(true);
     builderContainerlayout = new QVBoxLayout(this);
     builderContainerlayout->addStretch(1);
+    builderContainerlayout->setSpacing(25);
     setLayout(builderContainerlayout);
 
     if (isSubContainer) {
@@ -101,6 +103,59 @@ void BuilderContainer::paintEvent(QPaintEvent* event)
         QPainter painter(this);
         painter.fillRect(dropIndicatorRect, Qt::black);
     }
+
+    drawArrows();
+}
+
+void BuilderContainer::drawArrows()
+{
+
+    for (int indexOfWidget = 1; indexOfWidget < builderContainerlayout->count(); indexOfWidget++) {
+        QWidget* widget = builderContainerlayout->itemAt(indexOfWidget)->widget();
+
+        if (widget == nullptr) {
+            continue;
+        }
+
+        QRect rect = widget->rect();
+        int spacing = builderContainerlayout->spacing();
+        QPoint pos = widget->pos();
+
+        QPoint startPoint;
+        startPoint.setX(pos.x() + rect.width() / 2);
+        startPoint.setY(pos.y() - spacing + 1);
+
+        QPoint endPoint;
+        endPoint.setX(pos.x() + rect.width() / 2);
+        endPoint.setY(pos.y() - 5);
+
+        QLine line(startPoint, endPoint);
+
+        QPainter painter(this);
+        painter.setPen(QPen(QColor("#8c8c8c"), 2));
+        painter.drawLine(line);
+        
+        int arrowHeight = 10; // Height of the arrow
+        int arrowWidth = 10; // Width of the arrow
+
+        int arrowX = endPoint.x() - (arrowWidth / 2);
+        int arrowY = endPoint.y();
+
+        QPainterPath arrowPath;
+        arrowPath.moveTo(arrowX, arrowY);
+        arrowPath.lineTo(arrowX + arrowWidth, arrowY);
+        arrowPath.lineTo(arrowX + (arrowWidth / 2), arrowY + arrowHeight);
+        arrowPath.lineTo(arrowX, arrowY);
+        painter.fillPath(arrowPath, QColor("#8c8c8c"));
+    
+    
+    
+    }
+
+
+    
+    
+
 }
 
 QRect BuilderContainer::calculateDropIndicatorRect(int insertIndex) const
@@ -170,7 +225,7 @@ void BuilderContainer::dropEvent(QDropEvent* event)
             containerInformation.children.insert(insertIndex, info);
 
             hideDropIndicator(); // Hide the drop indicator
-
+            
             event->acceptProposedAction();
         }
     }
