@@ -7,6 +7,7 @@
 		<file>resource/For_loop.png</file>
 		<file>resource/Variable.png</file>
 		<file>resource/Conditional.png</file>
+		<file>resource/Operation.png</file>
          <!-- <file alias="Squidstat_Cycler_Firmware.hex">../../../firmware/firmware_for_cycler/hex_files/Squidstat_Cycler_Firmware.hex</file> -->
     </qresource>
 </RCC>

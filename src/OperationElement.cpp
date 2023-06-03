@@ -1,51 +1,48 @@
-#include "ConditionalElement.h"
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include "PlaceHolder.h"
-#include "BuilderContainer.h"
-#include <qgroupbox.h>
-#include <qlineedit.h>
+#include "OperationElement.h"
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QGroupBox>
+#include <QLineEdit>
 #include <qcombobox.h>
 
 #include "VariableElement.h"
 
-
-ConditionalElement::ConditionalElement()
+OperationElement::OperationElement()
 {
-    name = "Condition";
-    image = QPixmap(":/resource/Conditional.png");
+    name = "Operation";
+    image = QPixmap(":/resource/Operation.png");
 }
 
-QString ConditionalElement::getName() const
+QString OperationElement::getName() const
 {
     return name;
 }
 
-QPixmap ConditionalElement::getImage() const
+QPixmap OperationElement::getImage() const
 {
     return image;
 }
 
-QString ConditionalElement::getText() const
+QString OperationElement::getText() const
 {
-    return "Conditional Element: " + name;
+    return "Operation Element: " + name;
 }
 
-QWidget* ConditionalElement::getViewWidget(QWidget* parent)
+QWidget* OperationElement::getViewWidget(QWidget* parent)
 {
-    QGroupBox* wdg = new QGroupBox("Condition", parent);
-    wdg->setObjectName("ConditionalGroupBox");
+    QGroupBox* wdg = new QGroupBox("Operation", parent);
+    wdg->setObjectName("OperationGroupBox");
 
     // Set the style sheet to customize the appearance
     wdg->setStyleSheet(
-        "QGroupBox#ConditionalGroupBox {"
+        "QGroupBox#OperationGroupBox {"
         "   border: 1px solid #888888;"
         "   border-radius: 5px;"
         "   margin-top: 10px;"
         "   padding: 10px;"
         "   background-color: white;"
         "}"
-        "QGroupBox#ConditionalGroupBox::title {"
+        "QGroupBox#OperationGroupBox::title {"
         "   subcontrol-origin: margin;"
         "   subcontrol-position: top center;"
         "   padding: 5px;"
@@ -59,12 +56,11 @@ QWidget* ConditionalElement::getViewWidget(QWidget* parent)
     wdgLay->addWidget(firstVariableWidget, 0, 0);
 
     QComboBox* conditionComboBox = new QComboBox(wdg);
-    conditionComboBox->addItem("is Greater than (>)");
-    conditionComboBox->addItem("is Less than (<)");
-    conditionComboBox->addItem("is Greater than or equal to (>=)");
-    conditionComboBox->addItem("is Less than or equal to (<=)");
-    conditionComboBox->addItem("is same as (==)");
-    conditionComboBox->addItem("is not same as (!=)");
+    conditionComboBox->addItem("is Add to (+)");
+    conditionComboBox->addItem("is subtract from (-)");
+    conditionComboBox->addItem("is multiply by (x)");
+    conditionComboBox->addItem("is divide by (/)");
+    conditionComboBox->addItem("is XOR (^)");
     conditionComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     wdgLay->addWidget(conditionComboBox, 0, 1, Qt::AlignCenter);
 
@@ -75,7 +71,7 @@ QWidget* ConditionalElement::getViewWidget(QWidget* parent)
     // Connect the combo box signals to slots or functions
     // Example: Connect the currentIndexChanged signal of conditionComboBox
     // to a slot or function that handles the selection change.
-    // QObject::connect(conditionComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ConditionalElement::handleConditionIndexChanged);
+    // QObject::connect(conditionComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &OperationElement::handleConditionIndexChanged);
 
     return wdg;
 }

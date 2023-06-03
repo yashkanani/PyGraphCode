@@ -1,5 +1,11 @@
 #include "ElementManager.h"
 
+#include "VariableElement.h"
+#include "ForLoopElement.h"
+#include "IfLoopElement.h"
+#include "ConditionalElement.h"
+#include "OperationElement.h"
+
 ElementManager& ElementManager::getInstance()
 {
     static ElementManager instance;
@@ -37,4 +43,5 @@ void ElementManager::createElements()
     elements.push_back(std::make_shared<ForLoopElement>());
     elements.push_back(std::make_shared<IfLoopElement>());
     elements.push_back(std::make_shared<ConditionalElement>());
+    elements.push_back(std::make_shared<OperationElement>());
 }

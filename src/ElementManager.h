@@ -4,10 +4,7 @@
 #include <vector>
 #include <memory>
 #include "AbstractElement.h"
-#include "VariableElement.h"
-#include "ForLoopElement.h"
-#include "IfLoopElement.h"
-#include "ConditionalElement.h"
+
 
 class ElementManager {
 public:
