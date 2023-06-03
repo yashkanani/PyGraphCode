@@ -29,9 +29,9 @@ QString IfLoopElement::getText() const
     return "If Loop Element: " + name;
 }
 
-QWidget* IfLoopElement::getViewWidget()
+QWidget* IfLoopElement::getViewWidget(QWidget* parent)
 {
-    QGroupBox* wdg = new QGroupBox("If Loop");
+    QGroupBox* wdg = new QGroupBox("If Loop", parent);
     wdg->setObjectName("IfLoopGroupBox");
 
     // Set the style sheet to customize the appearance

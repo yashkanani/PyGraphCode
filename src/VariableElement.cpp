@@ -29,10 +29,10 @@ QString VariableElement::getText() const
     return "Variable Element: " + name;
 }
 
-QWidget* VariableElement::getViewWidget()
+QWidget* VariableElement::getViewWidget(QWidget* parent)
 {
 
-    QGroupBox* wdg = new QGroupBox("Variable");
+    QGroupBox* wdg = new QGroupBox("Variable", parent);
     wdg->setObjectName("VariableGroupBox");
 
     // Set the style sheet to customize the appearance

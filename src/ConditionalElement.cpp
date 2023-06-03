@@ -7,6 +7,8 @@
 #include <qlineedit.h>
 #include <qcombobox.h>
 
+#include "VariableElement.h"
+
 
 ConditionalElement::ConditionalElement()
 {
@@ -29,9 +31,9 @@ QString ConditionalElement::getText() const
     return "Conditional Element: " + name;
 }
 
-QWidget* ConditionalElement::getViewWidget()
+QWidget* ConditionalElement::getViewWidget(QWidget* parent)
 {
-    QGroupBox* wdg = new QGroupBox("Conditional Element");
+    QGroupBox* wdg = new QGroupBox("Conditional Element", parent);
     wdg->setObjectName("ConditionalGroupBox");
 
     // Set the style sheet to customize the appearance
@@ -52,25 +54,9 @@ QWidget* ConditionalElement::getViewWidget()
     QGridLayout* wdgLay = new QGridLayout(wdg);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    QGroupBox* firstGroupBox = new QGroupBox("First Variable", wdg);
-    QVBoxLayout* firstLay = new QVBoxLayout(firstGroupBox);
-
-    QComboBox* firstComboBox = new QComboBox(wdg);
-    firstComboBox->addItem("Static");
-    firstComboBox->addItem("Dynamic");
-    firstComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    firstLay->addWidget(firstComboBox);
-
-    QLineEdit* firstLineEdit = new QLineEdit(wdg);
-    firstLineEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    firstLay->addWidget(firstLineEdit);
-
-    bool subContainer = true;
-    BuilderContainer* firstContainer = new BuilderContainer(wdg, subContainer);
-    firstContainer->hide(); // Initially hide the builder container
-    firstLay->addWidget(firstContainer);
-
-    wdgLay->addWidget(firstGroupBox, 0, 0);
+    VariableElement* firstVariableElement = new VariableElement();
+    QWidget* firstVariableWidget = firstVariableElement->getViewWidget(wdg);
+    wdgLay->addWidget(firstVariableWidget, 0, 0);
 
     QComboBox* conditionComboBox = new QComboBox(wdg);
     conditionComboBox->addItem("is Greater than (>)");
@@ -82,49 +68,14 @@ QWidget* ConditionalElement::getViewWidget()
     conditionComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     wdgLay->addWidget(conditionComboBox, 0, 1, Qt::AlignCenter);
 
-    QGroupBox* secondGroupBox = new QGroupBox("Second Variable", wdg);
-    QVBoxLayout* secondLay = new QVBoxLayout(secondGroupBox);
-
-    QComboBox* secondComboBox = new QComboBox(wdg);
-    secondComboBox->addItem("Static");
-    secondComboBox->addItem("Dynamic");
-    secondComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    secondLay->addWidget(secondComboBox);
-
-    QLineEdit* secondLineEdit = new QLineEdit(wdg);
-    secondLineEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    secondLay->addWidget(secondLineEdit);
-
-    BuilderContainer* secondContainer = new BuilderContainer(wdg, subContainer);
-    secondContainer->hide(); // Initially hide the builder container
-    secondLay->addWidget(secondContainer);
-
-    wdgLay->addWidget(secondGroupBox, 0, 2);
+    VariableElement* secondVariableElement = new VariableElement();
+    QWidget* secondVariableWidget = secondVariableElement->getViewWidget(wdg);
+    wdgLay->addWidget(secondVariableWidget, 0, 2);
 
     // Connect the combo box signals to slots or functions
-    QObject::connect(firstComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
-        if (index == 0) {
-            // Show the line edit for entering static value
-            firstContainer->hide();
-            firstLineEdit->show();
-        } else {
-            // Show the builder container for entering dynamic value
-            firstContainer->show();
-            firstLineEdit->hide();
-        }
-    });
-
-    QObject::connect(secondComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
-        if (index == 0) {
-            // Show the line edit for entering static value
-            secondContainer->hide();
-            secondLineEdit->show();
-        } else {
-            // Show the builder container for entering dynamic value
-            secondContainer->show();
-            secondLineEdit->hide();
-        }
-    });
+    // Example: Connect the currentIndexChanged signal of conditionComboBox
+    // to a slot or function that handles the selection change.
+    // QObject::connect(conditionComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ConditionalElement::handleConditionIndexChanged);
 
     return wdg;
 }

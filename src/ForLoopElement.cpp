@@ -28,9 +28,9 @@ QString ForLoopElement::getText() const
     return "For Loop Element: " + name;
 }
 
-QWidget* ForLoopElement::getViewWidget()
+QWidget* ForLoopElement::getViewWidget(QWidget* parent)
 {
-    QGroupBox* wdg = new QGroupBox("For Loop");
+    QGroupBox* wdg = new QGroupBox("For Loop", parent);
     wdg->setObjectName("ForLoopGroupBox");
 
     // Set the style sheet to customize the appearance
