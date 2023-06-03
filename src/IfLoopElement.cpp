@@ -3,7 +3,10 @@
 #include <qlayout.h>
 #include "PlaceHolder.h"
 #include "BuilderContainer.h"
-
+#include <qgroupbox.h>
+#include <qcombobox.h>
+#include <qlineedit.h>
+#include "ConditionalElement.h"
 
 IfLoopElement::IfLoopElement()
 {
@@ -28,19 +31,51 @@ QString IfLoopElement::getText() const
 
 QWidget* IfLoopElement::getViewWidget()
 {
-    QWidget* wdg = new QWidget();
+    QGroupBox* wdg = new QGroupBox("If Loop");
+    wdg->setObjectName("IfLoopGroupBox");
+
+    // Set the style sheet to customize the appearance
+    wdg->setStyleSheet(
+        "QGroupBox#IfLoopGroupBox {"
+        "   border: 1px solid #888888;"
+        "   border-radius: 5px;"
+        "   margin-top: 10px;"
+        "   padding: 10px;"
+        "   background-color: white;"
+        "}"
+        "QGroupBox#IfLoopGroupBox::title {"
+        "   subcontrol-origin: margin;"
+        "   subcontrol-position: top center;"
+        "   padding: 5px;"
+        "}");
+
     QGridLayout* wdgLay = new QGridLayout(wdg);
+    wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    /* startLoop = std::make_shared<PlaceHolder>(wdg, new BuilderContainer(wdg));
-    wdgLay->addWidget(startLoop.get(), 0, 0);
+    // Create an instance of the Conditionalelement class
+    ConditionalElement conditionElement;
 
-    endLoop = std::make_shared<PlaceHolder>(wdg, new BuilderContainer(wdg));
-    wdgLay->addWidget(endLoop.get(), 0, 0);
+    // Use the getViewWidget function of the Conditionalelement to generate the condition part
+    QWidget* conditionWidget = conditionElement.getViewWidget();
 
-    body = std::make_shared<PlaceHolder>(wdg, new BuilderContainer(wdg));
-    wdgLay->addWidget(body.get(), 0, 0);*/
+    // Add the condition widget to the layout
+    wdgLay->addWidget(conditionWidget, 0, 0, 1, 2);
 
-    wdgLay->addWidget(new BuilderContainer(wdg));
-    wdgLay->addWidget(new QPushButton("If loop"));
+    QGroupBox* onTrueGroupBox = new QGroupBox("On True", wdg);
+    QVBoxLayout* onTrueLay = new QVBoxLayout(onTrueGroupBox);
+
+    BuilderContainer* onTrueContainer = new BuilderContainer(wdg, true);
+    onTrueLay->addWidget(onTrueContainer);
+
+    wdgLay->addWidget(onTrueGroupBox, 1, 0);
+
+    QGroupBox* onFalseGroupBox = new QGroupBox("On False", wdg);
+    QVBoxLayout* onFalseLay = new QVBoxLayout(onFalseGroupBox);
+
+    BuilderContainer* onFalseContainer = new BuilderContainer(wdg, true);
+    onFalseLay->addWidget(onFalseContainer);
+
+    wdgLay->addWidget(onFalseGroupBox,1,1);
+
     return wdg;
 }
