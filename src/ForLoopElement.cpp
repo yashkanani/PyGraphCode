@@ -48,63 +48,69 @@ QWidget* ForLoopElement::getViewWidget()
         "   padding: 5px;"
         "}");
 
-
-
-    QGridLayout* wdgLay = new QGridLayout(wdg);
+    QGridLayout* wdgLayout = new QGridLayout(wdg);
+    wdgLayout->setContentsMargins(0, 0, 0, 0);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     QGroupBox* startGroup = new QGroupBox("Take", wdg);
+    startGroup->setContentsMargins(0, 0, 0, 0);
     QHBoxLayout* startLay = new QHBoxLayout(startGroup);
 
     QComboBox* startComboBox = new QComboBox(wdg);
     startComboBox->addItem("Static");
     startComboBox->addItem("Dynamic");
+    startComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     startLay->addWidget(startComboBox, Qt::AlignLeft | Qt::AlignTop);
+
+    QLineEdit* startLineEdit = new QLineEdit(wdg);
+    startLineEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum); // Set the size policy
+    startLay->addWidget(startLineEdit);
 
     bool subContainer = true;
     BuilderContainer* startContainer = new BuilderContainer(wdg, subContainer);
     startLay->addWidget(startContainer);
 
-    wdgLay->addWidget(startGroup, 0, 0);
+    wdgLayout->addWidget(startGroup, 0, 0);
 
     QGroupBox* inGroup = new QGroupBox("in", wdg);
+    inGroup->setContentsMargins(0, 0, 0, 0);
     QHBoxLayout* inLay = new QHBoxLayout(inGroup);
 
     QComboBox* inComboBox = new QComboBox(wdg);
     inComboBox->addItem("Static");
     inComboBox->addItem("Dynamic");
+    inComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     inLay->addWidget(inComboBox, Qt::AlignLeft | Qt::AlignTop);
 
-    
+    QLineEdit* inLineEdit = new QLineEdit(wdg);
+    inLineEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum); // Set the size policy
+    inLay->addWidget(inLineEdit);
+
     BuilderContainer* inContainer = new BuilderContainer(wdg, subContainer);
     inLay->addWidget(inContainer);
 
-    wdgLay->addWidget(inGroup, 0, 2);
+    wdgLayout->addWidget(inGroup, 0, 2);
 
     QGroupBox* bodyGroup = new QGroupBox("body", wdg);
     bodyGroup->setContentsMargins(0, 0, 0, 0);
     bodyGroup->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     QVBoxLayout* bodyLayout = new QVBoxLayout(bodyGroup);
 
-    QComboBox* bodyComboBox = new QComboBox(wdg);
-    bodyComboBox->addItem("Static");
-    bodyComboBox->addItem("Dynamic");
-    bodyLayout->addWidget(bodyComboBox, Qt::AlignLeft | Qt::AlignTop);
-
-  
     BuilderContainer* bodyContainer = new BuilderContainer(wdg, subContainer);
     bodyLayout->addWidget(bodyContainer);
 
-    wdgLay->addWidget(bodyGroup, 1, 0, 1, 3);
+    wdgLayout->addWidget(bodyGroup, 1, 0, 1, 3);
 
     // Connect the combo box signals to slots or functions
     QObject::connect(startComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
         if (index == 0) {
             // Show the widget for entering static value
             startContainer->hide();
+            startLineEdit->show();
         } else {
             // Show the builder container for entering dynamic value
             startContainer->show();
+            startLineEdit->hide();
         }
     });
 
@@ -112,26 +118,19 @@ QWidget* ForLoopElement::getViewWidget()
         if (index == 0) {
             // Show the widget for entering static value
             inContainer->hide();
+            inLineEdit->show();
         } else {
             // Show the builder container for entering dynamic value
             inContainer->show();
-        }
-    });
-
-    QObject::connect(bodyComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
-        if (index == 0) {
-            // Show the widget for entering static value
-            bodyContainer->hide();
-        } else {
-            // Show the builder container for entering dynamic value
-            bodyContainer->show();
+            inLineEdit->hide();
         }
     });
 
     // Hide the BuilderContainer by default
     startContainer->hide();
     inContainer->hide();
-    bodyContainer->hide();
+    startLineEdit->show();
+    inLineEdit->show();
 
     return wdg;
 }
