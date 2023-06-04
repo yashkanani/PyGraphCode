@@ -19,7 +19,7 @@ private slots:
 private:
     void createCentralWidget();
     QWidget* getElementsWidget(QWidget*);
-    
+    QWidget* getResultedTextViewWidget(QWidget*);
 
     MainAppWindow* d_mainWindow;
 };

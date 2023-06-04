@@ -38,14 +38,18 @@ void MainWindowUI::createCentralWidget()
     //centralLayout->addWidget(GetMainTabWidget(), 1, 0);
     centralLayout->addWidget(getElementsWidget(centralWidget), 1, 0);
 
-     QScrollArea* scrollArea = new QScrollArea(centralWidget);
-    scrollArea->setWidgetResizable(true); // Allow the scroll area to resize the widget
-     BuilderContainer* builderContainer = new BuilderContainer(scrollArea);
-     scrollArea->setWidget(builderContainer);
+    QScrollArea* scrollBuilderArea = new QScrollArea(centralWidget);
+    scrollBuilderArea->setWidgetResizable(true); // Allow the scroll area to resize the widget
+    BuilderContainer* builderContainer = new BuilderContainer(scrollBuilderArea);
+    scrollBuilderArea->setWidget(builderContainer);
+    centralLayout->addWidget(scrollBuilderArea, 1, 1);
+   
+    centralLayout->addWidget(getResultedTextViewWidget(centralWidget), 1, 2);
 
-    centralLayout->addWidget(scrollArea, 1, 1);
-
-    centralLayout->setColumnStretch(1, 1);
+    // Set the column stretch to distribute remaining space
+    centralLayout->setColumnStretch(1, 2);
+    centralLayout->setColumnStretch(2, 1);
+ 
 }
 
 
@@ -145,6 +149,26 @@ QWidget* MainWindowUI::getElementsWidget(QWidget* parent)
 
 
     return elementHolder;
+}
+
+QWidget* MainWindowUI::getResultedTextViewWidget(QWidget* parent)
+{
+    QScrollArea* resultedTextScrollArea = new QScrollArea(parent);
+    resultedTextScrollArea->setWidgetResizable(true); // Allow the scroll area to resize the widget
+   
+    
+    // Create a QLabel to display the resulted text
+    QLabel* resultedTextLabel = new QLabel(resultedTextScrollArea);
+    resultedTextLabel->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    resultedTextLabel->setWordWrap(true);
+
+    // Get the Signal From BuilderContainer set to resultedTextLabel.
+
+    resultedTextLabel->setText("hello");
+
+    resultedTextScrollArea->setWidget(resultedTextLabel);
+
+    return resultedTextScrollArea;
 }
 
 void MainWindowUI::onSearchTextChanged(const QString& searchText)
