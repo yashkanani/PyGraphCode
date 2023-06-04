@@ -45,6 +45,7 @@ set(HEADERS
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ContainerInformation.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/PlaceHolder.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/OperationElement.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ResultedTextView.h
    )
 
 set(SOURCES
@@ -61,6 +62,7 @@ set(SOURCES
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderContainer.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/PlaceHolder.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/OperationElement.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ResultedTextView.cpp
     )
 
 

@@ -4,7 +4,7 @@
 #include "ElementManager.h"
 #include "ElementDragEventHandler.h"
 #include "BuilderContainer.h"
-
+#include "ResultedTextView.h"
 
 #include <iostream>
 #include <qgridlayout.h>
@@ -44,7 +44,7 @@ void MainWindowUI::createCentralWidget()
     scrollBuilderArea->setWidget(builderContainer);
     centralLayout->addWidget(scrollBuilderArea, 1, 1);
    
-    centralLayout->addWidget(getResultedTextViewWidget(centralWidget), 1, 2);
+    centralLayout->addWidget(getResultedTextViewWidget(centralWidget, builderContainer), 1, 2);
 
     // Set the column stretch to distribute remaining space
     centralLayout->setColumnStretch(1, 2);
@@ -151,24 +151,10 @@ QWidget* MainWindowUI::getElementsWidget(QWidget* parent)
     return elementHolder;
 }
 
-QWidget* MainWindowUI::getResultedTextViewWidget(QWidget* parent)
+QWidget* MainWindowUI::getResultedTextViewWidget(QWidget* parent, BuilderContainer* builderContainer)
 {
-    QScrollArea* resultedTextScrollArea = new QScrollArea(parent);
-    resultedTextScrollArea->setWidgetResizable(true); // Allow the scroll area to resize the widget
-   
-    
-    // Create a QLabel to display the resulted text
-    QLabel* resultedTextLabel = new QLabel(resultedTextScrollArea);
-    resultedTextLabel->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-    resultedTextLabel->setWordWrap(true);
-
-    // Get the Signal From BuilderContainer set to resultedTextLabel.
-
-    resultedTextLabel->setText("hello");
-
-    resultedTextScrollArea->setWidget(resultedTextLabel);
-
-    return resultedTextScrollArea;
+    ResultedTextView* resultedTextView = new ResultedTextView(parent, builderContainer);
+    return resultedTextView;
 }
 
 void MainWindowUI::onSearchTextChanged(const QString& searchText)

@@ -23,6 +23,9 @@ protected:
     void dragLeaveEvent(QDragLeaveEvent* event) override;
     void paintEvent(QPaintEvent* event) override;
 
+signals:
+    void updateResultedTextView();
+
 private:
     ContainerInformation containerInformation;
 

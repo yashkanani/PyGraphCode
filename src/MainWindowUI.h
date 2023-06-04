@@ -4,6 +4,7 @@
 
 #include <qobject.h>
 
+class BuilderContainer;
 class MainAppWindow;
 class MainWindowUI : public QObject {
     Q_OBJECT
@@ -19,7 +20,7 @@ private slots:
 private:
     void createCentralWidget();
     QWidget* getElementsWidget(QWidget*);
-    QWidget* getResultedTextViewWidget(QWidget*);
+    QWidget* getResultedTextViewWidget(QWidget*, BuilderContainer* builderContainer);
 
     MainAppWindow* d_mainWindow;
 };
