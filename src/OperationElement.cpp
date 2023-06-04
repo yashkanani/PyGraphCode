@@ -6,6 +6,7 @@
 #include <qcombobox.h>
 
 #include "VariableElement.h"
+#include "CodeText.h"
 
 OperationElement::OperationElement()
 {
@@ -23,9 +24,11 @@ QPixmap OperationElement::getImage() const
     return image;
 }
 
-QString OperationElement::getText() const
+std::shared_ptr<CodeText> OperationElement::getText() const
 {
-    return "Operation Element: " + name;
+    std::shared_ptr<CodeText> ret = std::make_shared<CodeText>();
+    ret->addToBody("Opration element code\n");
+    return ret;
 }
 
 QWidget* OperationElement::getViewWidget(QWidget* parent)

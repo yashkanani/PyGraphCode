@@ -1,4 +1,5 @@
 #include "ResultedTextView.h"
+#include "CodeText.h"
 
 ResultedTextView::ResultedTextView(QWidget* parent, BuilderContainer* builderContainer)
     : QWidget(parent), m_builderContainer(builderContainer)
@@ -26,6 +27,7 @@ ResultedTextView::ResultedTextView(QWidget* parent, BuilderContainer* builderCon
 void ResultedTextView::updateText()
 {
     if (m_builderContainer) {
-        m_resultedTextLabel->setText(m_builderContainer->getText());
+        std::shared_ptr<CodeText> result = m_builderContainer->getText();
+        m_resultedTextLabel->setText(result->getResult());
     }
 }

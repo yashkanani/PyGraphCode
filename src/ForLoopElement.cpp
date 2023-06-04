@@ -4,8 +4,10 @@
 #include <qlayout.h>
 #include "PlaceHolder.h"
 #include "BuilderContainer.h"
+#include "CodeText.h"
 #include <qlabel.h>
 #include <qgroupbox.h>
+#include "CodeText.h"
 
 ForLoopElement::ForLoopElement()
 {
@@ -23,9 +25,11 @@ QPixmap ForLoopElement::getImage() const
     return image;
 }
 
-QString ForLoopElement::getText() const
+std::shared_ptr<CodeText> ForLoopElement::getText() const
 {
-    return "For Loop Element: " + name;
+    std::shared_ptr<CodeText> ret = std::make_shared<CodeText>();
+    ret->addToBody("Forloop element code\n");
+    return ret;
 }
 
 QWidget* ForLoopElement::getViewWidget(QWidget* parent)

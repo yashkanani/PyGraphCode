@@ -7,6 +7,7 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qwidget.h>
+#include "CodeText.h"
 
 VariableElement::VariableElement()
 {
@@ -24,9 +25,11 @@ QPixmap VariableElement::getImage() const
     return image;
 }
 
-QString VariableElement::getText() const
+std::shared_ptr<CodeText> VariableElement::getText() const
 {
-    return "Variable Element: " + name;
+    std::shared_ptr<CodeText> ret = std::make_shared<CodeText>();
+    ret->addToBody("variable element code\n");
+    return ret;
 }
 
 QWidget* VariableElement::getViewWidget(QWidget* parent)

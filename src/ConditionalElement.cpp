@@ -8,6 +8,7 @@
 #include <qcombobox.h>
 
 #include "VariableElement.h"
+#include "CodeText.h"
 
 
 ConditionalElement::ConditionalElement()
@@ -26,9 +27,11 @@ QPixmap ConditionalElement::getImage() const
     return image;
 }
 
-QString ConditionalElement::getText() const
+std::shared_ptr<CodeText> ConditionalElement::getText() const
 {
-    return "Conditional Element: " + name;
+    std::shared_ptr<CodeText> ret = std::make_shared<CodeText>();
+    ret->addToBody("Conditional element code\n");
+    return ret;
 }
 
 QWidget* ConditionalElement::getViewWidget(QWidget* parent)

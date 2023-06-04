@@ -9,6 +9,7 @@
 
 #include "BuilderContainer.h"
 #include "ElementManager.h"
+#include "CodeText.h"
 
 BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
     : QFrame(parent)
@@ -36,14 +37,14 @@ BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
     containerInformation.type = ElementType::PARENT;
 }
 
-QString BuilderContainer::getText() const
+std::shared_ptr<CodeText> BuilderContainer::getText() const
 {
     return getText(containerInformation);
 }
 
-QString BuilderContainer::getText(const ContainerInformation& containerInfo) const
+std::shared_ptr<CodeText> BuilderContainer::getText(const ContainerInformation& containerInfo) const
 {
-    QString result;
+    std::shared_ptr<CodeText> result = std::make_shared<CodeText>();
     switch (containerInfo.type) {
 
     case ElementType::ELEMENT:
@@ -60,9 +61,13 @@ QString BuilderContainer::getText(const ContainerInformation& containerInfo) con
 
     case ElementType::PARENT:
         // Call the getText() method recursively for each child container
-        for (auto& childContainerInfo : containerInfo.children)
-            result += getText(childContainerInfo);
+        for (auto& childContainerInfo : containerInfo.children) {
+            std::shared_ptr<CodeText> childResult = getText(childContainerInfo);
+            if (childResult)
+                result->append(*childResult);
+        }
         break;
+
     default:
         break;
     }
@@ -226,6 +231,8 @@ void BuilderContainer::dropEvent(QDropEvent* event)
 
             hideDropIndicator(); // Hide the drop indicator
             
+            emit updateResultedTextView(); // Update the text in ResultedTextView Widget.
+
             event->acceptProposedAction();
         }
     }

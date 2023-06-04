@@ -14,7 +14,7 @@ class BuilderContainer : public QFrame {
 
 public:
     explicit BuilderContainer(QWidget* parent = nullptr, bool isSubContainer = false);
-    QString getText() const;
+    std::shared_ptr<CodeText> getText() const;
 
 protected:
     void dragEnterEvent(QDragEnterEvent* event) override;
@@ -38,7 +38,7 @@ private:
 
     QRect calculateDropIndicatorRect(int insertIndex) const;
 
-    QString getText(const ContainerInformation& containerInfo) const;
+    std::shared_ptr<CodeText> getText(const ContainerInformation& containerInfo) const;
     int findInsertIndex(QDropEvent* event);
     
 

@@ -7,6 +7,7 @@
 #include <qcombobox.h>
 #include <qlineedit.h>
 #include "ConditionalElement.h"
+#include "CodeText.h"
 
 IfLoopElement::IfLoopElement()
 {
@@ -24,9 +25,11 @@ QPixmap IfLoopElement::getImage() const
     return image;
 }
 
-QString IfLoopElement::getText() const
+std::shared_ptr<CodeText> IfLoopElement::getText() const
 {
-    return "If Loop Element: " + name;
+    std::shared_ptr<CodeText> ret = std::make_shared<CodeText>();
+    ret->addToBody("ifloop element code\n");
+    return ret;
 }
 
 QWidget* IfLoopElement::getViewWidget(QWidget* parent)

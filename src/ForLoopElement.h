@@ -14,7 +14,7 @@ public:
 
     QString getName() const override;
     QPixmap getImage() const override;
-    QString getText() const override;
+    std::shared_ptr<CodeText> getText() const override;
     QWidget* getViewWidget(QWidget* parent = nullptr) override;
   
 
