@@ -27,11 +27,11 @@ std::vector<AbstractElement*> ElementManager::getAllElements()
     return allElements;
 }
 
-AbstractElement* ElementManager::findElementByName(const QString& name)
+std::shared_ptr<AbstractElement> ElementManager::findElementByName(const QString& name)
 {
     for (const auto& element : elements) {
         if (element->getName() == name) {
-            return element.get();
+            return element;
         }
     }
     return nullptr;
@@ -44,4 +44,10 @@ void ElementManager::createElements()
     elements.push_back(std::make_shared<IfLoopElement>());
     elements.push_back(std::make_shared<ConditionalElement>());
     elements.push_back(std::make_shared<OperationElement>());
+}
+
+
+std::shared_ptr<AbstractElement> ElementManager::createCopyOfElements(const QString& name)
+{
+    return findElementByName(name)->clone(); // Clone method is not currently implemented in all element.
 }

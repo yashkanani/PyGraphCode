@@ -42,8 +42,8 @@ private:
     int findInsertIndex(QDropEvent* event);
     
 
-    AbstractElement* createInstance(const QString& elementType);
-    bool isDropAccepted(const AbstractElement* element) const;
+    std::shared_ptr<AbstractElement> createInstance(const QString& elementType);
+    bool isDropAccepted(std::shared_ptr<AbstractElement> element) const;
     void addElementWidget(QWidget* elementWidget, int insertIndex);
 
     QVBoxLayout* builderContainerlayout;

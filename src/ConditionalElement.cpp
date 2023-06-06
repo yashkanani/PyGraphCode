@@ -17,6 +17,11 @@ ConditionalElement::ConditionalElement()
     image = QPixmap(":/resource/Conditional.png");
 }
 
+ std::shared_ptr<AbstractElement> ConditionalElement::clone() const
+{
+    return std::make_shared<ConditionalElement>();
+}
+
 QString ConditionalElement::getName() const
 {
     return name;
@@ -59,6 +64,7 @@ QWidget* ConditionalElement::getViewWidget(QWidget* parent)
 
     VariableElement* firstVariableElement = new VariableElement();
     QWidget* firstVariableWidget = firstVariableElement->getViewWidget(wdg);
+    QObject::connect(firstVariableElement, &AbstractElement::childValueChanged, this, &AbstractElement::childValueChanged);
     wdgLay->addWidget(firstVariableWidget, 0, 0);
 
     QComboBox* conditionComboBox = new QComboBox(wdg);
@@ -69,16 +75,15 @@ QWidget* ConditionalElement::getViewWidget(QWidget* parent)
     conditionComboBox->addItem("is same as (==)");
     conditionComboBox->addItem("is not same as (!=)");
     conditionComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    
+    // Connect the combo box signals to notifier.
+    QObject::connect(conditionComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AbstractElement::childValueChanged);
     wdgLay->addWidget(conditionComboBox, 0, 1, Qt::AlignCenter);
 
     VariableElement* secondVariableElement = new VariableElement();
     QWidget* secondVariableWidget = secondVariableElement->getViewWidget(wdg);
+    QObject::connect(secondVariableElement, &AbstractElement::childValueChanged, this, &AbstractElement::childValueChanged);
     wdgLay->addWidget(secondVariableWidget, 0, 2);
-
-    // Connect the combo box signals to slots or functions
-    // Example: Connect the currentIndexChanged signal of conditionComboBox
-    // to a slot or function that handles the selection change.
-    // QObject::connect(conditionComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ConditionalElement::handleConditionIndexChanged);
 
     return wdg;
 }

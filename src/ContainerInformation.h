@@ -14,7 +14,7 @@ enum class ElementType {
 
 typedef struct ContainerInformation {
     ElementType type = ElementType::PARENT;
-    AbstractElement* elementPointer;
+    std::shared_ptr<AbstractElement> elementPointer;
     BuilderContainer* containerPointer;
     QList<ContainerInformation> children;
 } ContainerInformation;

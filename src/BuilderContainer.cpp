@@ -215,13 +215,14 @@ void BuilderContainer::dropEvent(QDropEvent* event)
         QString elementName;
         stream >> elementName;
 
-        AbstractElement* element = createInstance(elementName);
+        std::shared_ptr<AbstractElement> element = createInstance(elementName);
 
         if (element && isDropAccepted(element)) {
 
             int insertIndex = findInsertIndex(event);
 
             addElementWidget(element->getViewWidget(), insertIndex);
+            connect(element.get(), &AbstractElement::childValueChanged, this, &BuilderContainer::updateResultedTextView);
 
             ContainerInformation info;
             info.type = ElementType::ELEMENT;
@@ -238,13 +239,13 @@ void BuilderContainer::dropEvent(QDropEvent* event)
     }
 }
 
-AbstractElement* BuilderContainer::createInstance(const QString& elementName)
+std::shared_ptr<AbstractElement> BuilderContainer::createInstance(const QString& elementName)
 {
-    AbstractElement* elementPointer = ElementManager::getInstance().findElementByName(elementName);
+    std::shared_ptr<AbstractElement> elementPointer = ElementManager::getInstance().createCopyOfElements(elementName);
     return elementPointer;
 }
 
-bool BuilderContainer::isDropAccepted(const AbstractElement* element) const
+bool BuilderContainer::isDropAccepted(std::shared_ptr<AbstractElement> element) const
 {
 
     return true; // Return true if the drop is accepted, false otherwise

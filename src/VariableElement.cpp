@@ -1,5 +1,6 @@
 #include "VariableElement.h"
 #include "BuilderContainer.h"
+#include "CodeText.h"
 #include "PlaceHolder.h"
 #include <qcombobox.h>
 #include <qgroupbox.h>
@@ -7,12 +8,20 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qwidget.h>
-#include "CodeText.h"
 
 VariableElement::VariableElement()
 {
     name = "Variable";
     image = QPixmap(":/resource/Variable.png");
+
+    methodSelectcomboBox = nullptr;
+    staticValueLineEdit = nullptr;
+    dynamicValueContainer = nullptr;
+}
+
+std::shared_ptr<AbstractElement> VariableElement::clone() const
+{
+    return std::make_shared<VariableElement>();
 }
 
 QString VariableElement::getName() const
@@ -28,7 +37,38 @@ QPixmap VariableElement::getImage() const
 std::shared_ptr<CodeText> VariableElement::getText() const
 {
     std::shared_ptr<CodeText> ret = std::make_shared<CodeText>();
-    ret->addToBody("variable element code\n");
+
+    QString line;
+    if (methodSelectcomboBox) {
+
+        switch (methodSelectcomboBox->currentIndex()) {
+        case 0: { 
+            // Read
+            line = "";
+            break;
+        }
+        case 1: {
+            // Static Value set
+            if (staticValueLineEdit) {
+                line = staticValueLineEdit->text();
+            }
+            break;
+        }
+        case 2: {
+            // Dynamic Value set
+            if (dynamicValueContainer) {
+                line = dynamicValueContainer->getText()->getResult();
+            }
+           
+            break;
+        }
+        default: {
+            break;
+        }
+        };
+    }
+    line += "\n";
+    ret->addToBody(line);
     return ret;
 }
 
@@ -57,39 +97,57 @@ QWidget* VariableElement::getViewWidget(QWidget* parent)
     wdgLayout->setContentsMargins(0, 0, 0, 0);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    QComboBox* comboBox = new QComboBox(wdg);
-    comboBox->addItem("Read");
-    comboBox->addItem("Static");
-    comboBox->addItem("Dynamic");
-    comboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    wdgLayout->addWidget(comboBox);
+    methodSelectcomboBox = new QComboBox(wdg);
+    methodSelectcomboBox->addItem("Read");
+    methodSelectcomboBox->addItem("Static");
+    methodSelectcomboBox->addItem("Dynamic");
+    methodSelectcomboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    wdgLayout->addWidget(methodSelectcomboBox);
 
-    QLineEdit* lineEdit = new QLineEdit(wdg);
-    lineEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    lineEdit->hide(); // Initially hide the line edit
-    wdgLayout->addWidget(lineEdit);
+    staticValueLineEdit = new QLineEdit(wdg);
+    staticValueLineEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    staticValueLineEdit->hide(); // Initially hide the line edit
+    QObject::connect(staticValueLineEdit, &QLineEdit::textChanged, this, &AbstractElement::childValueChanged);
+    wdgLayout->addWidget(staticValueLineEdit);
 
-    BuilderContainer* builderContainer = new BuilderContainer(wdg, true);
-    builderContainer->hide(); // Initially hide the builder container
-    wdgLayout->addWidget(builderContainer);
+    dynamicValueContainer = new BuilderContainer(wdg, true);
+    dynamicValueContainer->hide(); // Initially hide the builder container
+    QObject::connect(dynamicValueContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+    wdgLayout->addWidget(dynamicValueContainer);
 
     // Connect the combo box signal to a lambda function
-    QObject::connect(comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
-        if (index == 0) {
-            // Neither static nor dynamic, hide both line edit and builder container
-            lineEdit->hide();
-            builderContainer->hide();
-
-        } else if (index == 1) {
-            // Show the line edit for entering static value
-            lineEdit->show();
-            builderContainer->hide();
-
-        } else {
-            // Show the builder container for entering dynamic value
-            lineEdit->hide();
-            builderContainer->show();
+    QObject::connect(methodSelectcomboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
+        if ((staticValueLineEdit == nullptr) || (dynamicValueContainer == nullptr)) {
+            return;
         }
+
+        switch (index) {
+
+        case 0: {
+            // Neither static nor dynamic, hide both line edit and builder container
+            staticValueLineEdit->hide();
+            dynamicValueContainer->hide();
+            break;
+        }
+        case 1: {
+            // Show the line edit for entering static value
+            staticValueLineEdit->show();
+            dynamicValueContainer->hide();
+            break;
+        }
+        case 2: {
+            // Show the builder container for entering dynamic value
+            staticValueLineEdit->hide();
+            dynamicValueContainer->show();
+            break;
+        }
+        default: {
+            // Handle any other cases if needed
+            break;
+        }
+        }
+
+        emit childValueChanged();
     });
 
     return wdg;

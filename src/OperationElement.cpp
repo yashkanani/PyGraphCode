@@ -14,6 +14,11 @@ OperationElement::OperationElement()
     image = QPixmap(":/resource/Operation.png");
 }
 
+ std::shared_ptr<AbstractElement> OperationElement::clone() const
+{
+     return std::make_shared<OperationElement>();
+ }
+
 QString OperationElement::getName() const
 {
     return name;

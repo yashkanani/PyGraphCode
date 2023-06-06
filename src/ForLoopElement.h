@@ -7,11 +7,11 @@
 #include <QComboBox>
 #include <QLineEdit>
 
-class PlaceHolder;
+
 class ForLoopElement : public AbstractElement {
 public:
     ForLoopElement();
-
+    std::shared_ptr<AbstractElement> clone() const override;
     QString getName() const override;
     QPixmap getImage() const override;
     std::shared_ptr<CodeText> getText() const override;
@@ -21,13 +21,6 @@ public:
 private:
     QString name;
     QPixmap image;
-
-    std::shared_ptr<PlaceHolder> startLoop;
-    std::shared_ptr<PlaceHolder> endLoop;
-    std::shared_ptr<PlaceHolder> body;
-    std::shared_ptr<PlaceHolder> condition;
-
-    
 };
 
 #endif // FOR_LOOP_ELEMENT_H
