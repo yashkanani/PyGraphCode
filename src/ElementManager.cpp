@@ -1,5 +1,6 @@
 #include "ElementManager.h"
 
+#include "ReadVariableElement.h"
 #include "WriteVariableElement.h"
 #include "ForLoopElement.h"
 #include "IfLoopElement.h"
@@ -40,6 +41,7 @@ std::shared_ptr<AbstractElement> ElementManager::findElementFromType(const Basic
 
 void ElementManager::createElements()
 {
+    elements.push_back(std::make_shared<ReadVariableElement>());
     elements.push_back(std::make_shared<WriteVariableElement>());
     elements.push_back(std::make_shared<ForLoopElement>());
     elements.push_back(std::make_shared<IfLoopElement>());
