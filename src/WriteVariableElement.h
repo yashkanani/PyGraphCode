@@ -7,9 +7,9 @@ class QLineEdit;
 class QComboBox;
 class BuilderContainer;
 
-class VariableElement : public AbstractElement {
+class WriteVariableElement : public AbstractElement {
 public:
-    VariableElement();
+    WriteVariableElement();
     std::shared_ptr<AbstractElement> clone() const override;
 
     std::shared_ptr<CodeText> getText() const override;

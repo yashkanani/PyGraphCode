@@ -8,7 +8,7 @@
 #include <qpushbutton.h>
 
 #include "CodeText.h"
-#include "VariableElement.h"
+#include "WriteVariableElement.h"
 
 ConditionalElement::ConditionalElement()
 {
@@ -94,7 +94,7 @@ QWidget* ConditionalElement::getViewWidget(QWidget* parent)
     QGridLayout* wdgLay = new QGridLayout(wdg);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    firstVariableElement = new VariableElement();
+    firstVariableElement = new WriteVariableElement();
     QWidget* firstVariableWidget = firstVariableElement->getViewWidget(wdg);
     QObject::connect(firstVariableElement, &AbstractElement::childValueChanged, this, &AbstractElement::childValueChanged);
     wdgLay->addWidget(firstVariableWidget, 0, 0);
@@ -112,7 +112,7 @@ QWidget* ConditionalElement::getViewWidget(QWidget* parent)
     QObject::connect(conditionComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AbstractElement::childValueChanged);
     wdgLay->addWidget(conditionComboBox, 0, 1, Qt::AlignCenter);
 
-    secondVariableElement = new VariableElement();
+    secondVariableElement = new WriteVariableElement();
     QWidget* secondVariableWidget = secondVariableElement->getViewWidget(wdg);
     QObject::connect(secondVariableElement, &AbstractElement::childValueChanged, this, &AbstractElement::childValueChanged);
     wdgLay->addWidget(secondVariableWidget, 0, 2);

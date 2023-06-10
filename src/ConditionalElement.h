@@ -3,7 +3,7 @@
 
 #include "AbstractElement.h"
 
-class VariableElement;
+class WriteVariableElement;
 class QComboBox;
 class ConditionalElement : public AbstractElement {
 public:
@@ -16,9 +16,9 @@ public:
 private:
    
 
-    VariableElement* firstVariableElement;
+    WriteVariableElement* firstVariableElement;
     QComboBox* conditionComboBox;
-    VariableElement* secondVariableElement;
+    WriteVariableElement* secondVariableElement;
 };
 
 #endif // CONDITIONAL_ELEMENT_H

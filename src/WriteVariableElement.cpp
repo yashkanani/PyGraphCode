@@ -1,4 +1,4 @@
-#include "VariableElement.h"
+#include "WriteVariableElement.h"
 #include "BuilderContainer.h"
 #include "CodeText.h"
 #include "PlaceHolder.h"
@@ -10,7 +10,7 @@
 #include <qwidget.h>
 
 
-VariableElement::VariableElement()
+WriteVariableElement::WriteVariableElement()
 {
     name = "Variable";
     image = QPixmap(":/resource/Variable.png");
@@ -24,12 +24,12 @@ VariableElement::VariableElement()
 
 
 
-std::shared_ptr<AbstractElement> VariableElement::clone() const
+std::shared_ptr<AbstractElement> WriteVariableElement::clone() const
 {
-    return std::make_shared<VariableElement>();
+    return std::make_shared<WriteVariableElement>();
 }
 
-std::shared_ptr<CodeText> VariableElement::getText() const
+std::shared_ptr<CodeText> WriteVariableElement::getText() const
 {
     std::shared_ptr<CodeText> ret = std::make_shared<CodeText>();
 
@@ -67,7 +67,7 @@ std::shared_ptr<CodeText> VariableElement::getText() const
     return ret;
 }
 
-QWidget* VariableElement::getViewWidget(QWidget* parent)
+QWidget* WriteVariableElement::getViewWidget(QWidget* parent)
 {
 
     QGroupBox* wdg = new QGroupBox(getName()+ " Variable", parent);
@@ -106,6 +106,12 @@ QWidget* VariableElement::getViewWidget(QWidget* parent)
     wdgLayout->addWidget(staticValueLineEdit);
 
     dynamicValueContainer = new BuilderContainer(wdg, true);
+
+    // Set the accepted types for the BuilderContainer
+    QList<BasicElementType> acceptedTypes = { BasicElementType::VARIABLE, BasicElementType::CONDITIONS };
+    dynamicValueContainer->setAcceptedTypes(acceptedTypes);
+    dynamicValueContainer->setMaxElements(1);
+
     dynamicValueContainer->hide(); // Initially hide the builder container
     QObject::connect(dynamicValueContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
     wdgLayout->addWidget(dynamicValueContainer);

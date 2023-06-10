@@ -1,5 +1,5 @@
 #include "ElementsCreator.h"
-#include "VariableElement.h"
+#include "WriteVariableElement.h"
 #include "elementscreator.h"
 #include <QDialog>
 #include <QFormLayout>
@@ -55,7 +55,7 @@ void ElementsCreator::onAddVariableClicked()
 
 void ElementsCreator::addVariableElement(const QString& variableName)
 {
-    std::shared_ptr<VariableElement> variableElement = std::make_shared<VariableElement>();
+    std::shared_ptr<WriteVariableElement> variableElement = std::make_shared<WriteVariableElement>();
     variableElement->setName(variableName);
 
     // Add custom variable for future use.
