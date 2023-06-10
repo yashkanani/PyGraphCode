@@ -3,9 +3,6 @@
 
 #include "AbstractElement.h"
 
-class QLineEdit;
-class QComboBox;
-class BuilderContainer;
 
 class ReadVariableElement : public AbstractElement {
 public:
@@ -14,14 +11,7 @@ public:
 
     std::shared_ptr<CodeText> getText() const override;
     QWidget* getViewWidget(QWidget* parent = nullptr) override;
-   
 
-private:
-
-
-    QComboBox* methodSelectcomboBox;
-    QLineEdit* staticValueLineEdit;
-    BuilderContainer* dynamicValueContainer;
 };
 
 #endif // READ_VARIABLE_ELEMENT_H
