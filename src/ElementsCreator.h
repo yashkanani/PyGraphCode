@@ -17,14 +17,17 @@ private slots:
     void onAddVariableClicked();
 
 private:
-    void addVariableElement(const QString& variableName);
+    void addElement(std::shared_ptr<AbstractElement> element);
+    void addReadVariableElement(const QString& variableName);
+    void addWriteVariableElement(const QString& variableName);
 
     QGridLayout* variableListLayout;
     int columnCount = 0;
     int rowCount = 0;
 
 
-    std::vector<std::shared_ptr<AbstractElement>> customeVariables;
+    std::vector<std::shared_ptr<AbstractElement>> customeReadVariables;
+    std::vector<std::shared_ptr<AbstractElement>> customeWriteVariables;
 };
 
 #endif // ELEMENTSCREATOR_H

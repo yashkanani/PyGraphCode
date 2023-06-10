@@ -1,5 +1,5 @@
-#ifndef VARIABLE_ELEMENT_H
-#define VARIABLE_ELEMENT_H
+#ifndef READ_VARIABLE_ELEMENT_H
+#define READ_VARIABLE_ELEMENT_H
 
 #include "AbstractElement.h"
 
@@ -24,4 +24,4 @@ private:
     BuilderContainer* dynamicValueContainer;
 };
 
-#endif // VARIABLE_ELEMENT_H
+#endif // READ_VARIABLE_ELEMENT_H

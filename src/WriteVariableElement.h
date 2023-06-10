@@ -1,5 +1,5 @@
-#ifndef VARIABLE_ELEMENT_H
-#define VARIABLE_ELEMENT_H
+#ifndef WRITE_VARIABLE_ELEMENT_H
+#define WRITE_VARIABLE_ELEMENT_H
 
 #include "AbstractElement.h"
 
@@ -24,4 +24,4 @@ private:
     BuilderContainer* dynamicValueContainer;
 };
 
-#endif // VARIABLE_ELEMENT_H
+#endif // WRITE_VARIABLE_ELEMENT_H

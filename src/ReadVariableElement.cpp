@@ -70,19 +70,19 @@ std::shared_ptr<CodeText> ReadVariableElement::getText() const
 QWidget* ReadVariableElement::getViewWidget(QWidget* parent)
 {
 
-    QGroupBox* wdg = new QGroupBox(getName()+ " Variable", parent);
-    wdg->setObjectName("VariableGroupBox");
+    QGroupBox* wdg = new QGroupBox(getName(), parent);
+    wdg->setObjectName("ReadVariableGroupBox");
 
     // Set the style sheet to customize the appearance
     wdg->setStyleSheet(
-        "QGroupBox#VariableGroupBox {"
+        "QGroupBox#ReadVariableGroupBox {"
         "   border: 1px solid #888888;"
         "   border-radius: 5px;"
         "   margin-top: 10px;"
         "   padding: 10px;"
         "   background-color: white;"
         "}"
-        "QGroupBox#VariableGroupBox::title {"
+        "QGroupBox#ReadVariableGroupBox::title {"
         "   subcontrol-origin: margin;"
         "   subcontrol-position: top center;"
         "   padding: 5px;"
@@ -93,9 +93,8 @@ QWidget* ReadVariableElement::getViewWidget(QWidget* parent)
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     methodSelectcomboBox = new QComboBox(wdg);
-    methodSelectcomboBox->addItem("Read");
-    methodSelectcomboBox->addItem("Static");
-    methodSelectcomboBox->addItem("Dynamic");
+    methodSelectcomboBox->addItem("Static Read");
+    methodSelectcomboBox->addItem("Dynamic Read");
     methodSelectcomboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     wdgLayout->addWidget(methodSelectcomboBox);
 

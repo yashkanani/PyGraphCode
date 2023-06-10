@@ -1,5 +1,6 @@
 #include "ElementsCreator.h"
 #include "WriteVariableElement.h"
+#include "ReadVariableElement.h"
 #include "elementscreator.h"
 #include <QDialog>
 #include <QFormLayout>
@@ -49,41 +50,59 @@ void ElementsCreator::onAddVariableClicked()
     if (dialog.exec() == QDialog::Accepted) {
         QString variableName = nameLineEdit.text();
 
-        addVariableElement(variableName);
+        addReadVariableElement(variableName);
+        addWriteVariableElement(variableName);
     }
 }
 
-void ElementsCreator::addVariableElement(const QString& variableName)
-{
+void ElementsCreator::addReadVariableElement(const QString& variableName) {
+    std::shared_ptr<ReadVariableElement> variableElement = std::make_shared<ReadVariableElement>();
+    variableElement->setName(variableName);
+
+    // Add custom variable for future use.
+    customeReadVariables.push_back(variableElement);
+
+    addElement(variableElement);
+    }
+void ElementsCreator::addWriteVariableElement(const QString& variableName) {
     std::shared_ptr<WriteVariableElement> variableElement = std::make_shared<WriteVariableElement>();
     variableElement->setName(variableName);
 
     // Add custom variable for future use.
-    customeVariables.push_back(variableElement);
+    customeWriteVariables.push_back(variableElement);
 
-    // Get the image from the variableElement
-    QPixmap variableImage = variableElement->getImage();
+    addElement(variableElement);
+}
 
-    QLabel* elementIconLabel = new QLabel(this);
-
-    elementIconLabel->setAlignment(Qt::AlignCenter);
-    elementIconLabel->setStyleSheet("QLabel:hover { background-color: lightgray; }");
-    elementIconLabel->setProperty("element", QVariant::fromValue(static_cast<AbstractElement*>(variableElement.get())));
-    elementIconLabel->setCursor(Qt::OpenHandCursor);
-    elementIconLabel->setAlignment(Qt::AlignCenter);
-    elementIconLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    elementIconLabel->installEventFilter(new ElementDragEventHandler(elementIconLabel)); // Install event filter
-    elementIconLabel->setPixmap(variableElement->getImage().scaled(50, 50));
-
-     // Add the element icon label to the grid layout at the appropriate position
-    variableListLayout->addWidget(elementIconLabel, rowCount, columnCount);
-    variableListLayout->setRowStretch(variableListLayout->rowCount(), 1);
+void ElementsCreator::addElement(std::shared_ptr<AbstractElement> element)
+{
     
+    if (element) {
+        // Get the image from the variableElement
+        QPixmap variableImage = element->getImage();
 
-    // Increment the column count and move to the next row if necessary
-    columnCount++;
-    if (columnCount >= 8) {
-        columnCount = 0;
-        rowCount++;
+        QLabel* elementIconLabel = new QLabel(this);
+
+        elementIconLabel->setAlignment(Qt::AlignCenter);
+        elementIconLabel->setStyleSheet("QLabel:hover { background-color: lightgray; }");
+        elementIconLabel->setProperty("element", QVariant::fromValue(static_cast<AbstractElement*>(element.get())));
+        elementIconLabel->setCursor(Qt::OpenHandCursor);
+        elementIconLabel->setAlignment(Qt::AlignCenter);
+        elementIconLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        elementIconLabel->installEventFilter(new ElementDragEventHandler(elementIconLabel)); // Install event filter
+        elementIconLabel->setPixmap(element->getImage().scaled(50, 50));
+
+        // Add the element icon label to the grid layout at the appropriate position
+        variableListLayout->addWidget(elementIconLabel, rowCount, columnCount);
+        variableListLayout->setRowStretch(variableListLayout->rowCount(), 1);
+
+        // Increment the column count and move to the next row if necessary
+        columnCount++;
+        if (columnCount >= 8) {
+            columnCount = 0;
+            rowCount++;
+        }
     }
+
+    
 }
