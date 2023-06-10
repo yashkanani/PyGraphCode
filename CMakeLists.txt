@@ -28,18 +28,46 @@ set(RESOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/src/resources.qrc
    ${CMAKE_CURRENT_SOURCE_DIR}/src/qml/CustomToolBarItem.qml
    ${CMAKE_CURRENT_SOURCE_DIR}/src/qml/SerachBar.qml
-  
 )
 
 
 set(HEADERS	
       ${CMAKE_CURRENT_SOURCE_DIR}/src/MainWindow.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/MainWindowUI.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/AbstractElement.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ConditionalElement.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ForLoopElement.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/IfLoopElement.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/VariableElement.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementManager.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementDragEventHandler.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderContainer.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ContainerInformation.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/PlaceHolder.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/OperationElement.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ResultedTextView.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/CodeText.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsCreator.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BasicElementType.h
    )
+
 set(SOURCES
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/src/MainWindow.cpp
-	  ${CMAKE_CURRENT_SOURCE_DIR}/src/MainWindowUI.cpp	
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/MainWindowUI.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/AbstractElement.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ConditionalElement.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ForLoopElement.cpp	
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/IfLoopElement.cpp	
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/VariableElement.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementManager.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementDragEventHandler.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderContainer.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/PlaceHolder.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/OperationElement.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ResultedTextView.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/CodeText.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsCreator.cpp
     )
 
 
