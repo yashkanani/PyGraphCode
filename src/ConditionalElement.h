@@ -3,18 +3,22 @@
 
 #include "AbstractElement.h"
 
+class VariableElement;
+class QComboBox;
 class ConditionalElement : public AbstractElement {
 public:
     ConditionalElement();
     std::shared_ptr<AbstractElement> clone() const override;
-    QString getName() const override;
-    QPixmap getImage() const override;
     std::shared_ptr<CodeText> getText() const override;
     QWidget* getViewWidget(QWidget* parent = nullptr) override;
 
+
 private:
-    QString name;
-    QPixmap image;
+   
+
+    VariableElement* firstVariableElement;
+    QComboBox* conditionComboBox;
+    VariableElement* secondVariableElement;
 };
 
 #endif // CONDITIONAL_ELEMENT_H

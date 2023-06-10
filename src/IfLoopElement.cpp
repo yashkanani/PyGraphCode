@@ -13,6 +13,7 @@ IfLoopElement::IfLoopElement()
 {
     name = "If Loop";
     image = QPixmap(":/resource/If_loop.png");
+    type = BasicElementType::IF_LOOP;
 }
 
 std::shared_ptr<AbstractElement> IfLoopElement::clone() const
@@ -20,15 +21,6 @@ std::shared_ptr<AbstractElement> IfLoopElement::clone() const
     return std::make_shared<IfLoopElement>();
 }
 
-QString IfLoopElement::getName() const
-{
-    return name;
-}
-
-QPixmap IfLoopElement::getImage() const
-{
-    return image;
-}
 
 std::shared_ptr<CodeText> IfLoopElement::getText() const
 {

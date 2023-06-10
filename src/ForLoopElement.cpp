@@ -13,6 +13,7 @@ ForLoopElement::ForLoopElement()
 {
     name = "For Loop";
     image = QPixmap(":/resource/For_loop.png");
+    type = BasicElementType::FOR_LOOP;
 }
 
  std::shared_ptr<AbstractElement> ForLoopElement::clone() const
@@ -20,15 +21,6 @@ ForLoopElement::ForLoopElement()
     return std::make_shared<ForLoopElement>();
 }
 
-QString ForLoopElement::getName() const
-{
-    return name;
-}
-
-QPixmap ForLoopElement::getImage() const
-{
-    return image;
-}
 
 std::shared_ptr<CodeText> ForLoopElement::getText() const
 {

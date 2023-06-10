@@ -12,6 +12,7 @@ OperationElement::OperationElement()
 {
     name = "Operation";
     image = QPixmap(":/resource/Operation.png");
+    type = BasicElementType::OPERATOR;
 }
 
  std::shared_ptr<AbstractElement> OperationElement::clone() const
@@ -19,15 +20,6 @@ OperationElement::OperationElement()
      return std::make_shared<OperationElement>();
  }
 
-QString OperationElement::getName() const
-{
-    return name;
-}
-
-QPixmap OperationElement::getImage() const
-{
-    return image;
-}
 
 std::shared_ptr<CodeText> OperationElement::getText() const
 {

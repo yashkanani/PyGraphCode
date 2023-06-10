@@ -12,15 +12,10 @@ class ForLoopElement : public AbstractElement {
 public:
     ForLoopElement();
     std::shared_ptr<AbstractElement> clone() const override;
-    QString getName() const override;
-    QPixmap getImage() const override;
+
     std::shared_ptr<CodeText> getText() const override;
     QWidget* getViewWidget(QWidget* parent = nullptr) override;
-  
 
-private:
-    QString name;
-    QPixmap image;
 };
 
 #endif // FOR_LOOP_ELEMENT_H

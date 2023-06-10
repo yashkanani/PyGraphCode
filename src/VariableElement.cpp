@@ -9,29 +9,24 @@
 #include <qpushbutton.h>
 #include <qwidget.h>
 
+
 VariableElement::VariableElement()
 {
     name = "Variable";
     image = QPixmap(":/resource/Variable.png");
+    type = BasicElementType::VARIABLE;
 
     methodSelectcomboBox = nullptr;
     staticValueLineEdit = nullptr;
     dynamicValueContainer = nullptr;
+    
 }
+
+
 
 std::shared_ptr<AbstractElement> VariableElement::clone() const
 {
     return std::make_shared<VariableElement>();
-}
-
-QString VariableElement::getName() const
-{
-    return name;
-}
-
-QPixmap VariableElement::getImage() const
-{
-    return image;
 }
 
 std::shared_ptr<CodeText> VariableElement::getText() const
@@ -44,20 +39,20 @@ std::shared_ptr<CodeText> VariableElement::getText() const
         switch (methodSelectcomboBox->currentIndex()) {
         case 0: { 
             // Read
-            line = "";
+            line = "a";
             break;
         }
         case 1: {
             // Static Value set
             if (staticValueLineEdit) {
-                line = staticValueLineEdit->text();
+                line = "a = " + staticValueLineEdit->text();
             }
             break;
         }
         case 2: {
             // Dynamic Value set
             if (dynamicValueContainer) {
-                line = dynamicValueContainer->getText()->getResult();
+                line = "a = " + dynamicValueContainer->getText()->getResult();
             }
            
             break;
@@ -67,7 +62,7 @@ std::shared_ptr<CodeText> VariableElement::getText() const
         }
         };
     }
-    line += "\n";
+    
     ret->addToBody(line);
     return ret;
 }
@@ -75,7 +70,7 @@ std::shared_ptr<CodeText> VariableElement::getText() const
 QWidget* VariableElement::getViewWidget(QWidget* parent)
 {
 
-    QGroupBox* wdg = new QGroupBox("Variable", parent);
+    QGroupBox* wdg = new QGroupBox(getName()+ " Variable", parent);
     wdg->setObjectName("VariableGroupBox");
 
     // Set the style sheet to customize the appearance
