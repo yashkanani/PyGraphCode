@@ -14,7 +14,7 @@
 BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
     : QFrame(parent)
 {
-    
+    setMaxElements(std::numeric_limits<int>::max()); // Set default value to maximum int value
     setAcceptDrops(true);
     builderContainerlayout = new QVBoxLayout(this);
     builderContainerlayout->addStretch(1);
@@ -32,8 +32,6 @@ BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
         
     }
     
-
-
     containerInformation.droppedItem = DroppedItem::PARENT;
 }
 
@@ -79,12 +77,55 @@ std::shared_ptr<CodeText> BuilderContainer::getText(const ContainerInformation& 
     return result;
 }
 
+ void BuilderContainer::setAcceptedTypes(const QList<BasicElementType>& acceptedTypesList)
+{
+     acceptedTypes = acceptedTypesList;
+ }
+
 void BuilderContainer::dragEnterEvent(QDragEnterEvent* event)
 {
-    if (event->mimeData()->hasFormat("application/element")) {
-        event->acceptProposedAction();
+    const QMimeData* mimeData = event->mimeData();
+    if (mimeData->hasFormat("application/element")) {
+
+        QByteArray data = mimeData->data("application/element");
+
+        if (data.isEmpty() || isMaxElementsReached()) {
+            event->ignore();
+            return;
+        }
+
+        QDataStream stream(&data, QIODevice::ReadOnly);
+
+        QString elementName;
+        stream >> elementName;
+
+        quint32 elementTypeValue;
+        stream >> elementTypeValue;
+        BasicElementType elementType = static_cast<BasicElementType>(elementTypeValue);
+    
+        if (isDropAccepted(elementType)) {
+            event->acceptProposedAction();
+        } else {
+            event->ignore();
+        }
     }
+
 }
+
+
+void BuilderContainer::setMaxElements(int maxElements)
+{
+    this->maxElements = maxElements;
+}
+
+bool BuilderContainer::isMaxElementsReached() const
+{
+    if (maxElements >= 0 && containerInformation.children.size() >= maxElements) {
+        return true;
+    }
+    return false;
+}
+
 
 void BuilderContainer::dragLeaveEvent(QDragLeaveEvent* event)
 {
@@ -203,6 +244,7 @@ void BuilderContainer::dragMoveEvent(QDragMoveEvent* event)
 
         event->acceptProposedAction();
     }
+    
 }
 
 void BuilderContainer::dropEvent(QDropEvent* event)
@@ -228,7 +270,7 @@ void BuilderContainer::dropEvent(QDropEvent* event)
         std::shared_ptr<AbstractElement> element = createInstance(elementType, elementName);
         
 
-        if (element && isDropAccepted(element)) {
+        if (element) {
 
             int insertIndex = findInsertIndex(event);
 
@@ -258,10 +300,13 @@ std::shared_ptr<AbstractElement> BuilderContainer::createInstance(const BasicEle
     return elementPointer;
 }
 
-bool BuilderContainer::isDropAccepted(std::shared_ptr<AbstractElement> element) const
-{
 
-    return true; // Return true if the drop is accepted, false otherwise
+bool BuilderContainer::isDropAccepted(const BasicElementType& elementType) const
+{
+    if (acceptedTypes.isEmpty()) {
+        return true; // Accept all types if acceptedTypes is empty
+    }
+    return acceptedTypes.contains(elementType);
 }
 
 void BuilderContainer::addElementWidget(QWidget* elementView, int insertIndex = -1)
