@@ -1,4 +1,4 @@
-#include "WriteVariableElement.h"
+#include "ReadVariableElement.h"
 #include "BuilderContainer.h"
 #include "CodeText.h"
 #include "PlaceHolder.h"
@@ -10,11 +10,11 @@
 #include <qwidget.h>
 
 
-WriteVariableElement::WriteVariableElement()
+ReadVariableElement::ReadVariableElement()
 {
-    name = "Write Variable";
+    name = "Read Variable";
     image = QPixmap(":/resource/Variable.png");
-    type = BasicElementType::WRITE_VARIABLE;
+    type = BasicElementType::READ_VARIABLE;
 
     methodSelectcomboBox = nullptr;
     staticValueLineEdit = nullptr;
@@ -24,12 +24,12 @@ WriteVariableElement::WriteVariableElement()
 
 
 
-std::shared_ptr<AbstractElement> WriteVariableElement::clone() const
+std::shared_ptr<AbstractElement> ReadVariableElement::clone() const
 {
-    return std::make_shared<WriteVariableElement>();
+    return std::make_shared<ReadVariableElement>();
 }
 
-std::shared_ptr<CodeText> WriteVariableElement::getText() const
+std::shared_ptr<CodeText> ReadVariableElement::getText() const
 {
     std::shared_ptr<CodeText> ret = std::make_shared<CodeText>();
 
@@ -67,7 +67,7 @@ std::shared_ptr<CodeText> WriteVariableElement::getText() const
     return ret;
 }
 
-QWidget* WriteVariableElement::getViewWidget(QWidget* parent)
+QWidget* ReadVariableElement::getViewWidget(QWidget* parent)
 {
 
     QGroupBox* wdg = new QGroupBox(getName()+ " Variable", parent);
@@ -108,7 +108,7 @@ QWidget* WriteVariableElement::getViewWidget(QWidget* parent)
     dynamicValueContainer = new BuilderContainer(wdg, true);
 
     // Set the accepted types for the BuilderContainer
-    QList<BasicElementType> acceptedTypes = { BasicElementType::WRITE_VARIABLE, BasicElementType::CONDITIONS };
+    QList<BasicElementType> acceptedTypes = { BasicElementType::READ_VARIABLE, BasicElementType::CONDITIONS };
     dynamicValueContainer->setAcceptedTypes(acceptedTypes);
     dynamicValueContainer->setMaxElements(1);
 
