@@ -15,6 +15,8 @@ class BuilderContainer : public QFrame {
 public:
     explicit BuilderContainer(QWidget* parent = nullptr, bool isSubContainer = false);
     std::shared_ptr<CodeText> getText() const;
+    void setAcceptedTypes(const QList<BasicElementType>& acceptedTypes);
+    void setMaxElements(int maxElements);
 
 protected:
     void dragEnterEvent(QDragEnterEvent* event) override;
@@ -43,10 +45,13 @@ private:
     
 
     std::shared_ptr<AbstractElement> createInstance(const BasicElementType& elementType, const QString& elementName);
-    bool isDropAccepted(std::shared_ptr<AbstractElement> element) const;
+    bool isDropAccepted(const BasicElementType& elementType) const;
+    bool isMaxElementsReached() const;
     void addElementWidget(QWidget* elementWidget, int insertIndex);
 
     QVBoxLayout* builderContainerlayout;
+    QList<BasicElementType> acceptedTypes;
+    int maxElements;
 };
 
 #endif // BUILDERCONTAINER_H
