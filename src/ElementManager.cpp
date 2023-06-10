@@ -27,10 +27,11 @@ std::vector<AbstractElement*> ElementManager::getAllElements()
     return allElements;
 }
 
-std::shared_ptr<AbstractElement> ElementManager::findElementByName(const QString& name)
+std::shared_ptr<AbstractElement> ElementManager::findElementFromType(const BasicElementType& elementType)
 {
+    // Check prebuild elements
     for (const auto& element : elements) {
-        if (element->getName() == name) {
+        if (element->getType() == elementType) {
             return element;
         }
     }
@@ -47,7 +48,9 @@ void ElementManager::createElements()
 }
 
 
-std::shared_ptr<AbstractElement> ElementManager::createCopyOfElements(const QString& name)
+std::shared_ptr<AbstractElement> ElementManager::createElementFromType(const BasicElementType& elementType)
 {
-    return findElementByName(name)->clone(); // Clone method is not currently implemented in all element.
+    return findElementFromType(elementType)->clone(); // Clone method is not currently implemented in all element.
 }
+
+

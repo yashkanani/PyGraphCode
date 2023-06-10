@@ -42,7 +42,7 @@ private:
     int findInsertIndex(QDropEvent* event);
     
 
-    std::shared_ptr<AbstractElement> createInstance(const QString& elementType);
+    std::shared_ptr<AbstractElement> createInstance(const BasicElementType& elementType, const QString& elementName);
     bool isDropAccepted(std::shared_ptr<AbstractElement> element) const;
     void addElementWidget(QWidget* elementWidget, int insertIndex);
 

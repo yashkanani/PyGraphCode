@@ -34,7 +34,7 @@ BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
     
 
 
-    containerInformation.type = ElementType::PARENT;
+    containerInformation.droppedItem = DroppedItem::PARENT;
 }
 
 std::shared_ptr<CodeText> BuilderContainer::getText() const
@@ -45,26 +45,31 @@ std::shared_ptr<CodeText> BuilderContainer::getText() const
 std::shared_ptr<CodeText> BuilderContainer::getText(const ContainerInformation& containerInfo) const
 {
     std::shared_ptr<CodeText> result = std::make_shared<CodeText>();
-    switch (containerInfo.type) {
+    switch (containerInfo.droppedItem) {
 
-    case ElementType::ELEMENT:
+    case DroppedItem::ELEMENT:
         // Call the getText() method of the AbstractElement
         if (containerInfo.elementPointer)
             result = containerInfo.elementPointer->getText();
         break;
 
-    case ElementType::CONTAINER:
+    case DroppedItem::CONTAINER:
         // Call the getText() method of the BuilderContainer
         if (containerInfo.containerPointer)
             result = containerInfo.containerPointer->getText();
         break;
 
-    case ElementType::PARENT:
+    case DroppedItem::PARENT:
         // Call the getText() method recursively for each child container
-        for (auto& childContainerInfo : containerInfo.children) {
-            std::shared_ptr<CodeText> childResult = getText(childContainerInfo);
-            if (childResult)
+        for (const auto& child : containerInfo.children) {
+            std::shared_ptr<CodeText> childResult = getText(child);
+
+            if (childResult) {
+                if (&child != &containerInfo.children.front()) {
+                    result->addToBody("\n");
+                }
                 result->append(*childResult);
+            }
         }
         break;
 
@@ -215,7 +220,13 @@ void BuilderContainer::dropEvent(QDropEvent* event)
         QString elementName;
         stream >> elementName;
 
-        std::shared_ptr<AbstractElement> element = createInstance(elementName);
+        quint32 elementTypeValue;
+        stream >> elementTypeValue;
+        BasicElementType elementType = static_cast<BasicElementType>(elementTypeValue);
+
+
+        std::shared_ptr<AbstractElement> element = createInstance(elementType, elementName);
+        
 
         if (element && isDropAccepted(element)) {
 
@@ -225,7 +236,7 @@ void BuilderContainer::dropEvent(QDropEvent* event)
             connect(element.get(), &AbstractElement::childValueChanged, this, &BuilderContainer::updateResultedTextView);
 
             ContainerInformation info;
-            info.type = ElementType::ELEMENT;
+            info.droppedItem = DroppedItem::ELEMENT;
             info.elementPointer = element;
 
             containerInformation.children.insert(insertIndex, info);
@@ -239,9 +250,11 @@ void BuilderContainer::dropEvent(QDropEvent* event)
     }
 }
 
-std::shared_ptr<AbstractElement> BuilderContainer::createInstance(const QString& elementName)
+std::shared_ptr<AbstractElement> BuilderContainer::createInstance(const BasicElementType& elementType, const QString& elementName)
 {
-    std::shared_ptr<AbstractElement> elementPointer = ElementManager::getInstance().createCopyOfElements(elementName);
+    std::shared_ptr<AbstractElement> elementPointer = ElementManager::getInstance().createElementFromType(elementType);
+    elementPointer->setName(elementName);
+
     return elementPointer;
 }
 

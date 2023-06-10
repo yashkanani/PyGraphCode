@@ -25,6 +25,7 @@ bool ElementDragEventHandler::eventFilter(QObject* watched, QEvent* event)
 
             QDataStream stream(&data, QIODevice::WriteOnly);
             stream << element->getName();
+            stream << static_cast<quint32>(element->getType()); // Serialize the BasicElementType enum value
 
             mimeData->setData("application/element", data);
             drag->setMimeData(mimeData);

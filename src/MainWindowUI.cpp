@@ -4,6 +4,7 @@
 #include "ElementManager.h"
 #include "ElementDragEventHandler.h"
 #include "BuilderContainer.h"
+#include "ElementsCreator.h"
 #include "ResultedTextView.h"
 
 #include <iostream>
@@ -36,15 +37,18 @@ void MainWindowUI::createCentralWidget()
 
     //centralLayout->addWidget(GetApplyStyleButton(),		0, 0);
     //centralLayout->addWidget(GetMainTabWidget(), 1, 0);
-    centralLayout->addWidget(getElementsWidget(centralWidget), 1, 0);
+    centralLayout->addWidget(getElementsWidget(centralWidget), 1, 0,2,1);
 
     QScrollArea* scrollBuilderArea = new QScrollArea(centralWidget);
     scrollBuilderArea->setWidgetResizable(true); // Allow the scroll area to resize the widget
     BuilderContainer* builderContainer = new BuilderContainer(scrollBuilderArea);
     scrollBuilderArea->setWidget(builderContainer);
-    centralLayout->addWidget(scrollBuilderArea, 1, 1);
+    centralLayout->addWidget(scrollBuilderArea, 1, 1,2,1);
    
-    centralLayout->addWidget(getResultedTextViewWidget(centralWidget, builderContainer), 1, 2);
+   
+    centralLayout->addWidget(getElementsCreatorWidget(centralWidget), 1, 2);
+    centralLayout->addWidget(getResultedTextViewWidget(centralWidget, builderContainer), 2, 2);
+    
 
     // Set the column stretch to distribute remaining space
     centralLayout->setColumnStretch(1, 2);
@@ -155,6 +159,12 @@ QWidget* MainWindowUI::getResultedTextViewWidget(QWidget* parent, BuilderContain
 {
     ResultedTextView* resultedTextView = new ResultedTextView(parent, builderContainer);
     return resultedTextView;
+}
+
+QWidget* MainWindowUI::getElementsCreatorWidget(QWidget* parent)
+{
+    ElementsCreator* elementsCreator = new ElementsCreator(parent);
+    return elementsCreator;
 }
 
 void MainWindowUI::onSearchTextChanged(const QString& searchText)

@@ -21,6 +21,7 @@ private:
     void createCentralWidget();
     QWidget* getElementsWidget(QWidget*);
     QWidget* getResultedTextViewWidget(QWidget*, BuilderContainer* builderContainer);
+    QWidget* getElementsCreatorWidget(QWidget* parent);
 
     MainAppWindow* d_mainWindow;
 };

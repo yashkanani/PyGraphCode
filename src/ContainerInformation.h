@@ -6,16 +6,16 @@
 class AbstractElement;
 class BuilderContainer;
 
-enum class ElementType {
+enum class DroppedItem {
     ELEMENT,
     CONTAINER,
     PARENT
 };
 
 typedef struct ContainerInformation {
-    ElementType type = ElementType::PARENT;
+    DroppedItem droppedItem = DroppedItem::PARENT;
     std::shared_ptr<AbstractElement> elementPointer;
-    BuilderContainer* containerPointer;
+    std::shared_ptr <BuilderContainer> containerPointer;
     QList<ContainerInformation> children;
 } ContainerInformation;
 
