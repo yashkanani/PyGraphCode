@@ -8,6 +8,7 @@
 
 #include <qwidget.h>
 
+#include <qpushbutton.h>
 
 
 ReadVariableElement::ReadVariableElement()
@@ -37,7 +38,9 @@ QWidget* ReadVariableElement::getViewWidget(QWidget* parent)
     QGroupBox* wdg = new QGroupBox("Read", parent);
     wdg->setObjectName("ReadVariableGroupBox");
 
-    // Set the style sheet to customize the appearance
+   
+
+     // Set the style sheet to customize the appearance
     wdg->setStyleSheet(
         "QGroupBox#ReadVariableGroupBox {"
         "   border: 1px solid #888888;"
@@ -50,15 +53,26 @@ QWidget* ReadVariableElement::getViewWidget(QWidget* parent)
         "   subcontrol-origin: margin;"
         "   subcontrol-position: top center;"
         "   padding: 5px;"
-        "}");
-
+        "}"
+        );
     QVBoxLayout* wdgLayout = new QVBoxLayout(wdg);
-    wdgLayout->setContentsMargins(0, 0, 0, 0);
+    wdgLayout->setContentsMargins(1, 1, 1, 1);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    QLabel* label = new QLabel(getName());
-    label->setAlignment(Qt::AlignCenter); // Align the label's text to the center
-    wdgLayout->addWidget(label);
+    QLabel* displayLabel = new QLabel(getName(), wdg);
+    displayLabel->setObjectName("readVariableNameText");
+    displayLabel->setStyleSheet(
+        "QLabel#readVariableNameText{"
+        "   border: 1px solid #888888;"
+        "   border-radius: 5px;"
+        "   padding: 5px;"
+        "}"
+    );
+    displayLabel->setAlignment(Qt::AlignCenter); // Align the label's text to the center
+    wdgLayout->addWidget(displayLabel);
+    
+
+    
 
     return wdg;
 }
