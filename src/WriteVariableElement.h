@@ -3,8 +3,6 @@
 
 #include "AbstractElement.h"
 
-class QLineEdit;
-class QComboBox;
 class BuilderContainer;
 
 class WriteVariableElement : public AbstractElement {
@@ -17,10 +15,6 @@ public:
    
 
 private:
-
-
-    QComboBox* methodSelectcomboBox;
-    QLineEdit* staticValueLineEdit;
     BuilderContainer* dynamicValueContainer;
 };
 
