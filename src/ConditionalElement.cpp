@@ -8,7 +8,7 @@
 #include <qpushbutton.h>
 
 #include "CodeText.h"
-#include "WriteVariableElement.h"
+#include "BuilderContainer.h"
 
 ConditionalElement::ConditionalElement()
 {
@@ -26,8 +26,9 @@ std::shared_ptr<CodeText> ConditionalElement::getText() const
 {
     std::shared_ptr<CodeText> ret = std::make_shared<CodeText>();
     QString line;
-    if (firstVariableElement) {
-        line = firstVariableElement->getText()->getResult();
+    line += "(";
+    if (firstVariableContainer) {
+        line += firstVariableContainer->getText()->getResult();
     }
 
     if (conditionComboBox) {
@@ -62,10 +63,11 @@ std::shared_ptr<CodeText> ConditionalElement::getText() const
         };
     }
 
-    if (secondVariableElement) {
-        line += secondVariableElement->getText()->getResult();
+    if (secondVariableContainer) {
+        line += secondVariableContainer->getText()->getResult();
     }
 
+    line += ")";
     
     ret->addToBody(line);
     return ret;
@@ -94,10 +96,14 @@ QWidget* ConditionalElement::getViewWidget(QWidget* parent)
     QGridLayout* wdgLay = new QGridLayout(wdg);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    firstVariableElement = new WriteVariableElement();
-    QWidget* firstVariableWidget = firstVariableElement->getViewWidget(wdg);
-    QObject::connect(firstVariableElement, &AbstractElement::childValueChanged, this, &AbstractElement::childValueChanged);
-    wdgLay->addWidget(firstVariableWidget, 0, 0);
+     // Set the accepted types for the BuilderContainer
+    QList<BasicElementType> acceptedTypes = { BasicElementType::READ_VARIABLE, BasicElementType::CONDITIONS };
+
+    firstVariableContainer = new BuilderContainer(wdg, true);
+    firstVariableContainer->setAcceptedTypes(acceptedTypes);
+    firstVariableContainer->setMaxElements(1);
+    QObject::connect(firstVariableContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+    wdgLay->addWidget(firstVariableContainer, 0, 0);
 
     conditionComboBox = new QComboBox(wdg);
     conditionComboBox->addItem("is Greater than (>)");
@@ -112,10 +118,14 @@ QWidget* ConditionalElement::getViewWidget(QWidget* parent)
     QObject::connect(conditionComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AbstractElement::childValueChanged);
     wdgLay->addWidget(conditionComboBox, 0, 1, Qt::AlignCenter);
 
-    secondVariableElement = new WriteVariableElement();
-    QWidget* secondVariableWidget = secondVariableElement->getViewWidget(wdg);
-    QObject::connect(secondVariableElement, &AbstractElement::childValueChanged, this, &AbstractElement::childValueChanged);
-    wdgLay->addWidget(secondVariableWidget, 0, 2);
+    secondVariableContainer = new BuilderContainer(wdg, true);
+
+    // Set the accepted types for the BuilderContainer
+    secondVariableContainer->setAcceptedTypes(acceptedTypes);
+    secondVariableContainer->setMaxElements(1);
+    QObject::connect(secondVariableContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+    wdgLay->addWidget(secondVariableContainer, 0, 2);
+
 
     return wdg;
 }
