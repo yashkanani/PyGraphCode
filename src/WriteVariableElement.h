@@ -1,15 +1,13 @@
-#ifndef VARIABLE_ELEMENT_H
-#define VARIABLE_ELEMENT_H
+#ifndef WRITE_VARIABLE_ELEMENT_H
+#define WRITE_VARIABLE_ELEMENT_H
 
 #include "AbstractElement.h"
 
-class QLineEdit;
-class QComboBox;
 class BuilderContainer;
 
-class VariableElement : public AbstractElement {
+class WriteVariableElement : public AbstractElement {
 public:
-    VariableElement();
+    WriteVariableElement();
     std::shared_ptr<AbstractElement> clone() const override;
 
     std::shared_ptr<CodeText> getText() const override;
@@ -17,11 +15,7 @@ public:
    
 
 private:
-
-
-    QComboBox* methodSelectcomboBox;
-    QLineEdit* staticValueLineEdit;
     BuilderContainer* dynamicValueContainer;
 };
 
-#endif // VARIABLE_ELEMENT_H
+#endif // WRITE_VARIABLE_ELEMENT_H

@@ -38,7 +38,7 @@ set(HEADERS
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ConditionalElement.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ForLoopElement.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/IfLoopElement.h
-	  ${CMAKE_CURRENT_SOURCE_DIR}/src/VariableElement.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/WriteVariableElement.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementManager.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementDragEventHandler.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderContainer.h
@@ -49,6 +49,7 @@ set(HEADERS
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/CodeText.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsCreator.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BasicElementType.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ReadVariableElement.h
    )
 
 set(SOURCES
@@ -59,7 +60,7 @@ set(SOURCES
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ConditionalElement.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ForLoopElement.cpp	
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/IfLoopElement.cpp	
-	  ${CMAKE_CURRENT_SOURCE_DIR}/src/VariableElement.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/WriteVariableElement.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementManager.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementDragEventHandler.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderContainer.cpp
@@ -68,6 +69,7 @@ set(SOURCES
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ResultedTextView.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/CodeText.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsCreator.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ReadVariableElement.cpp
     )
 
 

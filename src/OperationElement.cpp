@@ -5,7 +5,7 @@
 #include <QLineEdit>
 #include <qcombobox.h>
 
-#include "VariableElement.h"
+#include "WriteVariableElement.h"
 #include "CodeText.h"
 
 OperationElement::OperationElement()
@@ -51,7 +51,7 @@ QWidget* OperationElement::getViewWidget(QWidget* parent)
     QGridLayout* wdgLay = new QGridLayout(wdg);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    VariableElement* firstVariableElement = new VariableElement();
+    WriteVariableElement* firstVariableElement = new WriteVariableElement();
     QWidget* firstVariableWidget = firstVariableElement->getViewWidget(wdg);
     wdgLay->addWidget(firstVariableWidget, 0, 0);
 
@@ -64,7 +64,7 @@ QWidget* OperationElement::getViewWidget(QWidget* parent)
     conditionComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     wdgLay->addWidget(conditionComboBox, 0, 1, Qt::AlignCenter);
 
-    VariableElement* secondVariableElement = new VariableElement();
+    WriteVariableElement* secondVariableElement = new WriteVariableElement();
     QWidget* secondVariableWidget = secondVariableElement->getViewWidget(wdg);
     wdgLay->addWidget(secondVariableWidget, 0, 2);
 

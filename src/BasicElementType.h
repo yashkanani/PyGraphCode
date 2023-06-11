@@ -3,7 +3,8 @@
 
 enum class BasicElementType {
     UNKNOW,
-    VARIABLE,
+    WRITE_VARIABLE,
+    READ_VARIABLE,
     CONDITIONS,
     OPERATOR,
     CONSTANT,
