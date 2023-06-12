@@ -119,8 +119,6 @@ QWidget* ConditionalElement::getViewWidget(QWidget* parent)
     wdgLay->addWidget(conditionComboBox, 0, 1, Qt::AlignCenter);
 
     secondVariableContainer = new BuilderContainer(wdg, true);
-
-    // Set the accepted types for the BuilderContainer
     secondVariableContainer->setAcceptedTypes(acceptedTypes);
     secondVariableContainer->setMaxElements(1);
     QObject::connect(secondVariableContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);

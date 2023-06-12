@@ -6,6 +6,8 @@
 #include "IfLoopElement.h"
 #include "ConditionalElement.h"
 #include "OperationElement.h"
+#include "ConstantDecimalElement.h"
+#include "ConstantTextElement.h"
 
 ElementManager& ElementManager::getInstance()
 {
@@ -47,6 +49,8 @@ void ElementManager::createElements()
     elements.push_back(std::make_shared<IfLoopElement>());
     elements.push_back(std::make_shared<ConditionalElement>());
     elements.push_back(std::make_shared<OperationElement>());
+    elements.push_back(std::make_shared<ConstantTextElement>());
+    elements.push_back(std::make_shared<ConstantDecimalElement>());
 }
 
 

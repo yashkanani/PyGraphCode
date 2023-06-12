@@ -66,7 +66,7 @@ QWidget* WriteVariableElement::getViewWidget(QWidget* parent)
     dynamicValueContainer = new BuilderContainer(wdg, true);
 
     // Set the accepted types for the BuilderContainer
-    QList<BasicElementType> acceptedTypes = { BasicElementType::WRITE_VARIABLE, BasicElementType::CONDITIONS };
+    QList<BasicElementType> acceptedTypes = { BasicElementType::WRITE_VARIABLE, BasicElementType::CONDITIONS, BasicElementType::CONSTANT_TEXT, BasicElementType::CONSTANT_DECIMAL };
     dynamicValueContainer->setAcceptedTypes(acceptedTypes);
     dynamicValueContainer->setMaxElements(1);
     QObject::connect(dynamicValueContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
