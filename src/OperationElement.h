@@ -2,7 +2,8 @@
 #define OPERATIONELEMENT_H
 
 #include "AbstractElement.h"
-
+class QComboBox;
+class BuilderContainer;
 class OperationElement : public AbstractElement {
 public:
     OperationElement();
@@ -11,6 +12,11 @@ public:
 
     std::shared_ptr<CodeText> getText() const override;
     QWidget* getViewWidget(QWidget* parent = nullptr) override;
+
+private:
+    BuilderContainer* firstVariableContainer;
+    BuilderContainer* secondVariableContainer;
+    QComboBox* conditionComboBox;
 
 
 

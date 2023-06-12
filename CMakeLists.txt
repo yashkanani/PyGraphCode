@@ -50,6 +50,8 @@ set(HEADERS
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsCreator.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BasicElementType.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ReadVariableElement.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ConstantDecimalElement.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ConstantTextElement.h
    )
 
 set(SOURCES
@@ -70,6 +72,8 @@ set(SOURCES
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/CodeText.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsCreator.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ReadVariableElement.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ConstantDecimalElement.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ConstantTextElement.cpp
     )
 
 

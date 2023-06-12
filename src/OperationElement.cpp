@@ -5,7 +5,7 @@
 #include <QLineEdit>
 #include <qcombobox.h>
 
-#include "WriteVariableElement.h"
+#include "BuilderContainer.h"
 #include "CodeText.h"
 
 OperationElement::OperationElement()
@@ -13,6 +13,9 @@ OperationElement::OperationElement()
     name = "Operation";
     image = QPixmap(":/resource/Operation.png");
     type = BasicElementType::OPERATOR;
+
+    secondVariableContainer = nullptr;
+    firstVariableContainer = nullptr;
 }
 
  std::shared_ptr<AbstractElement> OperationElement::clone() const
@@ -24,7 +27,47 @@ OperationElement::OperationElement()
 std::shared_ptr<CodeText> OperationElement::getText() const
 {
     std::shared_ptr<CodeText> ret = std::make_shared<CodeText>();
-    ret->addToBody("Opration element code\n");
+    QString line;
+    line += "(";
+    if (firstVariableContainer) {
+        line += firstVariableContainer->getText()->getResult();
+    }
+
+    if (conditionComboBox) {
+        switch (conditionComboBox->currentIndex()) {
+        case 0: {
+            line += " + ";
+            break;
+        }
+        case 1: {
+            line += " - ";
+            break;
+        }
+        case 2: {
+            line += " x ";
+            break;
+        }
+        case 3: {
+            line += " / ";
+            break;
+        }
+        case 4: {
+            line += " ^ ";
+            break;
+        }
+        default: {
+            break;
+        }
+        };
+    }
+
+    if (secondVariableContainer) {
+        line += secondVariableContainer->getText()->getResult();
+    }
+
+    line += ")";
+
+    ret->addToBody(line);
     return ret;
 }
 
@@ -51,11 +94,16 @@ QWidget* OperationElement::getViewWidget(QWidget* parent)
     QGridLayout* wdgLay = new QGridLayout(wdg);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    WriteVariableElement* firstVariableElement = new WriteVariableElement();
-    QWidget* firstVariableWidget = firstVariableElement->getViewWidget(wdg);
-    wdgLay->addWidget(firstVariableWidget, 0, 0);
+   // Set the accepted types for the BuilderContainer
+    QList<BasicElementType> acceptedTypes = { BasicElementType::READ_VARIABLE, BasicElementType::CONDITIONS };
 
-    QComboBox* conditionComboBox = new QComboBox(wdg);
+    firstVariableContainer = new BuilderContainer(wdg, true);
+    firstVariableContainer->setAcceptedTypes(acceptedTypes);
+    firstVariableContainer->setMaxElements(1);
+    QObject::connect(firstVariableContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+    wdgLay->addWidget(firstVariableContainer, 0, 0);
+
+    conditionComboBox = new QComboBox(wdg);
     conditionComboBox->addItem("is Add to (+)");
     conditionComboBox->addItem("is subtract from (-)");
     conditionComboBox->addItem("is multiply by (x)");
@@ -64,14 +112,11 @@ QWidget* OperationElement::getViewWidget(QWidget* parent)
     conditionComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     wdgLay->addWidget(conditionComboBox, 0, 1, Qt::AlignCenter);
 
-    WriteVariableElement* secondVariableElement = new WriteVariableElement();
-    QWidget* secondVariableWidget = secondVariableElement->getViewWidget(wdg);
-    wdgLay->addWidget(secondVariableWidget, 0, 2);
-
-    // Connect the combo box signals to slots or functions
-    // Example: Connect the currentIndexChanged signal of conditionComboBox
-    // to a slot or function that handles the selection change.
-    // QObject::connect(conditionComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &OperationElement::handleConditionIndexChanged);
+    secondVariableContainer = new BuilderContainer(wdg, true);
+    secondVariableContainer->setAcceptedTypes(acceptedTypes);
+    secondVariableContainer->setMaxElements(1);
+    QObject::connect(secondVariableContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+    wdgLay->addWidget(secondVariableContainer, 0, 2);
 
     return wdg;
 }

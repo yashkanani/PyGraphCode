@@ -7,9 +7,10 @@ enum class BasicElementType {
     READ_VARIABLE,
     CONDITIONS,
     OPERATOR,
-    CONSTANT,
+    CONSTANT_DECIMAL,
     IF_LOOP,
-    FOR_LOOP
+    FOR_LOOP,
+    CONSTANT_TEXT
 };
 
 #endif  // BASICELEMENTTYPE_H
