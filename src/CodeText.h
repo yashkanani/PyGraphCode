@@ -6,11 +6,13 @@
 
 class CodeText {
 public:
+    CodeText(int indentLevel); // Default constructor
     CodeText(); // Default constructor
     void addToHeader(const QString& content);
     void addToBody(const QString& content);
     void increaseIndentOfBody();
     void removeIndentOfBody();
+    int getCurrentIndentOfBody() const;
     void append(const CodeText& other);
     QString getResult() const;
     QStringList getHeader() const;

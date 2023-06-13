@@ -22,7 +22,7 @@ ForLoopElement::ForLoopElement()
 }
 
 
-std::shared_ptr<CodeText> ForLoopElement::getText() const
+std::shared_ptr<CodeText> ForLoopElement::getText(int indentLevel) const
 {
     std::shared_ptr<CodeText> ret = std::make_shared<CodeText>();
     ret->addToBody("Forloop element code\n");

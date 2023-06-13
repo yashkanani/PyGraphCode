@@ -35,32 +35,32 @@ BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
     containerInformation.droppedItem = DroppedItem::PARENT;
 }
 
-std::shared_ptr<CodeText> BuilderContainer::getText() const
+std::shared_ptr<CodeText> BuilderContainer::getText(int indentLevel) const
 {
-    return getText(containerInformation);
+    return getText(containerInformation, indentLevel);
 }
 
-std::shared_ptr<CodeText> BuilderContainer::getText(const ContainerInformation& containerInfo) const
+std::shared_ptr<CodeText> BuilderContainer::getText(const ContainerInformation& containerInfo, int indentLevel) const
 {
-    std::shared_ptr<CodeText> result = std::make_shared<CodeText>();
+    std::shared_ptr<CodeText> result = std::make_shared<CodeText>(indentLevel);
     switch (containerInfo.droppedItem) {
 
     case DroppedItem::ELEMENT:
         // Call the getText() method of the AbstractElement
         if (containerInfo.elementPointer)
-            result = containerInfo.elementPointer->getText();
+            result = containerInfo.elementPointer->getText(indentLevel);
         break;
 
     case DroppedItem::CONTAINER:
         // Call the getText() method of the BuilderContainer
         if (containerInfo.containerPointer)
-            result = containerInfo.containerPointer->getText();
+            result = containerInfo.containerPointer->getText(indentLevel);
         break;
 
     case DroppedItem::PARENT:
         // Call the getText() method recursively for each child container
         for (const auto& child : containerInfo.children) {
-            std::shared_ptr<CodeText> childResult = getText(child);
+            std::shared_ptr<CodeText> childResult = getText(child, indentLevel);
 
             if (childResult) {
                 if (&child != &containerInfo.children.front()) {

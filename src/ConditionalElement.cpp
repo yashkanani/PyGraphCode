@@ -22,13 +22,13 @@ std::shared_ptr<AbstractElement> ConditionalElement::clone() const
     return std::make_shared<ConditionalElement>();
 }
 
-std::shared_ptr<CodeText> ConditionalElement::getText() const
+std::shared_ptr<CodeText> ConditionalElement::getText(int indentLevel) const
 {
-    std::shared_ptr<CodeText> ret = std::make_shared<CodeText>();
+    std::shared_ptr<CodeText> ret = std::make_shared<CodeText>(indentLevel);
     QString line;
     line += "(";
     if (firstVariableContainer) {
-        line += firstVariableContainer->getText()->getResult();
+        line += firstVariableContainer->getText(0)->getResult();
     }
 
     if (conditionComboBox) {
@@ -64,7 +64,7 @@ std::shared_ptr<CodeText> ConditionalElement::getText() const
     }
 
     if (secondVariableContainer) {
-        line += secondVariableContainer->getText()->getResult();
+        line += secondVariableContainer->getText(0)->getResult();
     }
 
     line += ")";

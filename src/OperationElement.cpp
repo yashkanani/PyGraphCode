@@ -24,13 +24,13 @@ OperationElement::OperationElement()
  }
 
 
-std::shared_ptr<CodeText> OperationElement::getText() const
-{
-    std::shared_ptr<CodeText> ret = std::make_shared<CodeText>();
+std::shared_ptr<CodeText> OperationElement::getText(int indentLevel) const
+ {
+    std::shared_ptr<CodeText> ret = std::make_shared<CodeText>(indentLevel);
     QString line;
     line += "(";
     if (firstVariableContainer) {
-        line += firstVariableContainer->getText()->getResult();
+        line += firstVariableContainer->getText(0)->getResult();
     }
 
     if (conditionComboBox) {
@@ -62,7 +62,7 @@ std::shared_ptr<CodeText> OperationElement::getText() const
     }
 
     if (secondVariableContainer) {
-        line += secondVariableContainer->getText()->getResult();
+        line += secondVariableContainer->getText(0)->getResult();
     }
 
     line += ")";

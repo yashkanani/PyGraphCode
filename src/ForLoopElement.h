@@ -13,7 +13,7 @@ public:
     ForLoopElement();
     std::shared_ptr<AbstractElement> clone() const override;
 
-    std::shared_ptr<CodeText> getText() const override;
+    std::shared_ptr<CodeText> getText(int indentLevel) const override;
     QWidget* getViewWidget(QWidget* parent = nullptr) override;
 
 };

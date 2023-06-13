@@ -27,7 +27,7 @@ ResultedTextView::ResultedTextView(QWidget* parent, BuilderContainer* builderCon
 void ResultedTextView::updateText()
 {
     if (m_builderContainer) {
-        std::shared_ptr<CodeText> result = m_builderContainer->getText();
+        std::shared_ptr<CodeText> result = m_builderContainer->getText(0);
         m_resultedTextLabel->setText(result->getResult());
     }
 }
