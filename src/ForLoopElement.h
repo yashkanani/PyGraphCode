@@ -7,7 +7,7 @@
 #include <QComboBox>
 #include <QLineEdit>
 
-
+class BuilderContainer;
 class ForLoopElement : public AbstractElement {
 public:
     ForLoopElement();
@@ -15,6 +15,14 @@ public:
 
     std::shared_ptr<CodeText> getText(int indentLevel) const override;
     QWidget* getViewWidget(QWidget* parent = nullptr) override;
+
+private:
+    BuilderContainer* variableContainer;
+    QComboBox* endCondition;
+    BuilderContainer* startContainer;
+    BuilderContainer* endContainer;
+    BuilderContainer* incrementContainer;
+    BuilderContainer* bodyContainer;
 
 };
 
