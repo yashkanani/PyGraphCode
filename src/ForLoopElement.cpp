@@ -1,31 +1,67 @@
 #include "ForLoopElement.h"
-#include <qwidget.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include "PlaceHolder.h"
 #include "BuilderContainer.h"
 #include "CodeText.h"
-#include <qlabel.h>
+#include "PlaceHolder.h"
 #include <qgroupbox.h>
-#include "CodeText.h"
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qpushbutton.h>
+#include <qwidget.h>
 
 ForLoopElement::ForLoopElement()
 {
     name = "For Loop";
     image = QPixmap(":/resource/For_loop.png");
     type = BasicElementType::FOR_LOOP;
+
+    endCondition = nullptr;
+    variableContainer = nullptr;
+    startContainer = nullptr;
+    incrementContainer = nullptr;
+    bodyContainer = nullptr;
 }
 
- std::shared_ptr<AbstractElement> ForLoopElement::clone() const
+std::shared_ptr<AbstractElement> ForLoopElement::clone() const
 {
     return std::make_shared<ForLoopElement>();
 }
 
-
-std::shared_ptr<CodeText> ForLoopElement::getText() const
+std::shared_ptr<CodeText> ForLoopElement::getText(int indentLevel) const
 {
-    std::shared_ptr<CodeText> ret = std::make_shared<CodeText>();
-    ret->addToBody("Forloop element code\n");
+    std::shared_ptr<CodeText> ret = std::make_shared<CodeText>(indentLevel);
+    
+
+    if (endCondition && variableContainer) {
+        switch (endCondition->currentIndex()) {
+
+        case 0: {
+            ret->addToBody("for " + variableContainer->getText(0)->getResult() + QString(" in range(%1):").arg(endContainer->getText(0)->getResult()));
+            ret->addToBody("\n");
+        } break;
+        case 1: {
+            if (startContainer) {
+                ret->addToBody("for " + variableContainer->getText(0)->getResult() + QString(" in range(%1, %2):").arg(startContainer->getText(0)->getResult()).arg(endContainer->getText(0)->getResult()));
+                ret->addToBody("\n");
+            }
+        } break;
+        case 2: {
+            if (startContainer && incrementContainer) {
+                ret->addToBody("for " + variableContainer->getText(0)->getResult() + QString(" in range(%1, %2, %3):").arg(startContainer->getText(0)->getResult()).arg(endContainer->getText(0)->getResult()).arg(incrementContainer->getText(0)->getResult()));
+                ret->addToBody("\n");
+            }
+        } break;
+
+        default:
+            break;
+        }
+    }
+
+    if (bodyContainer) {
+        ret->increaseIndentOfBody();
+        ret->append(*(bodyContainer->getText(ret->getCurrentIndentOfBody())));
+        ret->removeIndentOfBody();
+    }
+
     return ret;
 }
 
@@ -53,85 +89,81 @@ QWidget* ForLoopElement::getViewWidget(QWidget* parent)
     wdgLayout->setContentsMargins(0, 0, 0, 0);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    QGroupBox* startGroup = new QGroupBox("Take", wdg);
-    startGroup->setContentsMargins(0, 0, 0, 0);
-    QHBoxLayout* startLay = new QHBoxLayout(startGroup);
-
-    QComboBox* startComboBox = new QComboBox(wdg);
-    startComboBox->addItem("Static");
-    startComboBox->addItem("Dynamic");
-    startComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    startLay->addWidget(startComboBox, Qt::AlignLeft | Qt::AlignTop);
-
-    QLineEdit* startLineEdit = new QLineEdit(wdg);
-    startLineEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum); // Set the size policy
-    startLay->addWidget(startLineEdit);
+    QGroupBox* variableGroup = new QGroupBox("", wdg);
+    QVBoxLayout* variableLay = new QVBoxLayout(variableGroup);
 
     bool subContainer = true;
-    BuilderContainer* startContainer = new BuilderContainer(wdg, subContainer);
-    startLay->addWidget(startContainer);
+    variableContainer = new BuilderContainer(wdg, subContainer);
+    QObject::connect(variableContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+    variableLay->addWidget(variableContainer);
 
-    wdgLayout->addWidget(startGroup, 0, 0);
+    wdgLayout->addWidget(variableGroup, 0, 0);
 
-    QGroupBox* inGroup = new QGroupBox("in", wdg);
-    inGroup->setContentsMargins(0, 0, 0, 0);
-    QHBoxLayout* inLay = new QHBoxLayout(inGroup);
+    QGroupBox* endGroup = new QGroupBox("", wdg);
+    QHBoxLayout* endVariableLay = new QHBoxLayout(endGroup);
 
-    QComboBox* inComboBox = new QComboBox(wdg);
-    inComboBox->addItem("Static");
-    inComboBox->addItem("Dynamic");
-    inComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    inLay->addWidget(inComboBox, Qt::AlignLeft | Qt::AlignTop);
+    endCondition = new QComboBox(wdg);
+    endCondition->addItem("Static");
+    endCondition->addItem("Dynamic");
+    endCondition->addItem("yash");
+    endCondition->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    endVariableLay->addWidget(endCondition, Qt::AlignLeft | Qt::AlignTop);
 
-    QLineEdit* inLineEdit = new QLineEdit(wdg);
-    inLineEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum); // Set the size policy
-    inLay->addWidget(inLineEdit);
+    QList<BasicElementType> acceptedTypes = { BasicElementType::CONSTANT_DECIMAL, BasicElementType::READ_VARIABLE };
+    
+    startContainer = new BuilderContainer(wdg, subContainer);
+    startContainer->setAcceptedTypes(acceptedTypes);
+    startContainer->setMaxElements(1);
+    QObject::connect(startContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+    endVariableLay->addWidget(startContainer);
 
-    BuilderContainer* inContainer = new BuilderContainer(wdg, subContainer);
-    inLay->addWidget(inContainer);
+    endContainer = new BuilderContainer(wdg, subContainer);
+    endContainer->setAcceptedTypes(acceptedTypes);
+    endContainer->setMaxElements(1);
+    QObject::connect(endContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+    endVariableLay->addWidget(endContainer);
 
-    wdgLayout->addWidget(inGroup, 0, 2);
+    incrementContainer = new BuilderContainer(wdg, subContainer);
+    incrementContainer->setAcceptedTypes(acceptedTypes);
+    incrementContainer->setMaxElements(1);
+    QObject::connect(incrementContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+    endVariableLay->addWidget(incrementContainer);
 
-    QGroupBox* bodyGroup = new QGroupBox("body", wdg);
-    bodyGroup->setContentsMargins(0, 0, 0, 0);
-    bodyGroup->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-    QVBoxLayout* bodyLayout = new QVBoxLayout(bodyGroup);
+    wdgLayout->addWidget(endGroup, 0, 1);
 
-    BuilderContainer* bodyContainer = new BuilderContainer(wdg, subContainer);
-    bodyLayout->addWidget(bodyContainer);
-
-    wdgLayout->addWidget(bodyGroup, 1, 0, 1, 3);
+    bodyContainer = new BuilderContainer(wdg, subContainer);
+    QObject::connect(bodyContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+    wdgLayout->addWidget(bodyContainer, 1, 0, 1, 2);
 
     // Connect the combo box signals to slots or functions
-    QObject::connect(startComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
-        if (index == 0) {
-            // Show the widget for entering static value
+    QObject::connect(endCondition, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
+        switch (index) {
+
+        case 0: {
             startContainer->hide();
-            startLineEdit->show();
-        } else {
-            // Show the builder container for entering dynamic value
+            endContainer->show();
+            incrementContainer->hide();
+        } break;
+        case 1: {
             startContainer->show();
-            startLineEdit->hide();
+            endContainer->show();
+            incrementContainer->hide();
+        } break;
+        case 2: {
+            startContainer->show();
+            endContainer->show();
+            incrementContainer->show();
+        } break;
+
+        default:
+            endContainer->show();
+            break;
         }
     });
 
-    QObject::connect(inComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
-        if (index == 0) {
-            // Show the widget for entering static value
-            inContainer->hide();
-            inLineEdit->show();
-        } else {
-            // Show the builder container for entering dynamic value
-            inContainer->show();
-            inLineEdit->hide();
-        }
-    });
-
-    // Hide the BuilderContainer by default
     startContainer->hide();
-    inContainer->hide();
-    startLineEdit->show();
-    inLineEdit->show();
+    endContainer->show();
+    incrementContainer->hide();
 
     return wdg;
 }

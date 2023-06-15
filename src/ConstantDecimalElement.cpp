@@ -18,18 +18,13 @@ std::shared_ptr<AbstractElement> ConstantDecimalElement::clone() const
     return std::make_shared<ConstantDecimalElement>();
 }
 
-std::shared_ptr<CodeText> ConstantDecimalElement::getText() const
+std::shared_ptr<CodeText> ConstantDecimalElement::getText(int indentLevel) const
 {
-    std::shared_ptr<CodeText> ret = std::make_shared<CodeText>();
-
-    QString line;
-
+    std::shared_ptr<CodeText> ret = std::make_shared<CodeText>(indentLevel);
     // static Value set
     if (staticValueLineEdit) {
-        line = staticValueLineEdit->text();
+        ret->addToBody(staticValueLineEdit->text());
     }
-
-    ret->addToBody(line);
     return ret;
 }
 

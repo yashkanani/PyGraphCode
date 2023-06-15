@@ -4,6 +4,11 @@ CodeText::CodeText() : indentLevel(0)
 {
     // Default constructor implementation
 }
+CodeText::CodeText(int _indentLevel)
+    : indentLevel(_indentLevel)
+{
+    // Default constructor implementation
+}
 
 void CodeText::addToHeader(const QString& content)
 {
@@ -30,6 +35,10 @@ void CodeText::removeIndentOfBody()
     if (indentLevel >= space) {
         indentLevel -= space;
     }
+}
+int CodeText::getCurrentIndentOfBody() const
+{
+    return indentLevel;
 }
 
 void CodeText::append(const CodeText& other)

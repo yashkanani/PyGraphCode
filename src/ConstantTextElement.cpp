@@ -18,9 +18,9 @@ std::shared_ptr<AbstractElement> ConstantTextElement::clone() const
     return std::make_shared<ConstantTextElement>();
 }
 
-std::shared_ptr<CodeText> ConstantTextElement::getText() const
+std::shared_ptr<CodeText> ConstantTextElement::getText(int indentLevel) const
 {
-    std::shared_ptr<CodeText> ret = std::make_shared<CodeText>();
+    std::shared_ptr<CodeText> ret = std::make_shared<CodeText>(indentLevel);
 
     QString line;
 

@@ -19,7 +19,7 @@ public:
     BasicElementType getType() const;
     QPixmap getImage() const;
     void setName(const QString& name);
-    virtual std::shared_ptr<CodeText> getText() const = 0;
+    virtual std::shared_ptr<CodeText> getText(int indentLevel) const = 0;
     virtual QWidget* getViewWidget(QWidget* parent = nullptr) = 0;
 
 signals:

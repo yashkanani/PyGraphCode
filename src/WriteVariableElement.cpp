@@ -23,18 +23,15 @@ std::shared_ptr<AbstractElement> WriteVariableElement::clone() const
     return std::make_shared<WriteVariableElement>();
 }
 
-std::shared_ptr<CodeText> WriteVariableElement::getText() const
+std::shared_ptr<CodeText> WriteVariableElement::getText(int indentLevel) const
 {
-    std::shared_ptr<CodeText> ret = std::make_shared<CodeText>();
-
-    QString line;
+    std::shared_ptr<CodeText> ret = std::make_shared<CodeText>(indentLevel);
 
     // Dynamic Value set
     if (dynamicValueContainer) {
-        line = getName() + " = " + dynamicValueContainer->getText()->getResult();
+        ret->addToBody(getName() + " = " + dynamicValueContainer->getText(0)->getResult());
     }
 
-    ret->addToBody(line);
     return ret;
 }
 

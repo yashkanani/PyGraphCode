@@ -14,7 +14,7 @@ class BuilderContainer : public QFrame {
 
 public:
     explicit BuilderContainer(QWidget* parent = nullptr, bool isSubContainer = false);
-    std::shared_ptr<CodeText> getText() const;
+    std::shared_ptr<CodeText> getText(int indentLevel) const;
     void setAcceptedTypes(const QList<BasicElementType>& acceptedTypes);
     void setMaxElements(int maxElements);
 
@@ -40,7 +40,7 @@ private:
 
     QRect calculateDropIndicatorRect(int insertIndex) const;
 
-    std::shared_ptr<CodeText> getText(const ContainerInformation& containerInfo) const;
+    std::shared_ptr<CodeText> getText(const ContainerInformation& containerInfo, int indentLevel) const;
     int findInsertIndex(QDropEvent* event);
     
 
