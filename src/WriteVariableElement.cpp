@@ -20,7 +20,9 @@ WriteVariableElement::WriteVariableElement()
 
 std::shared_ptr<AbstractElement> WriteVariableElement::clone() const
 {
-    return std::make_shared<WriteVariableElement>();
+    auto ret = std::make_shared<WriteVariableElement>();
+    ret->setName(this->name);
+    return ret;
 }
 
 std::shared_ptr<CodeText> WriteVariableElement::getText(int indentLevel) const

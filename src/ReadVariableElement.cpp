@@ -22,7 +22,9 @@ ReadVariableElement::ReadVariableElement()
 
 std::shared_ptr<AbstractElement> ReadVariableElement::clone() const
 {
-    return std::make_shared<ReadVariableElement>();
+    auto ret =  std::make_shared<ReadVariableElement>();
+    ret->setName(this->name);
+    return ret;
 }
 
 std::shared_ptr<CodeText> ReadVariableElement::getText(int indentLevel) const
