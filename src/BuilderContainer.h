@@ -5,10 +5,12 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-#include "AbstractElement.h"
+
 #include "ContainerInformation.h"
+#include "BasicElementType.h"
 #include <qframe.h>
 
+class CodeText;
 class BuilderContainer : public QFrame {
     Q_OBJECT
 
@@ -17,6 +19,7 @@ public:
     std::shared_ptr<CodeText> getText(int indentLevel) const;
     void setAcceptedTypes(const QList<BasicElementType>& acceptedTypes);
     void setMaxElements(int maxElements);
+    void removeElementFromContainerInformation(const AbstractElement* element);
 
 protected:
     void dragEnterEvent(QDragEnterEvent* event) override;

@@ -10,6 +10,9 @@
 #include "BuilderContainer.h"
 #include "CodeText.h"
 #include "ElementManager.h"
+#include "AbstractElement.h"
+#include "InternalDragEventHandler.h"
+
 
 BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
     : QFrame(parent)
@@ -74,6 +77,32 @@ std::shared_ptr<CodeText> BuilderContainer::getText(const ContainerInformation& 
     }
     return result;
 }
+
+void BuilderContainer::removeElementFromContainerInformation(const AbstractElement* element)
+{
+    
+    int removeIndex = -1;
+    for (int i = 0; i < containerInformation.children.size(); ++i) {
+        if ((containerInformation.children[i].droppedItem == DroppedItem::ELEMENT) && (containerInformation.children[i].elementPointer.get() == element)) {
+            removeIndex = i;
+            break;
+        }
+    }
+
+    if (removeIndex != -1) {
+        containerInformation.children.erase(containerInformation.children.begin() + removeIndex);
+
+        // Remove the corresponding widget from builderContainerlayout
+        QWidget* widget = builderContainerlayout->itemAt(removeIndex)->widget();
+        if (widget) {
+            builderContainerlayout->removeWidget(widget);
+            delete widget;
+        }
+
+        emit updateResultedTextView(); // Update the text in ResultedTextView Widget.
+    }
+}
+
 
 void BuilderContainer::setAcceptedTypes(const QList<BasicElementType>& acceptedTypesList)
 {
@@ -233,7 +262,11 @@ void BuilderContainer::dropEvent(QDropEvent* event)
 
             int insertIndex = findInsertIndex(event);
 
-            addElementWidget(element->getViewWidget(), insertIndex);
+            QWidget* viewWidget = element->getViewWidget();
+            viewWidget->setProperty("element", QVariant::fromValue(dynamic_cast<AbstractElement*>(element.get())));
+            viewWidget->installEventFilter(new InternalDragEventHandler(this));
+
+            addElementWidget(viewWidget, insertIndex);
             connect(element.get(), &AbstractElement::childValueChanged, this, &BuilderContainer::updateResultedTextView);
 
             ContainerInformation info;
