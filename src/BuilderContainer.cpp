@@ -7,12 +7,11 @@
 #include <qpainterpath.h>
 #include <qpushbutton.h>
 
+#include "AbstractElement.h"
 #include "BuilderContainer.h"
 #include "CodeText.h"
 #include "ElementManager.h"
-#include "AbstractElement.h"
 #include "InternalDragEventHandler.h"
-
 
 BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
     : QFrame(parent)
@@ -32,7 +31,6 @@ BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
             "   border-radius: 5px;"
             "}");
     }
-
 }
 
 std::shared_ptr<CodeText> BuilderContainer::getText(int indentLevel) const
@@ -42,7 +40,7 @@ std::shared_ptr<CodeText> BuilderContainer::getText(int indentLevel) const
     // Call the getText() method recursively for each child container
     for (const auto& child : containerInformationList) {
 
-        if (child.droppedItem != DroppedItem::ELEMENT) { 
+        if (child.droppedItem != DroppedItem::ELEMENT) {
             continue;
         }
 
@@ -51,7 +49,7 @@ std::shared_ptr<CodeText> BuilderContainer::getText(int indentLevel) const
         if (childResult) {
             if (&child != &containerInformationList.front()) {
                 result->addToBody("\n");
-            }   
+            }
             result->append(*childResult);
         }
     }
@@ -64,9 +62,25 @@ const ContainerInformationList& BuilderContainer::getContainerInformation() cons
     return containerInformationList;
 }
 
+void BuilderContainer::appenContainerInformationList(const ContainerInformationList& informationList, int _insertIndex)
+{
+
+    int insertIndex = _insertIndex;
+    for (int i = 0; i < informationList.size(); ++i) {
+
+        if (informationList[i].droppedItem != DroppedItem::ELEMENT) {
+            continue;
+        }
+
+        auto element = informationList[i].elementPointer->clone();
+        addInformationAndView(element, insertIndex);
+        ++insertIndex;
+    }
+}
+
 void BuilderContainer::removeElementFromContainerInformation(const AbstractElement* element)
 {
-    
+
     int removeIndex = -1;
     for (int i = 0; i < containerInformationList.size(); ++i) {
         if ((containerInformationList[i].droppedItem == DroppedItem::ELEMENT) && (containerInformationList[i].elementPointer.get() == element)) {
@@ -88,7 +102,6 @@ void BuilderContainer::removeElementFromContainerInformation(const AbstractEleme
         emit updateResultedTextView(); // Update the text in ResultedTextView Widget.
     }
 }
-
 
 void BuilderContainer::setAcceptedTypes(const QList<BasicElementType>& acceptedTypesList)
 {
@@ -248,18 +261,7 @@ void BuilderContainer::dropEvent(QDropEvent* event)
 
             int insertIndex = findInsertIndex(event);
 
-            QWidget* viewWidget = element->getViewWidget();
-            viewWidget->setProperty("element", QVariant::fromValue(dynamic_cast<AbstractElement*>(element.get())));
-            viewWidget->installEventFilter(new InternalDragEventHandler(this));
-
-            addElementWidget(viewWidget, insertIndex);
-            connect(element.get(), &AbstractElement::childValueChanged, this, &BuilderContainer::updateResultedTextView);
-
-            ContainerInformation info;
-            info.droppedItem = DroppedItem::ELEMENT;
-            info.elementPointer = element;
-
-            containerInformationList.insert(insertIndex, info);
+            addInformationAndView(element, insertIndex);
 
             hideDropIndicator(); // Hide the drop indicator
 
@@ -268,6 +270,26 @@ void BuilderContainer::dropEvent(QDropEvent* event)
             event->acceptProposedAction();
         }
     }
+}
+
+void BuilderContainer::addInformationAndView(std::shared_ptr<AbstractElement> element, int insertIndex)
+{
+    if ((element == nullptr) || (insertIndex < 0)) {
+        return;
+    }
+
+    // add element view
+    QWidget* viewWidget = element->getViewWidget();
+    viewWidget->setProperty("element", QVariant::fromValue(dynamic_cast<AbstractElement*>(element.get())));
+    viewWidget->installEventFilter(new InternalDragEventHandler(this));
+    addElementWidget(viewWidget, insertIndex);
+    connect(element.get(), &AbstractElement::childValueChanged, this, &BuilderContainer::updateResultedTextView);
+
+    // add information
+    ContainerInformation info;
+    info.droppedItem = DroppedItem::ELEMENT;
+    info.elementPointer = element;
+    containerInformationList.insert(insertIndex, info);
 }
 
 bool BuilderContainer::isDropAccepted(const BasicElementType& elementType) const

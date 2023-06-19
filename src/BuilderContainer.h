@@ -20,6 +20,7 @@ public:
     void setMaxElements(int maxElements);
     void removeElementFromContainerInformation(const AbstractElement* element);
     const ContainerInformationList& getContainerInformation() const;
+    void appenContainerInformationList(const ContainerInformationList& informationList, int insertIndex = 0);
 
 protected:
     void dragEnterEvent(QDragEnterEvent* event) override;
@@ -46,6 +47,7 @@ private:
     bool isDropAccepted(const BasicElementType& elementType) const;
     bool isMaxElementsReached() const;
     void addElementWidget(QWidget* elementWidget, int insertIndex);
+    void addInformationAndView(std::shared_ptr<AbstractElement> element, int insertIndex);
 
     QVBoxLayout* builderContainerlayout;
     QList<BasicElementType> acceptedTypes;

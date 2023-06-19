@@ -3,6 +3,7 @@
 
 #include <QList>
 
+
 class AbstractElement;
 class BuilderContainer;
 
@@ -16,6 +17,6 @@ typedef struct ContainerInformation {
     std::shared_ptr<AbstractElement> elementPointer;
 } ContainerInformation;
 
-typedef QVector<ContainerInformation> ContainerInformationList;
+typedef QList<ContainerInformation> ContainerInformationList;
 
 #endif // CONTAINER_INFORMATION_H
