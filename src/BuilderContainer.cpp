@@ -68,7 +68,7 @@ void BuilderContainer::appenContainerInformationList(const ContainerInformationL
     int insertIndex = _insertIndex;
     for (int i = 0; i < informationList.size(); ++i) {
 
-        if (informationList[i].droppedItem != DroppedItem::ELEMENT) {
+        if ((informationList[i].droppedItem != DroppedItem::ELEMENT) || (informationList[i].elementPointer == nullptr)) {
             continue;
         }
 
