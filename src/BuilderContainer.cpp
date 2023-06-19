@@ -59,6 +59,11 @@ std::shared_ptr<CodeText> BuilderContainer::getText(int indentLevel) const
     return result;
 }
 
+const ContainerInformationList& BuilderContainer::getContainerInformation() const
+{
+    return containerInformationList;
+}
+
 void BuilderContainer::removeElementFromContainerInformation(const AbstractElement* element)
 {
     

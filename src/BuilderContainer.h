@@ -5,9 +5,8 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-
-#include "ContainerInformation.h"
 #include "BasicElementType.h"
+#include "ContainerInformation.h"
 #include <qframe.h>
 
 class CodeText;
@@ -20,6 +19,8 @@ public:
     void setAcceptedTypes(const QList<BasicElementType>& acceptedTypes);
     void setMaxElements(int maxElements);
     void removeElementFromContainerInformation(const AbstractElement* element);
+    const ContainerInformationList& getContainerInformation() const;
+
 protected:
     void dragEnterEvent(QDragEnterEvent* event) override;
     void dragMoveEvent(QDragMoveEvent* event) override;
@@ -31,7 +32,7 @@ signals:
     void updateResultedTextView();
 
 private:
-    QVector<ContainerInformation> containerInformationList;
+    ContainerInformationList containerInformationList;
 
     QRect dropIndicatorRect;
     bool isDropIndicatorVisible = false;
@@ -39,10 +40,8 @@ private:
     void drawArrows();
     void updateDropIndicator(int insertIndex);
 
-
     QRect calculateDropIndicatorRect(int insertIndex) const;
     int findInsertIndex(QDropEvent* event);
-    
 
     bool isDropAccepted(const BasicElementType& elementType) const;
     bool isMaxElementsReached() const;

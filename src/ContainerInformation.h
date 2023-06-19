@@ -16,4 +16,6 @@ typedef struct ContainerInformation {
     std::shared_ptr<AbstractElement> elementPointer;
 } ContainerInformation;
 
+typedef QVector<ContainerInformation> ContainerInformationList;
+
 #endif // CONTAINER_INFORMATION_H
