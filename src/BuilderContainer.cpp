@@ -33,48 +33,29 @@ BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
             "}");
     }
 
-    containerInformation.droppedItem = DroppedItem::PARENT;
 }
 
 std::shared_ptr<CodeText> BuilderContainer::getText(int indentLevel) const
 {
-    return getText(containerInformation, indentLevel);
-}
-
-std::shared_ptr<CodeText> BuilderContainer::getText(const ContainerInformation& containerInfo, int indentLevel) const
-{
     std::shared_ptr<CodeText> result = std::make_shared<CodeText>(indentLevel);
-    switch (containerInfo.droppedItem) {
 
-    case DroppedItem::ELEMENT:
-        // Call the getText() method of the AbstractElement
-        if (containerInfo.elementPointer)
-            result = containerInfo.elementPointer->getText(indentLevel);
-        break;
+    // Call the getText() method recursively for each child container
+    for (const auto& child : containerInformationList) {
 
-    case DroppedItem::CONTAINER:
-        // Call the getText() method of the BuilderContainer
-        if (containerInfo.containerPointer)
-            result = containerInfo.containerPointer->getText(indentLevel);
-        break;
-
-    case DroppedItem::PARENT:
-        // Call the getText() method recursively for each child container
-        for (const auto& child : containerInfo.children) {
-            std::shared_ptr<CodeText> childResult = getText(child, indentLevel);
-
-            if (childResult) {
-                if (&child != &containerInfo.children.front()) {
-                    result->addToBody("\n");
-                }
-                result->append(*childResult);
-            }
+        if (child.droppedItem != DroppedItem::ELEMENT) { 
+            continue;
         }
-        break;
 
-    default:
-        break;
+        std::shared_ptr<CodeText> childResult = child.elementPointer->getText(indentLevel);
+
+        if (childResult) {
+            if (&child != &containerInformationList.front()) {
+                result->addToBody("\n");
+            }   
+            result->append(*childResult);
+        }
     }
+
     return result;
 }
 
@@ -82,15 +63,15 @@ void BuilderContainer::removeElementFromContainerInformation(const AbstractEleme
 {
     
     int removeIndex = -1;
-    for (int i = 0; i < containerInformation.children.size(); ++i) {
-        if ((containerInformation.children[i].droppedItem == DroppedItem::ELEMENT) && (containerInformation.children[i].elementPointer.get() == element)) {
+    for (int i = 0; i < containerInformationList.size(); ++i) {
+        if ((containerInformationList[i].droppedItem == DroppedItem::ELEMENT) && (containerInformationList[i].elementPointer.get() == element)) {
             removeIndex = i;
             break;
         }
     }
 
     if (removeIndex != -1) {
-        containerInformation.children.erase(containerInformation.children.begin() + removeIndex);
+        containerInformationList.erase(containerInformationList.begin() + removeIndex);
 
         // Remove the corresponding widget from builderContainerlayout
         QWidget* widget = builderContainerlayout->itemAt(removeIndex)->widget();
@@ -135,7 +116,7 @@ void BuilderContainer::setMaxElements(int maxElements)
 
 bool BuilderContainer::isMaxElementsReached() const
 {
-    if (maxElements >= 0 && containerInformation.children.size() >= maxElements) {
+    if (maxElements >= 0 && containerInformationList.size() >= maxElements) {
         return true;
     }
     return false;
@@ -273,7 +254,7 @@ void BuilderContainer::dropEvent(QDropEvent* event)
             info.droppedItem = DroppedItem::ELEMENT;
             info.elementPointer = element;
 
-            containerInformation.children.insert(insertIndex, info);
+            containerInformationList.insert(insertIndex, info);
 
             hideDropIndicator(); // Hide the drop indicator
 

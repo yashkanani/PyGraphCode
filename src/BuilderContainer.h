@@ -20,7 +20,6 @@ public:
     void setAcceptedTypes(const QList<BasicElementType>& acceptedTypes);
     void setMaxElements(int maxElements);
     void removeElementFromContainerInformation(const AbstractElement* element);
-
 protected:
     void dragEnterEvent(QDragEnterEvent* event) override;
     void dragMoveEvent(QDragMoveEvent* event) override;
@@ -32,7 +31,7 @@ signals:
     void updateResultedTextView();
 
 private:
-    ContainerInformation containerInformation;
+    QVector<ContainerInformation> containerInformationList;
 
     QRect dropIndicatorRect;
     bool isDropIndicatorVisible = false;
@@ -42,8 +41,6 @@ private:
 
 
     QRect calculateDropIndicatorRect(int insertIndex) const;
-
-    std::shared_ptr<CodeText> getText(const ContainerInformation& containerInfo, int indentLevel) const;
     int findInsertIndex(QDropEvent* event);
     
 
