@@ -15,13 +15,17 @@ WriteVariableElement::WriteVariableElement()
     image = QPixmap(":/resource/Variable.png");
     type = BasicElementType::WRITE_VARIABLE;
 
-    dynamicValueContainer = nullptr;
+    dynamicValueContainer = std::make_shared<BuilderContainer>(nullptr, true);
 }
 
 std::shared_ptr<AbstractElement> WriteVariableElement::clone() const
 {
     auto ret = std::make_shared<WriteVariableElement>();
     ret->setName(this->name);
+
+    ret->dynamicValueContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    ret->dynamicValueContainer->appendContainerInformationList(dynamicValueContainer->getContainerInformation());
+
     return ret;
 }
 
@@ -62,14 +66,14 @@ QWidget* WriteVariableElement::getViewWidget(QWidget* parent)
     wdgLayout->setContentsMargins(0, 0, 0, 0);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    dynamicValueContainer = new BuilderContainer(wdg, true);
+    
 
     // Set the accepted types for the BuilderContainer
     QList<BasicElementType> acceptedTypes = { BasicElementType::WRITE_VARIABLE, BasicElementType::CONDITIONS, BasicElementType::CONSTANT_TEXT, BasicElementType::CONSTANT_DECIMAL };
     dynamicValueContainer->setAcceptedTypes(acceptedTypes);
     dynamicValueContainer->setMaxElements(1);
-    QObject::connect(dynamicValueContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-    wdgLayout->addWidget(dynamicValueContainer);
+    QObject::connect(dynamicValueContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+    wdgLayout->addWidget(dynamicValueContainer.get());
 
     return wdg;
 }

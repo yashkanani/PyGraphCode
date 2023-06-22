@@ -15,7 +15,7 @@ public:
    
 
 private:
-    BuilderContainer* dynamicValueContainer;
+    std::shared_ptr<BuilderContainer> dynamicValueContainer;
 };
 
 #endif // WRITE_VARIABLE_ELEMENT_H
