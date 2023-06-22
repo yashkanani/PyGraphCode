@@ -1,13 +1,12 @@
 #include "IfLoopElement.h"
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include "PlaceHolder.h"
-#include "BuilderContainer.h"
-#include <qgroupbox.h>
-#include <qcombobox.h>
-#include <qlineedit.h>
 #include "BuilderContainer.h"
 #include "CodeText.h"
+#include "PlaceHolder.h"
+#include <qcombobox.h>
+#include <qgroupbox.h>
+#include <qlayout.h>
+#include <qlineedit.h>
+#include <qpushbutton.h>
 
 IfLoopElement::IfLoopElement()
 {
@@ -15,26 +14,33 @@ IfLoopElement::IfLoopElement()
     image = QPixmap(":/resource/If_loop.png");
     type = BasicElementType::IF_LOOP;
 
-    conditionsContainer = nullptr;
-    onTrueContainer = nullptr;
-    onFalseContainer = nullptr;
+    conditionsContainer = std::make_shared<BuilderContainer>(nullptr,true);
+    onTrueContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    onFalseContainer = std::make_shared<BuilderContainer>(nullptr, true);
 }
 
 std::shared_ptr<AbstractElement> IfLoopElement::clone() const
 {
-    return std::make_shared<IfLoopElement>();
-}
+    auto ret = std::make_shared<IfLoopElement>();
 
+    ret->conditionsContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    ret->conditionsContainer->appendContainerInformationList(conditionsContainer->getContainerInformation());
+
+    ret->onTrueContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    ret->onTrueContainer->appendContainerInformationList(onTrueContainer->getContainerInformation());
+
+    ret->onFalseContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    ret->onFalseContainer->appendContainerInformationList(onFalseContainer->getContainerInformation());
+    return ret;
+}
 
 std::shared_ptr<CodeText> IfLoopElement::getText(int indentLevel) const
 {
     std::shared_ptr<CodeText> ret = std::make_shared<CodeText>(indentLevel);
-    
-   
 
     // Dynamic Value set
     if (conditionsContainer) {
-        ret->addToBody( "if " + conditionsContainer->getText(0)->getResult() + " :");
+        ret->addToBody("if " + conditionsContainer->getText(0)->getResult() + " :");
         ret->addToBody("\n");
         ret->increaseIndentOfBody();
     }
@@ -42,9 +48,8 @@ std::shared_ptr<CodeText> IfLoopElement::getText(int indentLevel) const
     // Dynamic Value set
     if (onTrueContainer) {
         ret->append(*(onTrueContainer->getText(ret->getCurrentIndentOfBody())));
-         ret->addToBody("\n");
-         ret->removeIndentOfBody();
-        
+        ret->addToBody("\n");
+        ret->removeIndentOfBody();
     }
 
     // Dynamic Value set
@@ -82,35 +87,38 @@ QWidget* IfLoopElement::getViewWidget(QWidget* parent)
     QGridLayout* wdgLay = new QGridLayout(wdg);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    conditionsContainer = new BuilderContainer(wdg, true);
+   
+    if (conditionsContainer) {
+        // Set the accepted types for the BuilderContainer
+        QList<BasicElementType> acceptedTypes = { BasicElementType::CONDITIONS, BasicElementType::READ_VARIABLE };
+        conditionsContainer->setAcceptedTypes(acceptedTypes);
+        conditionsContainer->setMaxElements(1);
+        QObject::connect(conditionsContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
 
-    // Set the accepted types for the BuilderContainer
-    QList<BasicElementType> acceptedTypes = {BasicElementType::CONDITIONS, BasicElementType::READ_VARIABLE };
-    conditionsContainer->setAcceptedTypes(acceptedTypes);
-    conditionsContainer->setMaxElements(1);
-    QObject::connect(conditionsContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-
-    // Add the condition widget to the layout
-    wdgLay->addWidget(conditionsContainer, 0, 0, 1, 2);
+        // Add the condition widget to the layout
+        wdgLay->addWidget(conditionsContainer.get(), 0, 0, 1, 2);
+    }
 
     QGroupBox* onTrueGroupBox = new QGroupBox("On True", wdg);
     QVBoxLayout* onTrueLay = new QVBoxLayout(onTrueGroupBox);
 
-    onTrueContainer = new BuilderContainer(wdg, true);
-    QObject::connect(onTrueContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-    onTrueLay->addWidget(onTrueContainer);
-
+    if (onTrueContainer) {
+        QObject::connect(onTrueContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+        onTrueLay->addWidget(onTrueContainer.get());
+        
+    }
     wdgLay->addWidget(onTrueGroupBox, 1, 0);
 
     QGroupBox* onFalseGroupBox = new QGroupBox("On False", wdg);
-   
+
     QVBoxLayout* onFalseLay = new QVBoxLayout(onFalseGroupBox);
 
-    onFalseContainer = new BuilderContainer(wdg, true);
-    QObject::connect(onFalseContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-    onFalseLay->addWidget(onFalseContainer);
+    if (onFalseContainer) {
+        QObject::connect(onFalseContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+        onFalseLay->addWidget(onFalseContainer.get());
+    }
 
-    wdgLay->addWidget(onFalseGroupBox,1,1);
+    wdgLay->addWidget(onFalseGroupBox, 1, 1);
 
     return wdg;
 }

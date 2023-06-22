@@ -11,9 +11,9 @@ public:
     QWidget* getViewWidget(QWidget* parent = nullptr) override;
 
 private:
-    BuilderContainer* conditionsContainer;
-    BuilderContainer* onTrueContainer;
-    BuilderContainer* onFalseContainer;
+    std::shared_ptr<BuilderContainer> conditionsContainer;
+    std::shared_ptr<BuilderContainer> onTrueContainer;
+    std::shared_ptr<BuilderContainer> onFalseContainer;
 };
 
 #endif // IF_LOOP_ELEMENT_H
