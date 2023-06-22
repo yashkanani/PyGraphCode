@@ -14,7 +14,7 @@ public:
     QWidget* getViewWidget(QWidget* parent = nullptr) override;
 
 private:
-    QLineEdit* staticValueLineEdit;
+    QString lineEditText;
 };
 
 #endif // CONSTANT_TEXT_ELEMENT_H
