@@ -62,7 +62,7 @@ const ContainerInformationList& BuilderContainer::getContainerInformation() cons
     return containerInformationList;
 }
 
-void BuilderContainer::appenContainerInformationList(const ContainerInformationList& informationList, int _insertIndex)
+void BuilderContainer::appendContainerInformationList(const ContainerInformationList& informationList, int _insertIndex)
 {
 
     int insertIndex = _insertIndex;
