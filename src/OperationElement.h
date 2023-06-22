@@ -14,10 +14,10 @@ public:
     QWidget* getViewWidget(QWidget* parent = nullptr) override;
 
 private:
-    BuilderContainer* firstVariableContainer;
-    BuilderContainer* secondVariableContainer;
-    QComboBox* conditionComboBox;
-
+    std::shared_ptr<BuilderContainer> firstVariableContainer;
+    std::shared_ptr<BuilderContainer> secondVariableContainer;
+    
+    QString comboSelection;
 
 
 };
