@@ -16,8 +16,8 @@ InternalDragEventHandler::InternalDragEventHandler(QObject* parent)
 bool InternalDragEventHandler::eventFilter(QObject* watched, QEvent* event)
 {
     QWidget* draggedWidget = qobject_cast<QWidget*>(watched);
-    if (draggedWidget && event->type() == QEvent::MouseButtonPress) {
-        if (draggedWidget->property("element").isValid()) {
+    if (draggedWidget && (draggedWidget->property("element").isValid()) && event->type() == QEvent::MouseButtonPress) {
+        
             AbstractElement* element = qvariant_cast<AbstractElement*>(draggedWidget->property("element"));
 
             // Create a drag object
@@ -58,7 +58,7 @@ bool InternalDragEventHandler::eventFilter(QObject* watched, QEvent* event)
             }
 
             return true;
-        }
+        
     }
   
     return QObject::eventFilter(watched, event);
