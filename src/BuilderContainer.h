@@ -28,6 +28,7 @@ protected:
     void dropEvent(QDropEvent* event) override;
     void dragLeaveEvent(QDragLeaveEvent* event) override;
     void paintEvent(QPaintEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
 
 signals:
     void updateResultedTextView();

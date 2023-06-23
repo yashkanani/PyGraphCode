@@ -250,7 +250,11 @@ void BuilderContainer::dragMoveEvent(QDragMoveEvent* event)
         event->acceptProposedAction();
     }
 }
-
+void BuilderContainer::mousePressEvent(QMouseEvent* event)
+{
+    // Prevent the event from being passed to the parent widget
+    event->accept();
+}
 void BuilderContainer::dropEvent(QDropEvent* event)
 {
     const QMimeData* mimeData = event->mimeData();
