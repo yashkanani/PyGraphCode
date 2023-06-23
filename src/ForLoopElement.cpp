@@ -57,22 +57,23 @@ std::shared_ptr<CodeText> ForLoopElement::getText(int indentLevel) const
 {
     std::shared_ptr<CodeText> ret = std::make_shared<CodeText>(indentLevel);
 
-    if (variableContainer) {
+    if (variableContainer && endContainer) {
 
-        if (comboSelection.compare("Static"))
+        if (comboSelection.compare("Static") == 0) {
             ret->addToBody("for " + variableContainer->getText(0)->getResult() + QString(" in range(%1):").arg(endContainer->getText(0)->getResult()));
-        ret->addToBody("\n");
-    } else if (comboSelection.compare("Dynamic")) {
-        if (startContainer) {
-            ret->addToBody("for " + variableContainer->getText(0)->getResult() + QString(" in range(%1, %2):").arg(startContainer->getText(0)->getResult()).arg(endContainer->getText(0)->getResult()));
             ret->addToBody("\n");
+        } else if (comboSelection.compare("Dynamic") == 0) {
+            if (startContainer) {
+                ret->addToBody("for " + variableContainer->getText(0)->getResult() + QString(" in range(%1, %2):").arg(startContainer->getText(0)->getResult()).arg(endContainer->getText(0)->getResult()));
+                ret->addToBody("\n");
+            }
+        } else {
+                if (startContainer && incrementContainer) {
+                    ret->addToBody("for " + variableContainer->getText(0)->getResult() + QString(" in range(%1, %2, %3):").arg(startContainer->getText(0)->getResult()).arg(endContainer->getText(0)->getResult()).arg(incrementContainer->getText(0)->getResult()));
+                    ret->addToBody("\n");
+                }
+            }
         }
-    } else {
-        if (startContainer && incrementContainer) {
-            ret->addToBody("for " + variableContainer->getText(0)->getResult() + QString(" in range(%1, %2, %3):").arg(startContainer->getText(0)->getResult()).arg(endContainer->getText(0)->getResult()).arg(incrementContainer->getText(0)->getResult()));
-            ret->addToBody("\n");
-        }
-    }
 
     if (bodyContainer) {
         ret->increaseIndentOfBody();
@@ -110,8 +111,11 @@ QWidget* ForLoopElement::getViewWidget(QWidget* parent)
     QGroupBox* variableGroup = new QGroupBox("", wdg);
     QVBoxLayout* variableLay = new QVBoxLayout(variableGroup);
 
+
+    QList<BasicElementType> acceptedTypes = { BasicElementType::CONSTANT_DECIMAL, BasicElementType::READ_VARIABLE };
     bool subContainer = true;
     if (variableContainer) {
+        startContainer->setAcceptedTypes(acceptedTypes);
         QObject::connect(variableContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
         variableLay->addWidget(variableContainer.get());
     }
@@ -129,7 +133,7 @@ QWidget* ForLoopElement::getViewWidget(QWidget* parent)
     endCondition->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     endVariableLay->addWidget(endCondition, Qt::AlignLeft | Qt::AlignTop);
 
-    QList<BasicElementType> acceptedTypes = { BasicElementType::CONSTANT_DECIMAL, BasicElementType::READ_VARIABLE };
+    
 
     if (startContainer) {
         startContainer->setAcceptedTypes(acceptedTypes);
@@ -192,6 +196,7 @@ QWidget* ForLoopElement::getViewWidget(QWidget* parent)
         }
 
         comboSelection = endCondition->currentText();
+        emit childValueChanged();
     });
 
     endCondition->setCurrentText(comboSelection);
