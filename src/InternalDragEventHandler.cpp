@@ -30,7 +30,9 @@ bool InternalDragEventHandler::eventFilter(QObject* watched, QEvent* event)
             drag->setMimeData(mimeData);
 
             // Set the drag pixmap
-            QPixmap pixmap = element->getImage().scaled(90, 90); // Adjust the size as needed
+            QPixmap pixmap = draggedWidget->grab();
+            pixmap = pixmap.scaledToHeight(150, Qt::SmoothTransformation);
+            pixmap = pixmap.scaledToWidth(150, Qt::SmoothTransformation);
             drag->setPixmap(pixmap);
 
             // Start the drag
