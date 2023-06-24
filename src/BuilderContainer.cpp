@@ -31,6 +31,11 @@ BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
             "   border-radius: 5px;"
             "}");
     }
+
+    // If any changes occur in the child, the updateResultedTextView signal is emitted,
+    // which helps ensure that the arrow is drawn correctly.
+    // To achieve this, a paint event is generated using the update function.
+    QObject::connect(this, &BuilderContainer::updateResultedTextView, this, [=]() { update(); });
 }
 
 std::shared_ptr<CodeText> BuilderContainer::getText(int indentLevel) const
@@ -236,7 +241,7 @@ QRect BuilderContainer::calculateDropIndicatorRect(int insertIndex) const
             }
         }
     }
-
+   
     return QRect(0, y, width(), height);
 }
 
@@ -246,6 +251,11 @@ void BuilderContainer::dragMoveEvent(QDragMoveEvent* event)
         int insertIndex = findInsertIndex(event);
 
         updateDropIndicator(insertIndex);
+
+
+        auto pos = event->pos();
+
+        emit EnsureVisible(pos.x(), pos.y());
 
         event->acceptProposedAction();
     }

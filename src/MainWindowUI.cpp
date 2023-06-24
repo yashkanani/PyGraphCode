@@ -42,6 +42,7 @@ void MainWindowUI::createCentralWidget()
     QScrollArea* scrollBuilderArea = new QScrollArea(centralWidget);
     scrollBuilderArea->setWidgetResizable(true); // Allow the scroll area to resize the widget
     BuilderContainer* builderContainer = new BuilderContainer(scrollBuilderArea);
+    QObject::connect(builderContainer, &BuilderContainer::EnsureVisible, scrollBuilderArea, &QScrollArea::ensureVisible);
     scrollBuilderArea->setWidget(builderContainer);
     centralLayout->addWidget(scrollBuilderArea, 1, 1,2,1);
    
