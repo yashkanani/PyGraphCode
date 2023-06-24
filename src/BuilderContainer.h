@@ -32,6 +32,7 @@ protected:
 
 signals:
     void updateResultedTextView();
+    void EnsureVisible(int xPosition, int yPosition, int xmargin = 50, int ymargin = 50);
 
 private:
     ContainerInformationList containerInformationList;

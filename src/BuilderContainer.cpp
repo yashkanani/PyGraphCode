@@ -236,7 +236,7 @@ QRect BuilderContainer::calculateDropIndicatorRect(int insertIndex) const
             }
         }
     }
-
+   
     return QRect(0, y, width(), height);
 }
 
@@ -246,6 +246,11 @@ void BuilderContainer::dragMoveEvent(QDragMoveEvent* event)
         int insertIndex = findInsertIndex(event);
 
         updateDropIndicator(insertIndex);
+
+
+        auto pos = event->pos();
+
+        emit EnsureVisible(pos.x(), pos.y());
 
         event->acceptProposedAction();
     }
