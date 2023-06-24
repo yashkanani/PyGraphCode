@@ -31,6 +31,11 @@ BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
             "   border-radius: 5px;"
             "}");
     }
+
+    // If any changes occur in the child, the updateResultedTextView signal is emitted,
+    // which helps ensure that the arrow is drawn correctly.
+    // To achieve this, a paint event is generated using the update function.
+    QObject::connect(this, &BuilderContainer::updateResultedTextView, this, [=]() { update(); });
 }
 
 std::shared_ptr<CodeText> BuilderContainer::getText(int indentLevel) const
