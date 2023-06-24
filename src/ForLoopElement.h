@@ -17,12 +17,12 @@ public:
     QWidget* getViewWidget(QWidget* parent = nullptr) override;
 
 private:
-    BuilderContainer* variableContainer;
-    QComboBox* endCondition;
-    BuilderContainer* startContainer;
-    BuilderContainer* endContainer;
-    BuilderContainer* incrementContainer;
-    BuilderContainer* bodyContainer;
+    std::shared_ptr<BuilderContainer> variableContainer;
+    QString comboSelection;
+    std::shared_ptr<BuilderContainer> startContainer;
+    std::shared_ptr<BuilderContainer> endContainer;
+    std::shared_ptr<BuilderContainer> incrementContainer;
+    std::shared_ptr<BuilderContainer> bodyContainer;
 
 };
 

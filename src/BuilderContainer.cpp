@@ -4,12 +4,14 @@
 #include <QMimeData>
 #include <QVBoxLayout>
 #include <qpainter.h>
-#include <qpushbutton.h>
 #include <qpainterpath.h>
+#include <qpushbutton.h>
 
+#include "AbstractElement.h"
 #include "BuilderContainer.h"
-#include "ElementManager.h"
 #include "CodeText.h"
+#include "ElementManager.h"
+#include "InternalDragEventHandler.h"
 
 BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
     : QFrame(parent)
@@ -27,91 +29,103 @@ BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
             "QWidget#BuilderContainerWidget {"
             "   border: 1px solid black;"
             "   border-radius: 5px;"
-            "}"
-        );
-        
+            "}");
     }
-    
-    containerInformation.droppedItem = DroppedItem::PARENT;
 }
 
 std::shared_ptr<CodeText> BuilderContainer::getText(int indentLevel) const
 {
-    return getText(containerInformation, indentLevel);
-}
-
-std::shared_ptr<CodeText> BuilderContainer::getText(const ContainerInformation& containerInfo, int indentLevel) const
-{
     std::shared_ptr<CodeText> result = std::make_shared<CodeText>(indentLevel);
-    switch (containerInfo.droppedItem) {
 
-    case DroppedItem::ELEMENT:
-        // Call the getText() method of the AbstractElement
-        if (containerInfo.elementPointer)
-            result = containerInfo.elementPointer->getText(indentLevel);
-        break;
+    // Call the getText() method recursively for each child container
+    for (const auto& child : containerInformationList) {
 
-    case DroppedItem::CONTAINER:
-        // Call the getText() method of the BuilderContainer
-        if (containerInfo.containerPointer)
-            result = containerInfo.containerPointer->getText(indentLevel);
-        break;
-
-    case DroppedItem::PARENT:
-        // Call the getText() method recursively for each child container
-        for (const auto& child : containerInfo.children) {
-            std::shared_ptr<CodeText> childResult = getText(child, indentLevel);
-
-            if (childResult) {
-                if (&child != &containerInfo.children.front()) {
-                    result->addToBody("\n");
-                }
-                result->append(*childResult);
-            }
+        if (child.droppedItem != DroppedItem::ELEMENT) {
+            continue;
         }
-        break;
 
-    default:
-        break;
+        std::shared_ptr<CodeText> childResult = child.elementPointer->getText(indentLevel);
+
+        if (childResult) {
+            if (&child != &containerInformationList.front()) {
+                result->addToBody("\n");
+            }
+            result->append(*childResult);
+        }
     }
+
     return result;
 }
 
- void BuilderContainer::setAcceptedTypes(const QList<BasicElementType>& acceptedTypesList)
+const ContainerInformationList& BuilderContainer::getContainerInformation() const
 {
-     acceptedTypes = acceptedTypesList;
- }
+    return containerInformationList;
+}
 
-void BuilderContainer::dragEnterEvent(QDragEnterEvent* event)
+void BuilderContainer::appendContainerInformationList(const ContainerInformationList& informationList, int _insertIndex)
 {
-    const QMimeData* mimeData = event->mimeData();
-    if (mimeData->hasFormat("application/element")) {
 
-        QByteArray data = mimeData->data("application/element");
+    int insertIndex = _insertIndex;
+    for (int i = 0; i < informationList.size(); ++i) {
 
-        if (data.isEmpty() || isMaxElementsReached()) {
-            event->ignore();
-            return;
+        if ((informationList[i].droppedItem != DroppedItem::ELEMENT) || (informationList[i].elementPointer == nullptr)) {
+            continue;
         }
 
-        QDataStream stream(&data, QIODevice::ReadOnly);
+        auto element = informationList[i].elementPointer->clone();
+        addInformationAndView(element, insertIndex);
+        ++insertIndex;
+    }
+}
 
-        QString elementName;
-        stream >> elementName;
+void BuilderContainer::removeElementFromContainerInformation(const AbstractElement* element)
+{
 
-        quint32 elementTypeValue;
-        stream >> elementTypeValue;
-        BasicElementType elementType = static_cast<BasicElementType>(elementTypeValue);
-    
-        if (isDropAccepted(elementType)) {
-            event->acceptProposedAction();
-        } else {
-            event->ignore();
+    int removeIndex = -1;
+    for (int i = 0; i < containerInformationList.size(); ++i) {
+        if ((containerInformationList[i].droppedItem == DroppedItem::ELEMENT) && (containerInformationList[i].elementPointer.get() == element)) {
+            removeIndex = i;
+            break;
         }
     }
 
+    if (removeIndex != -1) {
+        containerInformationList.erase(containerInformationList.begin() + removeIndex);
+
+        // Remove the corresponding widget from builderContainerlayout
+        QWidget* widget = builderContainerlayout->itemAt(removeIndex)->widget();
+        if (widget) {
+            builderContainerlayout->removeWidget(widget);
+            delete widget;
+        }
+
+        emit updateResultedTextView(); // Update the text in ResultedTextView Widget.
+    }
 }
 
+void BuilderContainer::setAcceptedTypes(const QList<BasicElementType>& acceptedTypesList)
+{
+    acceptedTypes = acceptedTypesList;
+}
+
+void BuilderContainer::dragEnterEvent(QDragEnterEvent* event)
+{
+    if (isMaxElementsReached()) {
+        event->ignore();
+        return;
+    }
+
+    const QMimeData* mimeData = event->mimeData();
+    QVariant& elementPointer = mimeData->property("element");
+    if (elementPointer.isValid()) {
+        std::shared_ptr<AbstractElement> element = qvariant_cast<AbstractElement*>(elementPointer)->clone();
+        if (element && isDropAccepted(element->getType())) {
+            event->acceptProposedAction();
+            return;
+        }
+    }
+    event->ignore();
+}
 
 void BuilderContainer::setMaxElements(int maxElements)
 {
@@ -120,12 +134,11 @@ void BuilderContainer::setMaxElements(int maxElements)
 
 bool BuilderContainer::isMaxElementsReached() const
 {
-    if (maxElements >= 0 && containerInformation.children.size() >= maxElements) {
+    if (maxElements >= 0 && containerInformationList.size() >= maxElements) {
         return true;
     }
     return false;
 }
-
 
 void BuilderContainer::dragLeaveEvent(QDragLeaveEvent* event)
 {
@@ -185,7 +198,7 @@ void BuilderContainer::drawArrows()
         QPainter painter(this);
         painter.setPen(QPen(QColor("#8c8c8c"), 2));
         painter.drawLine(line);
-        
+
         int arrowHeight = 10; // Height of the arrow
         int arrowWidth = 10; // Width of the arrow
 
@@ -198,15 +211,7 @@ void BuilderContainer::drawArrows()
         arrowPath.lineTo(arrowX + (arrowWidth / 2), arrowY + arrowHeight);
         arrowPath.lineTo(arrowX, arrowY);
         painter.fillPath(arrowPath, QColor("#8c8c8c"));
-    
-    
-    
     }
-
-
-    
-    
-
 }
 
 QRect BuilderContainer::calculateDropIndicatorRect(int insertIndex) const
@@ -214,7 +219,7 @@ QRect BuilderContainer::calculateDropIndicatorRect(int insertIndex) const
     int height = 2; // Set the height of the drop indicator rectangle
     int y = 0; // Initialize the Y-coordinate
 
-    if (insertIndex >= 0 && insertIndex < builderContainerlayout->count()-1) {
+    if (insertIndex >= 0 && insertIndex < builderContainerlayout->count() - 1) {
         QWidget* widget = builderContainerlayout->itemAt(insertIndex)->widget();
         if (widget) {
             QRect widgetRect = widget->geometry();
@@ -237,54 +242,33 @@ QRect BuilderContainer::calculateDropIndicatorRect(int insertIndex) const
 
 void BuilderContainer::dragMoveEvent(QDragMoveEvent* event)
 {
-    if (event->mimeData()->hasFormat("application/element")) {
+    if (event->mimeData()->property("element").isValid()) {
         int insertIndex = findInsertIndex(event);
 
         updateDropIndicator(insertIndex);
 
         event->acceptProposedAction();
     }
-    
 }
-
+void BuilderContainer::mousePressEvent(QMouseEvent* event)
+{
+    // Prevent the event from being passed to the parent widget
+    event->accept();
+}
 void BuilderContainer::dropEvent(QDropEvent* event)
 {
     const QMimeData* mimeData = event->mimeData();
-    if (mimeData->hasFormat("application/element")) {
-
-        QByteArray data = mimeData->data("application/element");
-        if (data.isEmpty()) {
-            return;
-        }
-
-        QDataStream stream(&data, QIODevice::ReadOnly);
-
-        QString elementName;
-        stream >> elementName;
-
-        quint32 elementTypeValue;
-        stream >> elementTypeValue;
-        BasicElementType elementType = static_cast<BasicElementType>(elementTypeValue);
-
-
-        std::shared_ptr<AbstractElement> element = createInstance(elementType, elementName);
-        
-
+    QVariant& elementPointer = mimeData->property("element");
+    if (elementPointer.isValid()) {
+        std::shared_ptr<AbstractElement> element = qvariant_cast<AbstractElement*>(elementPointer)->clone();
         if (element) {
 
             int insertIndex = findInsertIndex(event);
 
-            addElementWidget(element->getViewWidget(), insertIndex);
-            connect(element.get(), &AbstractElement::childValueChanged, this, &BuilderContainer::updateResultedTextView);
-
-            ContainerInformation info;
-            info.droppedItem = DroppedItem::ELEMENT;
-            info.elementPointer = element;
-
-            containerInformation.children.insert(insertIndex, info);
+            addInformationAndView(element, insertIndex);
 
             hideDropIndicator(); // Hide the drop indicator
-            
+
             emit updateResultedTextView(); // Update the text in ResultedTextView Widget.
 
             event->acceptProposedAction();
@@ -292,14 +276,25 @@ void BuilderContainer::dropEvent(QDropEvent* event)
     }
 }
 
-std::shared_ptr<AbstractElement> BuilderContainer::createInstance(const BasicElementType& elementType, const QString& elementName)
+void BuilderContainer::addInformationAndView(std::shared_ptr<AbstractElement> element, int insertIndex)
 {
-    std::shared_ptr<AbstractElement> elementPointer = ElementManager::getInstance().createElementFromType(elementType);
-    elementPointer->setName(elementName);
+    if ((element == nullptr) || (insertIndex < 0)) {
+        return;
+    }
 
-    return elementPointer;
+    // add element view
+    QWidget* viewWidget = element->getViewWidget();
+    viewWidget->setProperty("element", QVariant::fromValue(dynamic_cast<AbstractElement*>(element.get())));
+    viewWidget->installEventFilter(new InternalDragEventHandler(this));
+    addElementWidget(viewWidget, insertIndex);
+    connect(element.get(), &AbstractElement::childValueChanged, this, &BuilderContainer::updateResultedTextView);
+
+    // add information
+    ContainerInformation info;
+    info.droppedItem = DroppedItem::ELEMENT;
+    info.elementPointer = element;
+    containerInformationList.insert(insertIndex, info);
 }
-
 
 bool BuilderContainer::isDropAccepted(const BasicElementType& elementType) const
 {
@@ -372,4 +367,4 @@ int BuilderContainer::findInsertIndex(QDropEvent* event)
         insertIndex = builderContainerlayout->count() - 1; // Drop at the end if no position found
     }
     return insertIndex;
-}       
+}

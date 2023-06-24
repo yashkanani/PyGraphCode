@@ -1,5 +1,5 @@
-#include "CodeText.h"
 #include "ConstantDecimalElement.h"
+#include "CodeText.h"
 #include <QGroupBox>
 #include <QLayout>
 #include <QLineEdit>
@@ -10,21 +10,22 @@ ConstantDecimalElement::ConstantDecimalElement()
     image = QPixmap(":/resource/Variable.png");
     type = BasicElementType::CONSTANT_DECIMAL;
 
-    staticValueLineEdit = nullptr;
+    lineEditValue = "1.0";
 }
 
 std::shared_ptr<AbstractElement> ConstantDecimalElement::clone() const
 {
-    return std::make_shared<ConstantDecimalElement>();
+    auto ret = std::make_shared<ConstantDecimalElement>();
+    ret->lineEditValue = lineEditValue;
+
+    return ret;
 }
 
 std::shared_ptr<CodeText> ConstantDecimalElement::getText(int indentLevel) const
 {
     std::shared_ptr<CodeText> ret = std::make_shared<CodeText>(indentLevel);
     // static Value set
-    if (staticValueLineEdit) {
-        ret->addToBody(staticValueLineEdit->text());
-    }
+    ret->addToBody(lineEditValue);
     return ret;
 }
 
@@ -52,9 +53,13 @@ QWidget* ConstantDecimalElement::getViewWidget(QWidget* parent)
     wdgLayout->setContentsMargins(0, 0, 0, 0);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    staticValueLineEdit = new QLineEdit(wdg);
+    QLineEdit* staticValueLineEdit = new QLineEdit(wdg);
     staticValueLineEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    QObject::connect(staticValueLineEdit, &QLineEdit::textChanged, this, &AbstractElement::childValueChanged);
+    QObject::connect(staticValueLineEdit, &QLineEdit::textChanged, [=](const QString& value) {
+        lineEditValue = value;
+        emit childValueChanged();
+    });
+    staticValueLineEdit->setText(lineEditValue);
     wdgLayout->addWidget(staticValueLineEdit);
 
     return wdg;

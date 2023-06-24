@@ -7,19 +7,33 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 
-#include "CodeText.h"
 #include "BuilderContainer.h"
+#include "CodeText.h"
 
 ConditionalElement::ConditionalElement()
 {
     name = "Condition";
     image = QPixmap(":/resource/Conditional.png");
     type = BasicElementType::CONDITIONS;
+
+    firstVariableContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    secondVariableContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    comboSelection = "is Greater than (>)";
 }
 
 std::shared_ptr<AbstractElement> ConditionalElement::clone() const
 {
-    return std::make_shared<ConditionalElement>();
+    auto ret = std::make_shared<ConditionalElement>();
+
+    ret->comboSelection = comboSelection;
+
+    ret->firstVariableContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    ret->firstVariableContainer->appendContainerInformationList(firstVariableContainer->getContainerInformation());
+
+    ret->secondVariableContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    ret->secondVariableContainer->appendContainerInformationList(secondVariableContainer->getContainerInformation());
+
+    return ret;
 }
 
 std::shared_ptr<CodeText> ConditionalElement::getText(int indentLevel) const
@@ -31,36 +45,23 @@ std::shared_ptr<CodeText> ConditionalElement::getText(int indentLevel) const
         line += firstVariableContainer->getText(0)->getResult();
     }
 
-    if (conditionComboBox) {
-        switch (conditionComboBox->currentIndex()) {
-        case 0: {
-            line += " > ";
-            break;
-        }
-        case 1: {
-            line += " < ";
-            break;
-        }
-        case 2: {
-            line += " >= ";
-            break;
-        }
-        case 3: {
-            line += " <= ";
-            break;
-        }
-        case 4: {
-            line += " == ";
-            break;
-        }
-        case 5: {
-            line += " != ";
-            break;
-        }
-        default: {
-            break;
-        }
-        };
+    if (comboSelection.compare("is Greater than (>)") == 0) {
+        line += " > ";
+
+    } else if (comboSelection.compare("is Less than (<)") == 0) {
+        line += " < ";
+
+    } else if (comboSelection.compare("is Greater than or equal to (>=)") == 0) {
+        line += " >= ";
+
+    } else if (comboSelection.compare("is Less than or equal to (<=)") == 0) {
+        line += " <= ";
+
+    } else if (comboSelection.compare("is same as (==)") == 0) {
+        line += " == ";
+
+    } else if (comboSelection.compare("is not same as (!=)") == 0) {
+        line += " != ";
     }
 
     if (secondVariableContainer) {
@@ -68,7 +69,7 @@ std::shared_ptr<CodeText> ConditionalElement::getText(int indentLevel) const
     }
 
     line += ")";
-    
+
     ret->addToBody(line);
     return ret;
 }
@@ -96,16 +97,17 @@ QWidget* ConditionalElement::getViewWidget(QWidget* parent)
     QGridLayout* wdgLay = new QGridLayout(wdg);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-     // Set the accepted types for the BuilderContainer
+    // Set the accepted types for the BuilderContainer
     QList<BasicElementType> acceptedTypes = { BasicElementType::READ_VARIABLE, BasicElementType::CONDITIONS };
 
-    firstVariableContainer = new BuilderContainer(wdg, true);
-    firstVariableContainer->setAcceptedTypes(acceptedTypes);
-    firstVariableContainer->setMaxElements(1);
-    QObject::connect(firstVariableContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-    wdgLay->addWidget(firstVariableContainer, 0, 0);
+    if (firstVariableContainer) {
+        firstVariableContainer->setAcceptedTypes(acceptedTypes);
+        firstVariableContainer->setMaxElements(1);
+        QObject::connect(firstVariableContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+        wdgLay->addWidget(firstVariableContainer.get(), 0, 0);
+    }
 
-    conditionComboBox = new QComboBox(wdg);
+    QComboBox* conditionComboBox = new QComboBox(wdg);
     conditionComboBox->addItem("is Greater than (>)");
     conditionComboBox->addItem("is Less than (<)");
     conditionComboBox->addItem("is Greater than or equal to (>=)");
@@ -115,15 +117,20 @@ QWidget* ConditionalElement::getViewWidget(QWidget* parent)
     conditionComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     // Connect the combo box signals to notifier.
-    QObject::connect(conditionComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AbstractElement::childValueChanged);
+    QObject::connect(conditionComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=]() {
+        comboSelection = conditionComboBox->currentText();
+        emit childValueChanged();
+    });
+
     wdgLay->addWidget(conditionComboBox, 0, 1, Qt::AlignCenter);
+    conditionComboBox->setCurrentText(comboSelection);
 
-    secondVariableContainer = new BuilderContainer(wdg, true);
-    secondVariableContainer->setAcceptedTypes(acceptedTypes);
-    secondVariableContainer->setMaxElements(1);
-    QObject::connect(secondVariableContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-    wdgLay->addWidget(secondVariableContainer, 0, 2);
-
+    if (secondVariableContainer) {
+        secondVariableContainer->setAcceptedTypes(acceptedTypes);
+        secondVariableContainer->setMaxElements(1);
+        QObject::connect(secondVariableContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+        wdgLay->addWidget(secondVariableContainer.get(), 0, 2);
+    }
 
     return wdg;
 }

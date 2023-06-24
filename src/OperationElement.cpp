@@ -1,8 +1,8 @@
 #include "OperationElement.h"
-#include <QPushButton>
-#include <QVBoxLayout>
 #include <QGroupBox>
 #include <QLineEdit>
+#include <QPushButton>
+#include <QVBoxLayout>
 #include <qcombobox.h>
 
 #include "BuilderContainer.h"
@@ -14,18 +14,27 @@ OperationElement::OperationElement()
     image = QPixmap(":/resource/Operation.png");
     type = BasicElementType::OPERATOR;
 
-    secondVariableContainer = nullptr;
-    firstVariableContainer = nullptr;
+    secondVariableContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    firstVariableContainer = std::make_shared<BuilderContainer>(nullptr, true);
 }
 
- std::shared_ptr<AbstractElement> OperationElement::clone() const
+std::shared_ptr<AbstractElement> OperationElement::clone() const
 {
-     return std::make_shared<OperationElement>();
- }
+    auto ret = std::make_shared<OperationElement>();
 
+    ret->comboSelection = comboSelection;
+
+    ret->firstVariableContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    ret->firstVariableContainer->appendContainerInformationList(firstVariableContainer->getContainerInformation());
+
+    ret->secondVariableContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    ret->secondVariableContainer->appendContainerInformationList(secondVariableContainer->getContainerInformation());
+
+    return ret;
+}
 
 std::shared_ptr<CodeText> OperationElement::getText(int indentLevel) const
- {
+{
     std::shared_ptr<CodeText> ret = std::make_shared<CodeText>(indentLevel);
     QString line;
     line += "(";
@@ -33,32 +42,17 @@ std::shared_ptr<CodeText> OperationElement::getText(int indentLevel) const
         line += firstVariableContainer->getText(0)->getResult();
     }
 
-    if (conditionComboBox) {
-        switch (conditionComboBox->currentIndex()) {
-        case 0: {
-            line += " + ";
-            break;
-        }
-        case 1: {
-            line += " - ";
-            break;
-        }
-        case 2: {
-            line += " x ";
-            break;
-        }
-        case 3: {
-            line += " / ";
-            break;
-        }
-        case 4: {
-            line += " ^ ";
-            break;
-        }
-        default: {
-            break;
-        }
-        };
+    if (comboSelection.compare("is Add to (+)")) {
+        line += " + ";
+    } else if (comboSelection.compare("is subtract from (-)")) {
+        line += " - ";
+    } else if (comboSelection.compare("is multiply by (x)")) {
+        line += " x ";
+    } else if (comboSelection.compare("is divide by (/)")) {
+        line += " / ";
+    } else if (comboSelection.compare("is XOR (^)")) {
+        line += " ^ ";
+    } else {
     }
 
     if (secondVariableContainer) {
@@ -94,16 +88,17 @@ QWidget* OperationElement::getViewWidget(QWidget* parent)
     QGridLayout* wdgLay = new QGridLayout(wdg);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-   // Set the accepted types for the BuilderContainer
-    QList<BasicElementType> acceptedTypes = { BasicElementType::READ_VARIABLE, BasicElementType::CONDITIONS };
+    // Set the accepted types for the BuilderContainer
+    QList<BasicElementType> acceptedTypes = { BasicElementType::CONSTANT_DECIMAL, BasicElementType::READ_VARIABLE, BasicElementType::CONDITIONS };
 
-    firstVariableContainer = new BuilderContainer(wdg, true);
-    firstVariableContainer->setAcceptedTypes(acceptedTypes);
-    firstVariableContainer->setMaxElements(1);
-    QObject::connect(firstVariableContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-    wdgLay->addWidget(firstVariableContainer, 0, 0);
+    if (firstVariableContainer) {
+        firstVariableContainer->setAcceptedTypes(acceptedTypes);
+        firstVariableContainer->setMaxElements(1);
+        QObject::connect(firstVariableContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+        wdgLay->addWidget(firstVariableContainer.get(), 0, 0);
+    }
 
-    conditionComboBox = new QComboBox(wdg);
+    QComboBox* conditionComboBox = new QComboBox(wdg);
     conditionComboBox->addItem("is Add to (+)");
     conditionComboBox->addItem("is subtract from (-)");
     conditionComboBox->addItem("is multiply by (x)");
@@ -112,11 +107,17 @@ QWidget* OperationElement::getViewWidget(QWidget* parent)
     conditionComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     wdgLay->addWidget(conditionComboBox, 0, 1, Qt::AlignCenter);
 
-    secondVariableContainer = new BuilderContainer(wdg, true);
-    secondVariableContainer->setAcceptedTypes(acceptedTypes);
-    secondVariableContainer->setMaxElements(1);
-    QObject::connect(secondVariableContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-    wdgLay->addWidget(secondVariableContainer, 0, 2);
+    QObject::connect(conditionComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
+        comboSelection = conditionComboBox->currentText();
+    });
 
+    if (secondVariableContainer) {
+        secondVariableContainer->setAcceptedTypes(acceptedTypes);
+        secondVariableContainer->setMaxElements(1);
+        QObject::connect(secondVariableContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+        wdgLay->addWidget(secondVariableContainer.get(), 0, 2);
+    }
+
+    conditionComboBox->setCurrentText(comboSelection);
     return wdg;
 }

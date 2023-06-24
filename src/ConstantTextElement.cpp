@@ -10,12 +10,14 @@ ConstantTextElement::ConstantTextElement()
     image = QPixmap(":/resource/Variable.png");
     type = BasicElementType::CONSTANT_TEXT;
 
-    staticValueLineEdit = nullptr;
+    lineEditText = "PyGraph";
 }
 
 std::shared_ptr<AbstractElement> ConstantTextElement::clone() const
 {
-    return std::make_shared<ConstantTextElement>();
+    auto ret = std::make_shared<ConstantTextElement>();
+    ret->lineEditText = lineEditText;
+    return ret;
 }
 
 std::shared_ptr<CodeText> ConstantTextElement::getText(int indentLevel) const
@@ -25,9 +27,8 @@ std::shared_ptr<CodeText> ConstantTextElement::getText(int indentLevel) const
     QString line;
 
     // static Value set
-    if (staticValueLineEdit) {
-        line = "\"" + staticValueLineEdit->text() + "\"";
-    }
+
+    line = "\"" + lineEditText + "\"";
 
     ret->addToBody(line);
     return ret;
@@ -57,9 +58,13 @@ QWidget* ConstantTextElement::getViewWidget(QWidget* parent)
     wdgLayout->setContentsMargins(0, 0, 0, 0);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    staticValueLineEdit = new QLineEdit(wdg);
+    QLineEdit* staticValueLineEdit = new QLineEdit(wdg);
     staticValueLineEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    QObject::connect(staticValueLineEdit, &QLineEdit::textChanged, this, &AbstractElement::childValueChanged);
+    QObject::connect(staticValueLineEdit, &QLineEdit::textChanged, [=](const QString& value) {
+        lineEditText = value;
+        emit childValueChanged();
+    });
+    staticValueLineEdit->setText(lineEditText);
     wdgLayout->addWidget(staticValueLineEdit);
 
     return wdg;

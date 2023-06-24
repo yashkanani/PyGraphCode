@@ -3,20 +3,20 @@
 
 #include <QList>
 
+
 class AbstractElement;
 class BuilderContainer;
 
 enum class DroppedItem {
-    ELEMENT,
-    CONTAINER,
-    PARENT
+    UNKNOW = 0,
+    ELEMENT
 };
 
 typedef struct ContainerInformation {
-    DroppedItem droppedItem = DroppedItem::PARENT;
+    DroppedItem droppedItem = DroppedItem::ELEMENT;
     std::shared_ptr<AbstractElement> elementPointer;
-    std::shared_ptr <BuilderContainer> containerPointer;
-    QList<ContainerInformation> children;
 } ContainerInformation;
+
+typedef QList<ContainerInformation> ContainerInformationList;
 
 #endif // CONTAINER_INFORMATION_H

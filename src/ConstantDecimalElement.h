@@ -14,7 +14,7 @@ public:
     QWidget* getViewWidget(QWidget* parent = nullptr) override;
 
 private:
-    QLineEdit* staticValueLineEdit;
+    QString lineEditValue;
 };
 
 #endif // CONSTANT_DECIMAL_ELEMENT_H

@@ -14,47 +14,66 @@ ForLoopElement::ForLoopElement()
     image = QPixmap(":/resource/For_loop.png");
     type = BasicElementType::FOR_LOOP;
 
-    endCondition = nullptr;
-    variableContainer = nullptr;
-    startContainer = nullptr;
-    incrementContainer = nullptr;
-    bodyContainer = nullptr;
+    comboSelection = "Static";
+
+    variableContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    startContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    incrementContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    bodyContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    endContainer = std::make_shared<BuilderContainer>(nullptr, true);
 }
 
 std::shared_ptr<AbstractElement> ForLoopElement::clone() const
 {
-    return std::make_shared<ForLoopElement>();
+    auto ret = std::make_shared<ForLoopElement>();
+
+    // Copy endCondition
+    ret->comboSelection = comboSelection;
+
+    // Copy variableContainer
+    ret->variableContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    ret->variableContainer->appendContainerInformationList(variableContainer->getContainerInformation());
+
+    // Copy startContainer
+    ret->startContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    ret->startContainer->appendContainerInformationList(startContainer->getContainerInformation());
+
+    // Copy incrementContainer
+    ret->incrementContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    ret->incrementContainer->appendContainerInformationList(incrementContainer->getContainerInformation());
+
+    // Copy bodyContainer
+    ret->bodyContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    ret->bodyContainer->appendContainerInformationList(bodyContainer->getContainerInformation());
+
+    // Copy endContainer
+    ret->endContainer = std::make_shared<BuilderContainer>(nullptr, true);
+    ret->endContainer->appendContainerInformationList(endContainer->getContainerInformation());
+
+    return ret;
 }
 
 std::shared_ptr<CodeText> ForLoopElement::getText(int indentLevel) const
 {
     std::shared_ptr<CodeText> ret = std::make_shared<CodeText>(indentLevel);
-    
 
-    if (endCondition && variableContainer) {
-        switch (endCondition->currentIndex()) {
+    if (variableContainer && endContainer) {
 
-        case 0: {
+        if (comboSelection.compare("Static") == 0) {
             ret->addToBody("for " + variableContainer->getText(0)->getResult() + QString(" in range(%1):").arg(endContainer->getText(0)->getResult()));
             ret->addToBody("\n");
-        } break;
-        case 1: {
+        } else if (comboSelection.compare("Dynamic") == 0) {
             if (startContainer) {
                 ret->addToBody("for " + variableContainer->getText(0)->getResult() + QString(" in range(%1, %2):").arg(startContainer->getText(0)->getResult()).arg(endContainer->getText(0)->getResult()));
                 ret->addToBody("\n");
             }
-        } break;
-        case 2: {
-            if (startContainer && incrementContainer) {
-                ret->addToBody("for " + variableContainer->getText(0)->getResult() + QString(" in range(%1, %2, %3):").arg(startContainer->getText(0)->getResult()).arg(endContainer->getText(0)->getResult()).arg(incrementContainer->getText(0)->getResult()));
-                ret->addToBody("\n");
+        } else {
+                if (startContainer && incrementContainer) {
+                    ret->addToBody("for " + variableContainer->getText(0)->getResult() + QString(" in range(%1, %2, %3):").arg(startContainer->getText(0)->getResult()).arg(endContainer->getText(0)->getResult()).arg(incrementContainer->getText(0)->getResult()));
+                    ret->addToBody("\n");
+                }
             }
-        } break;
-
-        default:
-            break;
         }
-    }
 
     if (bodyContainer) {
         ret->increaseIndentOfBody();
@@ -92,51 +111,67 @@ QWidget* ForLoopElement::getViewWidget(QWidget* parent)
     QGroupBox* variableGroup = new QGroupBox("", wdg);
     QVBoxLayout* variableLay = new QVBoxLayout(variableGroup);
 
+
+    QList<BasicElementType> acceptedTypes = { BasicElementType::CONSTANT_DECIMAL, BasicElementType::READ_VARIABLE };
     bool subContainer = true;
-    variableContainer = new BuilderContainer(wdg, subContainer);
-    QObject::connect(variableContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-    variableLay->addWidget(variableContainer);
+    if (variableContainer) {
+        startContainer->setAcceptedTypes(acceptedTypes);
+        QObject::connect(variableContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+        variableLay->addWidget(variableContainer.get());
+    }
 
     wdgLayout->addWidget(variableGroup, 0, 0);
 
     QGroupBox* endGroup = new QGroupBox("", wdg);
     QHBoxLayout* endVariableLay = new QHBoxLayout(endGroup);
 
-    endCondition = new QComboBox(wdg);
+    QComboBox* endCondition = new QComboBox();
     endCondition->addItem("Static");
     endCondition->addItem("Dynamic");
     endCondition->addItem("yash");
+
     endCondition->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     endVariableLay->addWidget(endCondition, Qt::AlignLeft | Qt::AlignTop);
 
-    QList<BasicElementType> acceptedTypes = { BasicElementType::CONSTANT_DECIMAL, BasicElementType::READ_VARIABLE };
     
-    startContainer = new BuilderContainer(wdg, subContainer);
-    startContainer->setAcceptedTypes(acceptedTypes);
-    startContainer->setMaxElements(1);
-    QObject::connect(startContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-    endVariableLay->addWidget(startContainer);
 
-    endContainer = new BuilderContainer(wdg, subContainer);
-    endContainer->setAcceptedTypes(acceptedTypes);
-    endContainer->setMaxElements(1);
-    QObject::connect(endContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-    endVariableLay->addWidget(endContainer);
+    if (startContainer) {
+        startContainer->setAcceptedTypes(acceptedTypes);
+        startContainer->setMaxElements(1);
+        QObject::connect(startContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+        endVariableLay->addWidget(startContainer.get());
+        startContainer->hide();
+    }
 
-    incrementContainer = new BuilderContainer(wdg, subContainer);
-    incrementContainer->setAcceptedTypes(acceptedTypes);
-    incrementContainer->setMaxElements(1);
-    QObject::connect(incrementContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-    endVariableLay->addWidget(incrementContainer);
+    if (endContainer) {
+        endContainer->setAcceptedTypes(acceptedTypes);
+        endContainer->setMaxElements(1);
+        QObject::connect(endContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+        endVariableLay->addWidget(endContainer.get());
+        endContainer->show();
+    }
+
+    if (incrementContainer) {
+        incrementContainer->setAcceptedTypes(acceptedTypes);
+        incrementContainer->setMaxElements(1);
+        QObject::connect(incrementContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+        endVariableLay->addWidget(incrementContainer.get());
+        incrementContainer->hide();
+    }
 
     wdgLayout->addWidget(endGroup, 0, 1);
 
-    bodyContainer = new BuilderContainer(wdg, subContainer);
-    QObject::connect(bodyContainer, &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-    wdgLayout->addWidget(bodyContainer, 1, 0, 1, 2);
+    if (bodyContainer) {
+        QObject::connect(bodyContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+        wdgLayout->addWidget(bodyContainer.get(), 1, 0, 1, 2);
+    }
 
     // Connect the combo box signals to slots or functions
     QObject::connect(endCondition, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
+        if (!startContainer || !endContainer || !incrementContainer) {
+            return;
+        }
+
         switch (index) {
 
         case 0: {
@@ -159,11 +194,12 @@ QWidget* ForLoopElement::getViewWidget(QWidget* parent)
             endContainer->show();
             break;
         }
+
+        comboSelection = endCondition->currentText();
+        emit childValueChanged();
     });
 
-    startContainer->hide();
-    endContainer->show();
-    incrementContainer->hide();
+    endCondition->setCurrentText(comboSelection);
 
     return wdg;
 }

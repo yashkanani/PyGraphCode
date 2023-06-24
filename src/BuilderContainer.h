@@ -5,10 +5,11 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-#include "AbstractElement.h"
+#include "BasicElementType.h"
 #include "ContainerInformation.h"
 #include <qframe.h>
 
+class CodeText;
 class BuilderContainer : public QFrame {
     Q_OBJECT
 
@@ -17,6 +18,9 @@ public:
     std::shared_ptr<CodeText> getText(int indentLevel) const;
     void setAcceptedTypes(const QList<BasicElementType>& acceptedTypes);
     void setMaxElements(int maxElements);
+    void removeElementFromContainerInformation(const AbstractElement* element);
+    const ContainerInformationList& getContainerInformation() const;
+    void appendContainerInformationList(const ContainerInformationList& informationList, int insertIndex = 0);
 
 protected:
     void dragEnterEvent(QDragEnterEvent* event) override;
@@ -24,12 +28,13 @@ protected:
     void dropEvent(QDropEvent* event) override;
     void dragLeaveEvent(QDragLeaveEvent* event) override;
     void paintEvent(QPaintEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
 
 signals:
     void updateResultedTextView();
 
 private:
-    ContainerInformation containerInformation;
+    ContainerInformationList containerInformationList;
 
     QRect dropIndicatorRect;
     bool isDropIndicatorVisible = false;
@@ -37,17 +42,13 @@ private:
     void drawArrows();
     void updateDropIndicator(int insertIndex);
 
-
     QRect calculateDropIndicatorRect(int insertIndex) const;
-
-    std::shared_ptr<CodeText> getText(const ContainerInformation& containerInfo, int indentLevel) const;
     int findInsertIndex(QDropEvent* event);
-    
 
-    std::shared_ptr<AbstractElement> createInstance(const BasicElementType& elementType, const QString& elementName);
     bool isDropAccepted(const BasicElementType& elementType) const;
     bool isMaxElementsReached() const;
     void addElementWidget(QWidget* elementWidget, int insertIndex);
+    void addInformationAndView(std::shared_ptr<AbstractElement> element, int insertIndex);
 
     QVBoxLayout* builderContainerlayout;
     QList<BasicElementType> acceptedTypes;

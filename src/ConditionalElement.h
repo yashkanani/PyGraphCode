@@ -12,13 +12,12 @@ public:
     std::shared_ptr<CodeText> getText(int indentLevel) const override;
     QWidget* getViewWidget(QWidget* parent = nullptr) override;
 
-
 private:
-   
+    std::shared_ptr<BuilderContainer> firstVariableContainer;
 
-    BuilderContainer* firstVariableContainer;
-    QComboBox* conditionComboBox;
-    BuilderContainer* secondVariableContainer;
+    std::shared_ptr<BuilderContainer> secondVariableContainer;
+
+    QString comboSelection;
 };
 
 #endif // CONDITIONAL_ELEMENT_H
