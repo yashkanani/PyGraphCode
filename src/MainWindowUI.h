@@ -23,6 +23,8 @@ private:
     QWidget* getResultedTextViewWidget(QWidget*, BuilderContainer* builderContainer);
     QWidget* getElementsCreatorWidget(QWidget* parent);
 
+    QWidget* getButtonWidget(QWidget*, BuilderContainer* builderContainer);
+
     MainAppWindow* d_mainWindow;
 };
 #endif
