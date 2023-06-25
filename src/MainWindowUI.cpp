@@ -6,6 +6,7 @@
 #include "ElementManager.h"
 #include "ElementsCreator.h"
 #include "ResultedTextView.h"
+#include "BuilderControlsButtons.h"
 
 #include <iostream>
 #include <qcombobox.h>
@@ -52,6 +53,8 @@ void MainWindowUI::createCentralWidget()
     centralLayout->addWidget(getResultedTextViewWidget(centralWidget, builderContainer), 2, 2, 2, 1);
 
     // Set the column stretch to distribute remaining space
+    centralLayout->setRowStretch(1, 1);
+    centralLayout->setRowStretch(2, 2);
     centralLayout->setColumnStretch(1, 2);
     centralLayout->setColumnStretch(2, 1);
 }
@@ -159,8 +162,8 @@ QWidget* MainWindowUI::getElementsCreatorWidget(QWidget* parent)
 
 QWidget* MainWindowUI::getButtonWidget(QWidget* parent, BuilderContainer* builderContainer)
 {
-    QWidget* w = new QPushButton("hello");
-    return w;
+    BuilderControlsButtons* controlButtons = new BuilderControlsButtons(builderContainer, parent);
+    return controlButtons;
 }
 void MainWindowUI::onSearchTextChanged(const QString& searchText)
 {

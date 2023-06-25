@@ -53,6 +53,7 @@ set(HEADERS
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ConstantDecimalElement.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ConstantTextElement.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/InternalDragEventHandler.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderControlsButtons.h
    )
 
 set(SOURCES
@@ -76,6 +77,7 @@ set(SOURCES
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ConstantDecimalElement.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ConstantTextElement.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/InternalDragEventHandler.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderControlsButtons.cpp
     )
 
 
