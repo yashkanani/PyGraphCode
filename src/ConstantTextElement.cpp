@@ -3,6 +3,13 @@
 #include <QGroupBox>
 #include <QLayout>
 #include <QLineEdit>
+#include "ElementUserInputs.h"
+
+namespace key {
+    const std::string lineEditText = "inputText";
+    
+}
+
 
 ConstantTextElement::ConstantTextElement()
 {
@@ -19,7 +26,18 @@ std::shared_ptr<AbstractElement> ConstantTextElement::clone() const
     ret->lineEditText = lineEditText;
     return ret;
 }
-
+void ConstantTextElement::setUserInput(std::shared_ptr<ElementUserInputs> userInput)
+{
+    if (userInput != nullptr) {
+        lineEditText = userInput->getString(key::lineEditText);
+    }
+}
+std::shared_ptr<ElementUserInputs> ConstantTextElement::getUserInput()
+{
+    std::shared_ptr<ElementUserInputs> ret = std::make_shared<ElementUserInputs>();
+    ret->addString(key::lineEditText, lineEditText);
+    return ret;
+}
 std::shared_ptr<CodeText> ConstantTextElement::getText(int indentLevel) const
 {
     std::shared_ptr<CodeText> ret = std::make_shared<CodeText>(indentLevel);

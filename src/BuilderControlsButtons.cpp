@@ -28,7 +28,9 @@ void BuilderControlsButtons::handleSaveButtonClicked()
     // Use the builderContainer pointer here
     if (m_builderContainer)
     {
-        // Perform save operation using builderContainer
+        // Get BuilderContainer
+        // Convert full container in JSON
+        // Write down in JSON Object in file.
     }
 }
 
@@ -39,4 +41,9 @@ void BuilderControlsButtons::handleLoadButtonClicked()
     {
         // Perform load operation using builderContainer
     }
+
+    // Create the BuilderInformation container
+    // Read the Json object
+    // create the Elements
+    // plce information in 
 }
