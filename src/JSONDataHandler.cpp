@@ -5,6 +5,8 @@
 #include "BuilderContainer.h"
 #include "ElementManager.h"
 #include <variant>
+#include <qfile.h>
+#include <qjsondocument.h>
 
 namespace JSONSting {
 const QString type = "type";
@@ -14,6 +16,26 @@ const QString elementName = "name";
 const QString elementinputs = "elementinputs";
 const QString containerinputs = "containerinputs";
 }
+
+bool JSONDataHandler::saveContainerInformationListToJsonFile(const ContainerInformationList& containerList, const QString& filePath) const
+{
+    QJsonObject rootObject = convertContainerInformationListToJson(containerList);
+    QJsonDocument jsonDocument(rootObject);
+    QString jsonString = jsonDocument.toJson(QJsonDocument::Indented);
+
+    QFile file(filePath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream textStream(&file);
+        textStream << jsonString;
+        file.close();
+        qDebug() << "JSON data written to file successfully.";
+        return true;
+    } else {
+        qDebug() << "Failed to open the file for writing.";
+        return false;
+    }
+}
+
 
 QJsonObject JSONDataHandler::convertContainerInformationListToJson(const ContainerInformationList& containerList) const
 {
@@ -48,6 +70,28 @@ QJsonObject JSONDataHandler::convertContainerInformationListToJson(const Contain
     rootObject[JSONSting::containerinputs] = jsonArray;
 
     return rootObject;
+}
+
+
+ContainerInformationList JSONDataHandler::readContainerInformationListFromJsonFile(const QString& filePath) const
+{
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "Failed to open the file for reading.";
+        return ContainerInformationList();
+    }
+
+    QString jsonData = file.readAll();
+    file.close();
+
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(jsonData.toUtf8());
+    if (jsonDocument.isNull()) {
+        qDebug() << "Failed to parse JSON document.";
+        return ContainerInformationList();
+    }
+
+    QJsonObject rootObject = jsonDocument.object();
+    return convertJsonToContainerInformationList(rootObject);
 }
 
 
