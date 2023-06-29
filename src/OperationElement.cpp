@@ -66,15 +66,15 @@ std::shared_ptr<CodeText> OperationElement::getText(int indentLevel) const
         line += firstVariableContainer->getText(0)->getResult();
     }
 
-    if (comboSelection.compare("is Add to (+)")) {
+    if (comboSelection.compare("is Add to (+)") == 0) {
         line += " + ";
-    } else if (comboSelection.compare("is subtract from (-)")) {
+    } else if (comboSelection.compare("is subtract from (-)") == 0) {
         line += " - ";
-    } else if (comboSelection.compare("is multiply by (x)")) {
+    } else if (comboSelection.compare("is multiply by (x)") == 0) {
         line += " x ";
-    } else if (comboSelection.compare("is divide by (/)")) {
+    } else if (comboSelection.compare("is divide by (/)") == 0) {
         line += " / ";
-    } else if (comboSelection.compare("is XOR (^)")) {
+    } else if (comboSelection.compare("is XOR (^)") == 0) {
         line += " ^ ";
     } else {
     }
@@ -133,6 +133,7 @@ QWidget* OperationElement::getViewWidget(QWidget* parent)
 
     QObject::connect(conditionComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
         comboSelection = conditionComboBox->currentText();
+        emit childValueChanged();
     });
 
     if (secondVariableContainer) {
