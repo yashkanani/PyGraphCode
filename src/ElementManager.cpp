@@ -40,6 +40,16 @@ std::shared_ptr<AbstractElement> ElementManager::findElementFromType(const Basic
     }
     return nullptr;
 }
+std::shared_ptr<AbstractElement> ElementManager::findElementFromName(const QString& elementName)
+{
+    for (const auto& element : elements) {
+        if (element->getName() == elementName) {
+            return element;
+        }
+    }
+    return nullptr;
+
+}
 
 void ElementManager::createElements()
 {
@@ -56,7 +66,19 @@ void ElementManager::createElements()
 
 std::shared_ptr<AbstractElement> ElementManager::createElementFromType(const BasicElementType& elementType)
 {
-    return findElementFromType(elementType)->clone(); // Clone method is not currently implemented in all element.
+    std::shared_ptr<AbstractElement> foundElement = findElementFromType(elementType);
+    if (foundElement) {
+        return foundElement->clone();
+    }
+    return nullptr;
+}
+std::shared_ptr<AbstractElement> ElementManager::createElementFromName(const QString& elementName)
+{
+    std::shared_ptr<AbstractElement> foundElement = findElementFromName(elementName);
+    if (foundElement) {
+        return foundElement->clone();
+    }
+    return nullptr;
 }
 
 

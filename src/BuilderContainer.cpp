@@ -81,6 +81,7 @@ void BuilderContainer::appendContainerInformationList(const ContainerInformation
         addInformationAndView(element, insertIndex);
         ++insertIndex;
     }
+    emit updateResultedTextView(); // Update the text in ResultedTextView Widget.
 }
 
 void BuilderContainer::removeElementFromContainerInformation(const AbstractElement* element)

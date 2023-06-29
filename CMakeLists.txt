@@ -55,6 +55,7 @@ set(HEADERS
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/InternalDragEventHandler.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderControlsButtons.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementUserInputs.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/JSONDataHandler.h
    )
 
 set(SOURCES
@@ -80,6 +81,7 @@ set(SOURCES
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/InternalDragEventHandler.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderControlsButtons.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementUserInputs.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/JSONDataHandler.cpp
     )
 
 

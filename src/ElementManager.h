@@ -11,8 +11,8 @@ public:
     static ElementManager& getInstance();
 
     std::vector<AbstractElement*> getAllElements();
-    std::shared_ptr<AbstractElement> findElementFromType(const BasicElementType& elementType);
-    std::shared_ptr<AbstractElement> createElementFromType(const BasicElementType& elementType);
+    
+    std::shared_ptr<AbstractElement> createElementFromName(const QString& elementName);
     
 
 private:
@@ -25,6 +25,11 @@ private:
 
     std::vector<std::shared_ptr<AbstractElement>> elements;
 
+
+
+    std::shared_ptr<AbstractElement> findElementFromType(const BasicElementType& elementType);
+    std::shared_ptr<AbstractElement> findElementFromName(const QString& elementName);
+    std::shared_ptr<AbstractElement> createElementFromType(const BasicElementType& elementType);
 };
 
 #endif  // ELEMENT_MANAGER_H
