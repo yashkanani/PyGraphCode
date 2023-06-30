@@ -56,6 +56,7 @@ set(HEADERS
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderControlsButtons.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementUserInputs.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/JSONDataHandler.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsListWidget.h
    )
 
 set(SOURCES
@@ -82,6 +83,7 @@ set(SOURCES
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderControlsButtons.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementUserInputs.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/JSONDataHandler.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsListWidget.cpp
     )
 
 

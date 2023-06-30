@@ -11,6 +11,7 @@
 #include "ElementDragEventHandler.h"
 
 #include "ElementManager.h"
+#include "ElementsListWidget.h"
 
 ElementsCreator::ElementsCreator(QWidget* parent)
     : QWidget(parent)
@@ -21,18 +22,14 @@ ElementsCreator::ElementsCreator(QWidget* parent)
     connect(addButton, &QPushButton::clicked, this, &ElementsCreator::onAddVariableClicked);
     layout->addWidget(addButton);
 
-    QScrollArea* scrollArea = new QScrollArea(this);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+    elementsListHolder = new ElementsListWidget(this);
+    elementsListHolder->setElementsPerRow(8);
 
-    QWidget* scrollContentWidget = new QWidget(scrollArea);
-    variableListLayout = new QGridLayout(scrollContentWidget);
-    scrollArea->setWidget(scrollContentWidget);
-
-    layout->addWidget(scrollArea);
+    layout->addWidget(elementsListHolder);
 
     setLayout(layout);
 }
+
 
 void ElementsCreator::onAddVariableClicked()
 {
@@ -63,45 +60,22 @@ void ElementsCreator::addReadVariableElement(const QString& variableName) {
     customeReadVariables.push_back(variableElement);
 
     addElement(variableElement);
-    }
+   
+}
 void ElementsCreator::addWriteVariableElement(const QString& variableName) {
     std::shared_ptr<WriteVariableElement> variableElement = std::make_shared<WriteVariableElement>();
     variableElement->setName(variableName);
 
     // Add custom variable for future use.
     customeWriteVariables.push_back(variableElement);
-
     addElement(variableElement);
 }
 
 void ElementsCreator::addElement(std::shared_ptr<AbstractElement> element)
 {
     
-    if (element) {
-        // Get the image from the variableElement
-        QPixmap variableImage = element->getImage();
-
-        QLabel* elementIconLabel = new QLabel(this);
-
-        elementIconLabel->setAlignment(Qt::AlignCenter);
-        elementIconLabel->setStyleSheet("QLabel:hover { background-color: lightgray; }");
-        elementIconLabel->setProperty("element", QVariant::fromValue(static_cast<AbstractElement*>(element.get())));
-        elementIconLabel->setCursor(Qt::OpenHandCursor);
-        elementIconLabel->setAlignment(Qt::AlignCenter);
-        elementIconLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        elementIconLabel->installEventFilter(new ElementDragEventHandler(elementIconLabel)); // Install event filter
-        elementIconLabel->setPixmap(element->getImage().scaled(50, 50));
-
-        // Add the element icon label to the grid layout at the appropriate position
-        variableListLayout->addWidget(elementIconLabel, rowCount, columnCount);
-        variableListLayout->setRowStretch(variableListLayout->rowCount(), 1);
-
-        // Increment the column count and move to the next row if necessary
-        columnCount++;
-        if (columnCount >= 8) {
-            columnCount = 0;
-            rowCount++;
-        }
+    if ((element != nullptr) && (elementsListHolder != nullptr)) {
+        elementsListHolder->addElement(element.get());
     }
 
     

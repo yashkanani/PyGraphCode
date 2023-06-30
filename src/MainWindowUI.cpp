@@ -7,6 +7,7 @@
 #include "ElementsCreator.h"
 #include "ResultedTextView.h"
 #include "BuilderControlsButtons.h"
+#include "ElementsListWidget.h"
 
 #include <iostream>
 #include <qcombobox.h>
@@ -98,52 +99,21 @@ QWidget* MainWindowUI::getElementsWidget(QWidget* parent)
     filterComboBox->addItem("Filter 2");
     filterComboBox->addItem("Filter 3");
 
-    QWidget* elementsListHolder = new QWidget(searchBarWidget);
-    QGridLayout* elementsListLayout = new QGridLayout(elementsListHolder);
-    elementsListLayout->setContentsMargins(10, 10, 10, 10);
-    elementsListLayout->setSpacing(10);
-
-    QScrollArea* elementsListArea = new QScrollArea(searchBarWidget);
-    elementsListArea->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
-    elementsListArea->setWidgetResizable(true);
-    elementsListArea->setWidget(elementsListHolder);
+    
+    ElementsListWidget* elementsListHolder = new ElementsListWidget(searchBarWidget);
 
     // Get all elements from the ElementManager
+    // Iterate through all elements and create draggable icons in the grid layout
     ElementManager& elementManager = ElementManager::getInstance();
     std::vector<AbstractElement*> allElements = elementManager.getAllElements();
-
-    // Iterate through all elements and create draggable icons in the grid layout
-    int columnCount = 0;
-    int rowCount = 0;
-    for (AbstractElement* element : allElements) {
-
-        QLabel* elementIconLabel = new QLabel(searchBarWidget);
-
-        elementIconLabel->setAlignment(Qt::AlignCenter);
-        elementIconLabel->setStyleSheet("QLabel:hover { background-color: lightgray; }");
-        elementIconLabel->setProperty("element", QVariant::fromValue(static_cast<AbstractElement*>(element)));
-        elementIconLabel->setCursor(Qt::OpenHandCursor);
-        elementIconLabel->setAlignment(Qt::AlignCenter);
-        elementIconLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        elementIconLabel->installEventFilter(new ElementDragEventHandler(elementIconLabel)); // Install event filter
-        elementIconLabel->setPixmap(element->getImage().scaled(50, 50));
-
-        // Add the element icon label to the grid layout at the appropriate position
-        elementsListLayout->addWidget(elementIconLabel, rowCount, columnCount);
-
-        // Increment the column count and move to the next row if necessary
-        columnCount++;
-        if (columnCount >= 3) {
-            columnCount = 0;
-            rowCount++;
-        }
+    for (AbstractElement* element : allElements) { 
+        elementsListHolder->addElement(element);
     }
 
-    elementsListLayout->setRowStretch(elementsListLayout->rowCount(), 1);
 
     elementLayout->addWidget(searchBarWidget);
     elementLayout->addWidget(filterComboBox);
-    elementLayout->addWidget(elementsListArea);
+    elementLayout->addWidget(elementsListHolder);
 
     return elementHolder;
 }
