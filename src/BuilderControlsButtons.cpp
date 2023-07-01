@@ -1,11 +1,13 @@
 #include "BuilderControlsButtons.h"
 #include "BuilderContainer.h"
+#include "ElementsListWidget.h"
 #include "JSONDataHandler.h"
 #include <QtWidgets>
 
-BuilderControlsButtons::BuilderControlsButtons(BuilderContainer* builderContainer, QWidget* parent)
+BuilderControlsButtons::BuilderControlsButtons(BuilderContainer* builderContainer, ElementsListWidget* customElementWidget, QWidget* parent)
     : QWidget(parent)
     , m_builderContainer(builderContainer)
+    , m_customElementWidget(customElementWidget)
 {
     // Create the buttons
     QPushButton* saveButton = new QPushButton("Save", this);
@@ -30,7 +32,8 @@ void BuilderControlsButtons::handleSaveButtonClicked()
     // Use the builderContainer pointer here
     if (m_builderContainer) {
         QString filePath = "C:/Users/yash0/Desktop/testJson.json"; // Specify the desired file path
-        auto rootObject = JSONDataHandler().saveContainerInformationListToJsonFile(m_builderContainer->getContainerInformation(), filePath);
+        JSONDataHandler().saveContainerInformationListToJsonFile(m_builderContainer->getContainerInformation(), filePath);
+        // Emit the signal which inform to parents.
     }
 }
 

@@ -37,9 +37,13 @@ void MainWindowUI::createCentralWidget()
     QGridLayout* centralLayout = new QGridLayout(centralWidget);
     d_mainWindow->setCentralWidget(centralWidget);
 
-    //centralLayout->addWidget(GetApplyStyleButton(),		0, 0);
-    //centralLayout->addWidget(GetMainTabWidget(), 1, 0);
-    centralLayout->addWidget(getElementsWidget(centralWidget), 0, 0, 4, 1);
+    
+
+    ElementsListWidget* customElementWidget = new ElementsListWidget(centralWidget);
+  
+
+    centralLayout->addWidget(getElementsWidget(centralWidget), 0, 0, 2, 1);
+    centralLayout->addWidget(customElementWidget, 2, 0, 2, 1);
 
     QScrollArea* scrollBuilderArea = new QScrollArea(centralWidget);
     scrollBuilderArea->setWidgetResizable(true); // Allow the scroll area to resize the widget
@@ -47,7 +51,7 @@ void MainWindowUI::createCentralWidget()
     QObject::connect(builderContainer, &BuilderContainer::EnsureVisible, scrollBuilderArea, &QScrollArea::ensureVisible);
     scrollBuilderArea->setWidget(builderContainer);
 
-    centralLayout->addWidget(getButtonWidget(centralWidget, builderContainer), 0, 1);
+    centralLayout->addWidget(getButtonWidget(builderContainer, customElementWidget, centralWidget), 0, 1);
     centralLayout->addWidget(scrollBuilderArea, 1, 1, 3, 1);
 
     centralLayout->addWidget(getElementsCreatorWidget(centralWidget), 0, 2, 2, 1);
@@ -99,7 +103,6 @@ QWidget* MainWindowUI::getElementsWidget(QWidget* parent)
     filterComboBox->addItem("Filter 2");
     filterComboBox->addItem("Filter 3");
 
-    
     ElementsListWidget* elementsListHolder = new ElementsListWidget(searchBarWidget);
 
     // Get all elements from the ElementManager
@@ -110,13 +113,13 @@ QWidget* MainWindowUI::getElementsWidget(QWidget* parent)
         elementsListHolder->addElement(element);
     }
 
-
     elementLayout->addWidget(searchBarWidget);
     elementLayout->addWidget(filterComboBox);
     elementLayout->addWidget(elementsListHolder);
 
     return elementHolder;
 }
+
 
 QWidget* MainWindowUI::getResultedTextViewWidget(QWidget* parent, BuilderContainer* builderContainer)
 {
@@ -130,9 +133,9 @@ QWidget* MainWindowUI::getElementsCreatorWidget(QWidget* parent)
     return elementsCreator;
 }
 
-QWidget* MainWindowUI::getButtonWidget(QWidget* parent, BuilderContainer* builderContainer)
+QWidget* MainWindowUI::getButtonWidget(BuilderContainer* builderContainer, ElementsListWidget* customElementWidget, QWidget* parent)
 {
-    BuilderControlsButtons* controlButtons = new BuilderControlsButtons(builderContainer, parent);
+    BuilderControlsButtons* controlButtons = new BuilderControlsButtons(builderContainer, customElementWidget, parent); 
     return controlButtons;
 }
 void MainWindowUI::onSearchTextChanged(const QString& searchText)

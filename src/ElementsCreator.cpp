@@ -17,7 +17,7 @@ ElementsCreator::ElementsCreator(QWidget* parent)
     : QWidget(parent)
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
-
+    layout->setContentsMargins(0, 0, 0, 0);
     QPushButton* addButton = new QPushButton("Add Variable", this);
     connect(addButton, &QPushButton::clicked, this, &ElementsCreator::onAddVariableClicked);
     layout->addWidget(addButton);

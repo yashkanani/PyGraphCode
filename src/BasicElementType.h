@@ -10,7 +10,8 @@ enum class BasicElementType {
     CONSTANT_DECIMAL,
     IF_LOOP,
     FOR_LOOP,
-    CONSTANT_TEXT
+    CONSTANT_TEXT,
+    USER_DEFINED
 };
 
 #endif  // BASICELEMENTTYPE_H
