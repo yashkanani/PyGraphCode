@@ -13,6 +13,7 @@ public:
     std::vector<AbstractElement*> getAllElements();
     
     std::shared_ptr<AbstractElement> createElementFromName(const QString& elementName);
+    void addCustomElement(std::shared_ptr<AbstractElement>);
     
 
 private:
@@ -24,8 +25,7 @@ private:
     void createElements();
 
     std::vector<std::shared_ptr<AbstractElement>> elements;
-
-
+    std::vector<std::shared_ptr<AbstractElement>> customElementsList;
 
     std::shared_ptr<AbstractElement> findElementFromType(const BasicElementType& elementType);
     std::shared_ptr<AbstractElement> findElementFromName(const QString& elementName);

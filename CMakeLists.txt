@@ -58,6 +58,7 @@ set(HEADERS
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/JSONDataHandler.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsListWidget.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/UserDefinedElement.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/CustomElementInputDialog.h
    )
 
 set(SOURCES
@@ -86,6 +87,7 @@ set(SOURCES
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/JSONDataHandler.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsListWidget.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/UserDefinedElement.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/CustomElementInputDialog.cpp
     )
 
 

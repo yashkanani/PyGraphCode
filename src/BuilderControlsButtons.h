@@ -6,6 +6,7 @@
 // Forward declaration of BuilderContainer
 class BuilderContainer;
 class ElementsListWidget;
+class AbstractElement;
 class BuilderControlsButtons : public QWidget {
     Q_OBJECT
 
@@ -17,8 +18,10 @@ private slots:
     void handleLoadButtonClicked();
 
 private:
-     BuilderContainer* m_builderContainer;
-     ElementsListWidget* m_customElementWidget;
+    BuilderContainer* m_builderContainer;
+    ElementsListWidget* m_customElementWidget;
+
+    
 };
 
 #endif // BUILDERCONTROLSBUTTONS_H

@@ -42,11 +42,13 @@ std::shared_ptr<AbstractElement> ElementManager::findElementFromType(const Basic
 }
 std::shared_ptr<AbstractElement> ElementManager::findElementFromName(const QString& elementName)
 {
+    // Check In Basic Elements list.
     for (const auto& element : elements) {
         if (element->getName() == elementName) {
             return element;
         }
     }
+
     return nullptr;
 
 }
@@ -81,4 +83,10 @@ std::shared_ptr<AbstractElement> ElementManager::createElementFromName(const QSt
     return nullptr;
 }
 
+
+void ElementManager::addCustomElement(std::shared_ptr<AbstractElement> customElement) {
+    if (customElement != nullptr) {
+        customElementsList.push_back(customElement);
+    }
+}
 

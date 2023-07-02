@@ -2,6 +2,11 @@
 #include "BuilderContainer.h"
 #include "ElementsListWidget.h"
 #include "JSONDataHandler.h"
+#include "UserDefinedElement.h"
+#include "ElementUserInputs.h"
+#include "ElementManager.h"
+#include "CustomElementInputDialog.h"
+
 #include <QtWidgets>
 
 BuilderControlsButtons::BuilderControlsButtons(BuilderContainer* builderContainer, ElementsListWidget* customElementWidget, QWidget* parent)
@@ -31,18 +36,46 @@ void BuilderControlsButtons::handleSaveButtonClicked()
 {
     // Use the builderContainer pointer here
     if (m_builderContainer) {
-        QString filePath = "C:/Users/yash0/Desktop/testJson.json"; // Specify the desired file path
-        JSONDataHandler().saveContainerInformationListToJsonFile(m_builderContainer->getContainerInformation(), filePath);
-        // Emit the signal which inform to parents.
+        CustomElementInputDialog dialog;
+        if (dialog.exec() == QDialog::Accepted) {
+            QString customElementName = dialog.getCustomElementName();
+            QString filePath = dialog.getSaveLocation();
+
+            // Check if the filePath is empty
+            if (filePath.isEmpty()) {
+                qDebug() << "File path is empty.";
+                return;
+            }
+
+            // Append the custom element name to the file path
+            filePath += QDir::separator() + customElementName + ".json";
+
+            JSONDataHandler().saveContainerInformationListToJsonFile(m_builderContainer->getContainerInformation(), filePath);
+            
+            qDebug() << "JSON data written to file successfully.";
+        }
     }
 }
+
 
 void BuilderControlsButtons::handleLoadButtonClicked()
 {
     // Use the builderContainer pointer here
-    if (m_builderContainer) {
-        QString filePath = "C:/Users/yash0/Desktop/testJson.json";
-        m_builderContainer->appendContainerInformationList(JSONDataHandler().readContainerInformationListFromJsonFile(filePath));
+    if (m_customElementWidget) {
+        QString filePath = "C:/Users/yash0/Desktop/hh.json";
+
+        
+
+
+        std::shared_ptr<UserDefinedElement> customElement = std::make_shared<UserDefinedElement>();
+        std::shared_ptr<ElementUserInputs> userInput = std::make_shared<ElementUserInputs>();
+        std::shared_ptr<BuilderContainer> builder = std::make_shared<BuilderContainer>(nullptr, true);
+        builder->appendContainerInformationList((JSONDataHandler().readContainerInformationListFromJsonFile(filePath)));
+        userInput->addContainer("CustomInput", builder);
+        customElement->setUserInput(userInput);
+        
+        ElementManager::getInstance().addCustomElement(customElement);
+        m_customElementWidget->addElement(customElement.get());
         return;
     }
 

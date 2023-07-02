@@ -67,7 +67,11 @@ QWidget* UserDefinedElement::getViewWidget(QWidget* parent)
     // Create the widget containing the BuilderContainer and its child widgets
     QWidget* containerWidget = new QWidget(groupBox);
     QVBoxLayout* containerLayout = new QVBoxLayout(containerWidget);
-    containerLayout->addWidget(userContainer.get());
+
+    if (userContainer != nullptr) {
+        QObject::connect(userContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+        containerLayout->addWidget(userContainer.get());
+    }
 
     // Set the visibility of the container widget based on the check box state
     containerWidget->setVisible(checkBox->isChecked());

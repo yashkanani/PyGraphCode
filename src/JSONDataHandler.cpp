@@ -7,11 +7,13 @@
 #include <variant>
 #include <qfile.h>
 #include <qjsondocument.h>
+#include "UserDefinedElement.h"
 
 namespace JSONSting {
 const QString type = "type";
 const QString element = "element";
 const QString container = "container";
+const QString userelement = "userelement";
 const QString elementName = "name";
 const QString elementinputs = "elementinputs";
 const QString containerinputs = "containerinputs";
@@ -43,10 +45,17 @@ QJsonObject JSONDataHandler::convertContainerInformationListToJson(const Contain
 
     for (const auto& containerInfo : containerList) {
         QJsonObject jsonObject;
-        jsonObject[JSONSting::type] = JSONSting::element;
+        
         jsonObject[JSONSting::elementName] = containerInfo.elementPointer->getName();
 
         if (containerInfo.droppedItem == DroppedItem::ELEMENT && containerInfo.elementPointer) {
+
+            if (containerInfo.elementPointer->getType() == BasicElementType::USER_DEFINED) {
+                jsonObject[JSONSting::type] = JSONSting::userelement;
+            } else {
+                jsonObject[JSONSting::type] = JSONSting::element;
+            }
+            
             std::shared_ptr<ElementUserInputs> inputHanlder = containerInfo.elementPointer->getUserInput();
             QJsonObject inputsObject; // Create a new object for storing inputs
 
@@ -111,13 +120,21 @@ ContainerInformationList JSONDataHandler::convertJsonToContainerInformationList(
                     QJsonObject inputsObject = containerInfoObject[JSONSting::elementinputs].toObject();
 
                     ContainerInformation containerInfo;
-                    containerInfo.elementPointer = ElementManager::getInstance().createElementFromName(elementName);
+                    if (containerInfoObject.contains(JSONSting::type)) {
+                        QString elementType = containerInfoObject[JSONSting::type].toString();
+                        if (elementType == JSONSting::element) {
+                            containerInfo.elementPointer = ElementManager::getInstance().createElementFromName(elementName);
+                        } else if (elementType == JSONSting::userelement) {
+                            containerInfo.elementPointer = std::make_shared<UserDefinedElement>();
+                        }
+                    }
 
                     // Check if elementPointer is empty
                     if (containerInfo.elementPointer == nullptr) {
                         continue; // Move to the next element in the loop
                     }
 
+                    containerInfo.droppedItem = DroppedItem::ELEMENT;
                     std::shared_ptr<ElementUserInputs> inputHandler = std::make_shared<ElementUserInputs>();
 
                     for (const QString& key : inputsObject.keys()) {
@@ -128,7 +145,7 @@ ContainerInformationList JSONDataHandler::convertJsonToContainerInformationList(
                             inputHandler->addString(key.toStdString(), inputValue);
                         } else if (value.isObject()) {
                             ContainerInformationList subContainerList = convertJsonToContainerInformationList(value.toObject());
-                            std::shared_ptr<BuilderContainer> subContainer = std::make_shared<BuilderContainer>();
+                            std::shared_ptr<BuilderContainer> subContainer = std::make_shared<BuilderContainer>(nullptr,true);
                             subContainer->appendContainerInformationList(subContainerList);
                             inputHandler->addContainer(key.toStdString(), subContainer);
                         }
@@ -137,6 +154,8 @@ ContainerInformationList JSONDataHandler::convertJsonToContainerInformationList(
                     containerInfo.elementPointer->setUserInput(inputHandler);
                     containerList.push_back(containerInfo);
                 }
+
+
             }
         }
     }
