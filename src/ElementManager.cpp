@@ -94,10 +94,12 @@ void ElementManager::addCustomElement(std::shared_ptr<AbstractElement> customEle
     }
 }
 
-std::shared_ptr<AbstractElement> ElementManager::createCustomElement(const ContainerInformationList& informationList)
+std::shared_ptr<AbstractElement> ElementManager::createCustomElement(const QString& elementName, const ContainerInformationList& informationList)
 {
 
     std::shared_ptr<UserDefinedElement> customElement = std::make_shared<UserDefinedElement>();
+    customElement->setName(elementName);
+
     std::shared_ptr<ElementUserInputs> userInput = std::make_shared<ElementUserInputs>();
     std::shared_ptr<BuilderContainer> builder = std::make_shared<BuilderContainer>(nullptr, true);
     

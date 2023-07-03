@@ -16,7 +16,7 @@ public:
     
     std::shared_ptr<AbstractElement> createElementFromName(const QString& elementName);
    
-    std::shared_ptr<AbstractElement> createCustomElement(const ContainerInformationList& informationList);
+    std::shared_ptr<AbstractElement> createCustomElement(const QString& elementName, const ContainerInformationList& informationList);
 
 private:
     ElementManager();

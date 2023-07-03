@@ -20,6 +20,8 @@ BuilderControlsButtons::BuilderControlsButtons(BuilderContainer* builderContaine
 
     // Create the horizontal layout
     QHBoxLayout* layout = new QHBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+
     layout->addWidget(saveButton);
     layout->addWidget(loadButton);
     layout->setAlignment(Qt::AlignHCenter); // Align buttons horizontally in the middle
@@ -50,11 +52,19 @@ void BuilderControlsButtons::handleSaveButtonClicked()
             // Append the custom element name to the file path
             filePath += QDir::separator() + customElementName + ".json";
 
+            // create the packet for json file.
+            JSONDataHandler::JSONContainerHeader jsonPacket;
+            jsonPacket.displayName = customElementName;
+            jsonPacket.containerinformationList = m_builderContainer->getContainerInformation();
+
             // Save Container information in file.
-            JSONDataHandler().saveContainerInformationListToJsonFile(m_builderContainer->getContainerInformation(), filePath);
+            JSONDataHandler().saveContainerInformationListToJsonFile(jsonPacket, filePath);
+
+            // Verify the result
+            JSONDataHandler::JSONContainerHeader resultedJsonPacket = JSONDataHandler().readContainerInformationListFromJsonFile(filePath);
 
             // Create the Custom Element and added in Customelement Widget.
-            std::shared_ptr<AbstractElement> customElement = ElementManager::getInstance().createCustomElement((JSONDataHandler().readContainerInformationListFromJsonFile(filePath)));
+            std::shared_ptr<AbstractElement> customElement = ElementManager::getInstance().createCustomElement(resultedJsonPacket.displayName, resultedJsonPacket.containerinformationList);
             m_customElementWidget->addElement(customElement.get());
 
             qDebug() << "JSON data written to file successfully.";
@@ -73,8 +83,10 @@ void BuilderControlsButtons::handleLoadButtonClicked()
         // Process each selected file
         for (const QString& filePath : fileNames) {
             
-            // Read the container information from json file and create the customElement using container information.
-            std::shared_ptr<AbstractElement> customElement = ElementManager::getInstance().createCustomElement((JSONDataHandler().readContainerInformationListFromJsonFile(filePath)));
+            JSONDataHandler::JSONContainerHeader jsonPacket = JSONDataHandler().readContainerInformationListFromJsonFile(filePath);
+
+            // Create the Custom Element and added in Customelement Widget.
+            std::shared_ptr<AbstractElement> customElement = ElementManager::getInstance().createCustomElement(jsonPacket.displayName, jsonPacket.containerinformationList);
             m_customElementWidget->addElement(customElement.get());
         }
 

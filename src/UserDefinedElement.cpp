@@ -43,6 +43,7 @@ std::string UserDefinedElement::getUserInputkey()
 std::shared_ptr<AbstractElement> UserDefinedElement::clone() const
 {
     auto ret = std::make_shared<UserDefinedElement>();
+    ret->name = getName();
 
     ret->userContainer = std::make_shared<BuilderContainer>(nullptr, true);
     ret->userContainer->appendContainerInformationList(userContainer->getContainerInformation());
@@ -61,7 +62,7 @@ std::shared_ptr<CodeText> UserDefinedElement::getText(int indentLevel) const
 
 QWidget* UserDefinedElement::getViewWidget(QWidget* parent)
 {
-    QGroupBox* groupBox = new QGroupBox("User Defined Element", parent);
+    QGroupBox* groupBox = new QGroupBox(getName(), parent);
     QVBoxLayout* layout = new QVBoxLayout(groupBox);
 
     // Create the check box for toggling the visibility of the container widget

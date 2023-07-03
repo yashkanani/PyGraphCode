@@ -1,13 +1,13 @@
 #include "JSONDataHandler.h"
-#include <QJsonArray>
 #include "AbstractElement.h"
-#include "ElementUserInputs.h"
 #include "BuilderContainer.h"
 #include "ElementManager.h"
-#include <variant>
+#include "ElementUserInputs.h"
+#include "UserDefinedElement.h"
+#include <QJsonArray>
 #include <qfile.h>
 #include <qjsondocument.h>
-#include "UserDefinedElement.h"
+#include <variant>
 
 namespace JSONSting {
 const QString type = "type";
@@ -21,11 +21,11 @@ const QString displayName = "displayName";
 const QString inputData = "inputData";
 }
 
-bool JSONDataHandler::saveContainerInformationListToJsonFile(const ContainerInformationList& containerList, const QString& filePath) const
+bool JSONDataHandler::saveContainerInformationListToJsonFile(const JSONContainerHeader& containerData, const QString& filePath) const
 {
     QJsonObject rootObject;
-    rootObject[JSONSting::displayName] = "hello";
-    rootObject[JSONSting::inputData] = convertContainerInformationListToJson(containerList);
+    rootObject[JSONSting::displayName] = containerData.displayName;
+    rootObject[JSONSting::inputData] = convertContainerInformationListToJson(containerData.containerinformationList);
 
     QJsonDocument jsonDocument(rootObject);
     QString jsonString = jsonDocument.toJson(QJsonDocument::Indented);
@@ -43,14 +43,13 @@ bool JSONDataHandler::saveContainerInformationListToJsonFile(const ContainerInfo
     }
 }
 
-
 QJsonObject JSONDataHandler::convertContainerInformationListToJson(const ContainerInformationList& containerList) const
 {
     QJsonArray jsonArray;
 
     for (const auto& containerInfo : containerList) {
         QJsonObject jsonObject;
-        
+
         jsonObject[JSONSting::elementName] = containerInfo.elementPointer->getName();
 
         if (containerInfo.droppedItem == DroppedItem::ELEMENT && containerInfo.elementPointer) {
@@ -60,7 +59,7 @@ QJsonObject JSONDataHandler::convertContainerInformationListToJson(const Contain
             } else {
                 jsonObject[JSONSting::type] = JSONSting::element;
             }
-            
+
             std::shared_ptr<ElementUserInputs> inputHanlder = containerInfo.elementPointer->getUserInput();
             QJsonObject inputsObject; // Create a new object for storing inputs
 
@@ -86,13 +85,14 @@ QJsonObject JSONDataHandler::convertContainerInformationListToJson(const Contain
     return rootObject;
 }
 
-
-ContainerInformationList JSONDataHandler::readContainerInformationListFromJsonFile(const QString& filePath) const
+JSONDataHandler::JSONContainerHeader JSONDataHandler::readContainerInformationListFromJsonFile(const QString& filePath) const
 {
+    JSONDataHandler::JSONContainerHeader packet;
+
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "Failed to open the file for reading.";
-        return ContainerInformationList();
+        return packet;
     }
 
     QString jsonData = file.readAll();
@@ -101,23 +101,25 @@ ContainerInformationList JSONDataHandler::readContainerInformationListFromJsonFi
     QJsonDocument jsonDocument = QJsonDocument::fromJson(jsonData.toUtf8());
     if (jsonDocument.isNull()) {
         qDebug() << "Failed to parse JSON document.";
-        return ContainerInformationList();
+        return packet;
     }
 
     QJsonObject rootObject = jsonDocument.object();
     QString displayName = rootObject.value(JSONSting::displayName).toString();
-    
+
     // Process the inputData value as needed
     QJsonValue inputDataValue = rootObject.value(JSONSting::inputData);
     if (inputDataValue.isObject()) {
         QJsonObject inputDataObject = inputDataValue.toObject();
-        return convertJsonToContainerInformationList(inputDataObject);
-    } 
-    
-    return ContainerInformationList();
-    
-}
 
+        //fill packet information
+        packet.displayName = displayName;
+        packet.containerinformationList = convertJsonToContainerInformationList(inputDataObject);
+        return packet;
+    }
+
+    return packet;
+}
 
 ContainerInformationList JSONDataHandler::convertJsonToContainerInformationList(const QJsonObject& jsonObject) const
 {
@@ -141,6 +143,7 @@ ContainerInformationList JSONDataHandler::convertJsonToContainerInformationList(
                             containerInfo.elementPointer = ElementManager::getInstance().createElementFromName(elementName);
                         } else if (elementType == JSONSting::userelement) {
                             containerInfo.elementPointer = std::make_shared<UserDefinedElement>();
+                            containerInfo.elementPointer->setName(elementName);
                         }
                     }
 
@@ -160,7 +163,7 @@ ContainerInformationList JSONDataHandler::convertJsonToContainerInformationList(
                             inputHandler->addString(key.toStdString(), inputValue);
                         } else if (value.isObject()) {
                             ContainerInformationList subContainerList = convertJsonToContainerInformationList(value.toObject());
-                            std::shared_ptr<BuilderContainer> subContainer = std::make_shared<BuilderContainer>(nullptr,true);
+                            std::shared_ptr<BuilderContainer> subContainer = std::make_shared<BuilderContainer>(nullptr, true);
                             subContainer->appendContainerInformationList(subContainerList);
                             inputHandler->addContainer(key.toStdString(), subContainer);
                         }
@@ -169,8 +172,6 @@ ContainerInformationList JSONDataHandler::convertJsonToContainerInformationList(
                     containerInfo.elementPointer->setUserInput(inputHandler);
                     containerList.push_back(containerInfo);
                 }
-
-
             }
         }
     }

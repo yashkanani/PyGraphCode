@@ -6,8 +6,13 @@
 
 class JSONDataHandler {
 public:
-    ContainerInformationList readContainerInformationListFromJsonFile(const QString& filePath) const;
-    bool saveContainerInformationListToJsonFile(const ContainerInformationList& containerList, const QString& filePath) const;
+    typedef struct {
+        QString displayName;
+        ContainerInformationList containerinformationList;
+    } JSONContainerHeader;
+
+    JSONContainerHeader readContainerInformationListFromJsonFile(const QString& filePath) const;
+    bool saveContainerInformationListToJsonFile(const JSONContainerHeader& containerData, const QString& filePath) const;
 
 private:
     QJsonObject convertContainerInformationListToJson(const ContainerInformationList& containerList) const;
