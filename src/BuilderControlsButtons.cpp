@@ -1,11 +1,11 @@
 #include "BuilderControlsButtons.h"
 #include "BuilderContainer.h"
+#include "CustomElementInputDialog.h"
+#include "ElementManager.h"
+#include "ElementUserInputs.h"
 #include "ElementsListWidget.h"
 #include "JSONDataHandler.h"
 #include "UserDefinedElement.h"
-#include "ElementUserInputs.h"
-#include "ElementManager.h"
-#include "CustomElementInputDialog.h"
 
 #include <QtWidgets>
 
@@ -50,22 +50,34 @@ void BuilderControlsButtons::handleSaveButtonClicked()
             // Append the custom element name to the file path
             filePath += QDir::separator() + customElementName + ".json";
 
+            // Save Container information in file.
             JSONDataHandler().saveContainerInformationListToJsonFile(m_builderContainer->getContainerInformation(), filePath);
-            
+
+            // Create the Custom Element and added in Customelement Widget.
+            std::shared_ptr<AbstractElement> customElement = ElementManager::getInstance().createCustomElement((JSONDataHandler().readContainerInformationListFromJsonFile(filePath)));
+            m_customElementWidget->addElement(customElement.get());
+
             qDebug() << "JSON data written to file successfully.";
         }
     }
 }
 
-
 void BuilderControlsButtons::handleLoadButtonClicked()
 {
     // Use the builderContainer pointer here
     if (m_customElementWidget) {
-        QString filePath = "C:/Users/yash0/Desktop/hh.json";
-        auto customElement = ElementManager::getInstance().createCustomElement((JSONDataHandler().readContainerInformationListFromJsonFile(filePath)));
-        m_customElementWidget->addElement(customElement.get());
+
+        // Open file dialog for JSON file selection
+        QStringList fileNames = QFileDialog::getOpenFileNames(nullptr, "Select JSON Files", "", "JSON Files (*.json)");
+
+        // Process each selected file
+        for (const QString& filePath : fileNames) {
+            
+            // Read the container information from json file and create the customElement using container information.
+            std::shared_ptr<AbstractElement> customElement = ElementManager::getInstance().createCustomElement((JSONDataHandler().readContainerInformationListFromJsonFile(filePath)));
+            m_customElementWidget->addElement(customElement.get());
+        }
+
         return;
     }
-
 }
