@@ -8,6 +8,10 @@
 #include "OperationElement.h"
 #include "ConstantDecimalElement.h"
 #include "ConstantTextElement.h"
+#include "UserDefinedElement.h"
+#include "ElementUserInputs.h"
+
+#include "AbstractElement.h"
 
 ElementManager& ElementManager::getInstance()
 {
@@ -90,3 +94,17 @@ void ElementManager::addCustomElement(std::shared_ptr<AbstractElement> customEle
     }
 }
 
+std::shared_ptr<AbstractElement> ElementManager::createCustomElement(const ContainerInformationList& informationList)
+{
+
+    std::shared_ptr<UserDefinedElement> customElement = std::make_shared<UserDefinedElement>();
+    std::shared_ptr<ElementUserInputs> userInput = std::make_shared<ElementUserInputs>();
+    std::shared_ptr<BuilderContainer> builder = std::make_shared<BuilderContainer>(nullptr, true);
+    
+    builder->appendContainerInformationList(informationList);
+    userInput->addContainer(customElement->getUserInputkey(), builder);
+    customElement->setUserInput(userInput);
+
+    addCustomElement(customElement);
+    return customElement;
+}

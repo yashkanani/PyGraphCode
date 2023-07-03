@@ -63,24 +63,9 @@ void BuilderControlsButtons::handleLoadButtonClicked()
     // Use the builderContainer pointer here
     if (m_customElementWidget) {
         QString filePath = "C:/Users/yash0/Desktop/hh.json";
-
-        
-
-
-        std::shared_ptr<UserDefinedElement> customElement = std::make_shared<UserDefinedElement>();
-        std::shared_ptr<ElementUserInputs> userInput = std::make_shared<ElementUserInputs>();
-        std::shared_ptr<BuilderContainer> builder = std::make_shared<BuilderContainer>(nullptr, true);
-        builder->appendContainerInformationList((JSONDataHandler().readContainerInformationListFromJsonFile(filePath)));
-        userInput->addContainer("CustomInput", builder);
-        customElement->setUserInput(userInput);
-        
-        ElementManager::getInstance().addCustomElement(customElement);
+        auto customElement = ElementManager::getInstance().createCustomElement((JSONDataHandler().readContainerInformationListFromJsonFile(filePath)));
         m_customElementWidget->addElement(customElement.get());
         return;
     }
 
-    // Create the BuilderInformation container
-    // Read the Json object
-    // create the Elements
-    // plce information in
 }

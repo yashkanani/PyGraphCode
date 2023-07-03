@@ -6,9 +6,8 @@
 #include <qcheckbox.h>
 #include <qgroupbox.h>
 
-
 namespace key {
-    const std::string usercontainerKey = "CustomInput";
+const std::string usercontainerKey = "CustomInput";
 }
 
 UserDefinedElement::UserDefinedElement()
@@ -34,6 +33,11 @@ std::shared_ptr<ElementUserInputs> UserDefinedElement::getUserInput()
     std::shared_ptr<ElementUserInputs> ret = std::make_shared<ElementUserInputs>();
     ret->addContainer(key::usercontainerKey, userContainer);
     return ret;
+}
+
+std::string UserDefinedElement::getUserInputkey()
+{
+    return key::usercontainerKey;
 }
 
 std::shared_ptr<AbstractElement> UserDefinedElement::clone() const

@@ -1,12 +1,14 @@
 #include "elementslistwidget.h"
 #include "elementdrageventhandler.h"
 #include "elementmanager.h"
+#include "AbstractElement.h"
 #include <QAbstractScrollArea>
 #include <QGridLayout>
 #include <QLabel>
 #include <QPixmap>
 #include <QScrollArea>
 #include <QVariant>
+
 
 ElementsListWidget::ElementsListWidget(QWidget* parent)
     : QWidget(parent)

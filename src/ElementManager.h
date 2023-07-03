@@ -3,18 +3,20 @@
 
 #include <vector>
 #include <memory>
-#include "AbstractElement.h"
+#include "ContainerInformation.h"
+#include "BasicElementType.h"
 
-
+class AbstractElement;
 class ElementManager {
 public:
     static ElementManager& getInstance();
 
     std::vector<AbstractElement*> getAllElements();
     
-    std::shared_ptr<AbstractElement> createElementFromName(const QString& elementName);
-    void addCustomElement(std::shared_ptr<AbstractElement>);
     
+    std::shared_ptr<AbstractElement> createElementFromName(const QString& elementName);
+   
+    std::shared_ptr<AbstractElement> createCustomElement(const ContainerInformationList& informationList);
 
 private:
     ElementManager();
@@ -30,6 +32,7 @@ private:
     std::shared_ptr<AbstractElement> findElementFromType(const BasicElementType& elementType);
     std::shared_ptr<AbstractElement> findElementFromName(const QString& elementName);
     std::shared_ptr<AbstractElement> createElementFromType(const BasicElementType& elementType);
+    void addCustomElement(std::shared_ptr<AbstractElement>);
 };
 
 #endif  // ELEMENT_MANAGER_H
