@@ -17,11 +17,16 @@ const QString userelement = "userelement";
 const QString elementName = "name";
 const QString elementinputs = "elementinputs";
 const QString containerinputs = "containerinputs";
+const QString displayName = "displayName";
+const QString inputData = "inputData";
 }
 
 bool JSONDataHandler::saveContainerInformationListToJsonFile(const ContainerInformationList& containerList, const QString& filePath) const
 {
-    QJsonObject rootObject = convertContainerInformationListToJson(containerList);
+    QJsonObject rootObject;
+    rootObject[JSONSting::displayName] = "hello";
+    rootObject[JSONSting::inputData] = convertContainerInformationListToJson(containerList);
+
     QJsonDocument jsonDocument(rootObject);
     QString jsonString = jsonDocument.toJson(QJsonDocument::Indented);
 
@@ -100,7 +105,17 @@ ContainerInformationList JSONDataHandler::readContainerInformationListFromJsonFi
     }
 
     QJsonObject rootObject = jsonDocument.object();
-    return convertJsonToContainerInformationList(rootObject);
+    QString displayName = rootObject.value(JSONSting::displayName).toString();
+    
+    // Process the inputData value as needed
+    QJsonValue inputDataValue = rootObject.value(JSONSting::inputData);
+    if (inputDataValue.isObject()) {
+        QJsonObject inputDataObject = inputDataValue.toObject();
+        return convertJsonToContainerInformationList(inputDataObject);
+    } 
+    
+    return ContainerInformationList();
+    
 }
 
 
