@@ -122,7 +122,7 @@ void BuilderContainer::dragEnterEvent(QDragEnterEvent* event)
     }
 
     const QMimeData* mimeData = event->mimeData();
-    QVariant& elementPointer = mimeData->property("element");
+    const QVariant& elementPointer = mimeData->property("element");
     if (elementPointer.isValid()) {
         std::shared_ptr<AbstractElement> element = qvariant_cast<AbstractElement*>(elementPointer)->clone();
         if (element && isDropAccepted(element->getType())) {
@@ -269,7 +269,7 @@ void BuilderContainer::mousePressEvent(QMouseEvent* event)
 void BuilderContainer::dropEvent(QDropEvent* event)
 {
     const QMimeData* mimeData = event->mimeData();
-    QVariant& elementPointer = mimeData->property("element");
+    const QVariant& elementPointer = mimeData->property("element");
     if (elementPointer.isValid()) {
         std::shared_ptr<AbstractElement> element = qvariant_cast<AbstractElement*>(elementPointer)->clone();
         if (element) {

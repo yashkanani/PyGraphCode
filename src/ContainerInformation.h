@@ -2,7 +2,7 @@
 #define CONTAINER_INFORMATION_H
 
 #include <QList>
-
+#include <memory>
 
 class AbstractElement;
 class BuilderContainer;
