@@ -11,10 +11,10 @@
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "variables": [
-		{
-			"name": "CMAKE_PREFIX_PATH",
-			"value": "C:/Qt/5.15.2/msvc2019_64/"
-		}	
+        {
+          "name": "CMAKE_PREFIX_PATH",
+          "value": "${env.QT_ROOT_DIR}/msvc2019_64/"
+        }	
 	  ]
     },
     {
@@ -30,7 +30,7 @@
       "variables": [
 		{
 			"name": "CMAKE_PREFIX_PATH",
-			"value": "C:/Qt/5.15.2/msvc2019_64/"
+			"value": "${env.QT_ROOT_DIR}/msvc2019_64/"
 		}	
 	  ]
     },
@@ -45,10 +45,10 @@
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "variables": [
-		{
-			"name": "CMAKE_PREFIX_PATH",
-			"value": "C:/Qt/5.15.2/mingw81_64/"
-		}	
+        {
+          "name": "CMAKE_PREFIX_PATH",
+          "value": "${env.QT_ROOT_DIR}/mingw81_64/"
+        }	
 	  ]
     },
 	{
@@ -62,10 +62,10 @@
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "variables": [
-		{
-			"name": "CMAKE_PREFIX_PATH",
-			"value": "C:/Qt/5.15.2/mingw81_64/"
-		}	
+        {
+          "name": "CMAKE_PREFIX_PATH",
+          "value": "${env.QT_ROOT_DIR}/mingw81_64/"
+        }	
 	  ]
     },
 	{
