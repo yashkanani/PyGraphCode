@@ -1,6 +1,6 @@
-#include "elementslistwidget.h"
-#include "elementdrageventhandler.h"
-#include "elementmanager.h"
+#include "ElementsListWidget.h"
+#include "ElementDragEventHandler.h"
+#include "ElementManager.h"
 #include "AbstractElement.h"
 #include <QAbstractScrollArea>
 #include <QGridLayout>
