@@ -6,7 +6,7 @@
 
 class JSONDataHandler {
 public:
-    typedef struct {
+    typedef struct _JSONContainerHeader{
         QString displayName;
         ContainerInformationList containerinformationList;
     } JSONContainerHeader;

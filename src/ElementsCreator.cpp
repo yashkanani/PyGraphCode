@@ -1,7 +1,6 @@
 #include "ElementsCreator.h"
 #include "WriteVariableElement.h"
 #include "ReadVariableElement.h"
-#include "elementscreator.h"
 #include <QDialog>
 #include <QFormLayout>
 #include <QMessageBox>

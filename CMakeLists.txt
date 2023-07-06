@@ -26,8 +26,6 @@ find_package(Qt5 COMPONENTS Core Concurrent Widgets Quick Gui OpenGL Test Networ
 # Add resource files
 set(RESOURCES 
    ${CMAKE_CURRENT_SOURCE_DIR}/src/resources.qrc
-   ${CMAKE_CURRENT_SOURCE_DIR}/src/qml/CustomToolBarItem.qml
-   ${CMAKE_CURRENT_SOURCE_DIR}/src/qml/SerachBar.qml
 )
 
 
@@ -43,7 +41,6 @@ set(HEADERS
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementDragEventHandler.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderContainer.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ContainerInformation.h
-	  ${CMAKE_CURRENT_SOURCE_DIR}/src/PlaceHolder.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/OperationElement.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ResultedTextView.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/CodeText.h
@@ -73,7 +70,6 @@ set(SOURCES
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementManager.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementDragEventHandler.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderContainer.cpp
-	  ${CMAKE_CURRENT_SOURCE_DIR}/src/PlaceHolder.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/OperationElement.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ResultedTextView.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/CodeText.cpp
