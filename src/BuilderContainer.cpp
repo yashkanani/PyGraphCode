@@ -10,7 +10,6 @@
 #include "AbstractElement.h"
 #include "BuilderContainer.h"
 #include "CodeText.h"
-#include "ElementManager.h"
 #include "InternalDragEventHandler.h"
 
 BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)

@@ -1,6 +1,5 @@
 #include "ConditionalElement.h"
 #include "BuilderContainer.h"
-#include "PlaceHolder.h"
 #include <qcombobox.h>
 #include <qgroupbox.h>
 #include <qlayout.h>

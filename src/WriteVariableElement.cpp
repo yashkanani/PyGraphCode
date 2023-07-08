@@ -1,7 +1,6 @@
 #include "WriteVariableElement.h"
 #include "BuilderContainer.h"
 #include "CodeText.h"
-#include "PlaceHolder.h"
 #include <qcombobox.h>
 #include <qgroupbox.h>
 #include <qlayout.h>
