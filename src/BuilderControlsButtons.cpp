@@ -2,10 +2,8 @@
 #include "BuilderContainer.h"
 #include "CustomElementInputDialog.h"
 #include "ElementManager.h"
-#include "ElementUserInputs.h"
 #include "ElementsListWidget.h"
 #include "JSONDataHandler.h"
-#include "UserDefinedElement.h"
 
 #include <QtWidgets>
 

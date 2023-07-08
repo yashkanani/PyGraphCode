@@ -8,8 +8,6 @@
 #include <QVBoxLayout>
 #include <qlabel.h>
 #include "ElementDragEventHandler.h"
-
-#include "ElementManager.h"
 #include "ElementsListWidget.h"
 
 ElementsCreator::ElementsCreator(QWidget* parent)

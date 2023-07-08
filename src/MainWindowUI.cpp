@@ -17,10 +17,8 @@
 #include <qlineedit.h>
 #include <qmimedata.h>
 #include <qpushbutton.h>
-#include <qquickitem.h>
-#include <qquickview.h>
-#include <qquickwidget.h>
 #include <qscrollarea.h>
+#include <qdebug.h>
 
 MainWindowUI::MainWindowUI(MainAppWindow* main)
     : d_mainWindow(main)

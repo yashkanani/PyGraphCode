@@ -20,7 +20,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt5 COMPONENTS Core Concurrent Widgets Quick Gui OpenGL Test Network QuickWidgets REQUIRED)
+
+find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 #enable_testing()
 
 # Add resource files
@@ -88,6 +89,6 @@ set(SOURCES
 
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} ${RESOURCES})
-target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui Qt5::Widgets Qt5::OpenGL Qt5::Concurrent Qt5::Network Qt5::Quick Qt5::QuickWidgets)
+target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui Qt5::Widgets)
 
 
