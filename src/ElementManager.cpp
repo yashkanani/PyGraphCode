@@ -8,6 +8,10 @@
 #include "OperationElement.h"
 #include "ConstantDecimalElement.h"
 #include "ConstantTextElement.h"
+#include "UserDefinedElement.h"
+#include "ElementUserInputs.h"
+
+#include "AbstractElement.h"
 
 ElementManager& ElementManager::getInstance()
 {
@@ -40,6 +44,18 @@ std::shared_ptr<AbstractElement> ElementManager::findElementFromType(const Basic
     }
     return nullptr;
 }
+std::shared_ptr<AbstractElement> ElementManager::findElementFromName(const QString& elementName)
+{
+    // Check In Basic Elements list.
+    for (const auto& element : elements) {
+        if (element->getName() == elementName) {
+            return element;
+        }
+    }
+
+    return nullptr;
+
+}
 
 void ElementManager::createElements()
 {
@@ -56,7 +72,41 @@ void ElementManager::createElements()
 
 std::shared_ptr<AbstractElement> ElementManager::createElementFromType(const BasicElementType& elementType)
 {
-    return findElementFromType(elementType)->clone(); // Clone method is not currently implemented in all element.
+    std::shared_ptr<AbstractElement> foundElement = findElementFromType(elementType);
+    if (foundElement) {
+        return foundElement->clone();
+    }
+    return nullptr;
+}
+std::shared_ptr<AbstractElement> ElementManager::createElementFromName(const QString& elementName)
+{
+    std::shared_ptr<AbstractElement> foundElement = findElementFromName(elementName);
+    if (foundElement) {
+        return foundElement->clone();
+    }
+    return nullptr;
 }
 
 
+void ElementManager::addCustomElement(std::shared_ptr<AbstractElement> customElement) {
+    if (customElement != nullptr) {
+        customElementsList.push_back(customElement);
+    }
+}
+
+std::shared_ptr<AbstractElement> ElementManager::createCustomElement(const QString& elementName, const ContainerInformationList& informationList)
+{
+
+    std::shared_ptr<UserDefinedElement> customElement = std::make_shared<UserDefinedElement>();
+    customElement->setName(elementName);
+
+    std::shared_ptr<ElementUserInputs> userInput = std::make_shared<ElementUserInputs>();
+    std::shared_ptr<BuilderContainer> builder = std::make_shared<BuilderContainer>(nullptr, true);
+    
+    builder->appendContainerInformationList(informationList);
+    userInput->addContainer(customElement->getUserInputkey(), builder);
+    customElement->setUserInput(userInput);
+
+    addCustomElement(customElement);
+    return customElement;
+}

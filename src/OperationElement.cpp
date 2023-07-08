@@ -7,6 +7,13 @@
 
 #include "BuilderContainer.h"
 #include "CodeText.h"
+#include "ElementUserInputs.h"
+
+namespace key {
+const std::string comboSelectionString = "comboSelection";
+const std::string firstContainer = "firstContainer";
+const std::string secondContainer = "selectionContainer";
+}
 
 OperationElement::OperationElement()
 {
@@ -14,10 +21,27 @@ OperationElement::OperationElement()
     image = QPixmap(":/resource/Operation.png");
     type = BasicElementType::OPERATOR;
 
+    comboSelection = "is Add to (+)";
     secondVariableContainer = std::make_shared<BuilderContainer>(nullptr, true);
     firstVariableContainer = std::make_shared<BuilderContainer>(nullptr, true);
 }
+void OperationElement::setUserInput(std::shared_ptr<ElementUserInputs> userInput)
+{
+    if (userInput != nullptr) {
+        comboSelection = userInput->getString(key::comboSelectionString);
+        firstVariableContainer = userInput->getContainer(key::firstContainer);
+        secondVariableContainer = userInput->getContainer(key::secondContainer);
+    }
+}
 
+std::shared_ptr<ElementUserInputs> OperationElement::getUserInput()
+{
+    std::shared_ptr<ElementUserInputs> ret = std::make_shared<ElementUserInputs>();
+    ret->addString(key::comboSelectionString, comboSelection);
+    ret->addContainer(key::firstContainer, firstVariableContainer);
+    ret->addContainer(key::secondContainer, secondVariableContainer);
+    return ret;
+}
 std::shared_ptr<AbstractElement> OperationElement::clone() const
 {
     auto ret = std::make_shared<OperationElement>();
@@ -42,15 +66,15 @@ std::shared_ptr<CodeText> OperationElement::getText(int indentLevel) const
         line += firstVariableContainer->getText(0)->getResult();
     }
 
-    if (comboSelection.compare("is Add to (+)")) {
+    if (comboSelection.compare("is Add to (+)") == 0) {
         line += " + ";
-    } else if (comboSelection.compare("is subtract from (-)")) {
+    } else if (comboSelection.compare("is subtract from (-)") == 0) {
         line += " - ";
-    } else if (comboSelection.compare("is multiply by (x)")) {
+    } else if (comboSelection.compare("is multiply by (x)") == 0) {
         line += " x ";
-    } else if (comboSelection.compare("is divide by (/)")) {
+    } else if (comboSelection.compare("is divide by (/)") == 0) {
         line += " / ";
-    } else if (comboSelection.compare("is XOR (^)")) {
+    } else if (comboSelection.compare("is XOR (^)") == 0) {
         line += " ^ ";
     } else {
     }
@@ -109,6 +133,7 @@ QWidget* OperationElement::getViewWidget(QWidget* parent)
 
     QObject::connect(conditionComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
         comboSelection = conditionComboBox->currentText();
+        emit childValueChanged();
     });
 
     if (secondVariableContainer) {

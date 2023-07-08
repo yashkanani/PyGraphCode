@@ -15,6 +15,8 @@ public:
 
     std::shared_ptr<CodeText> getText(int indentLevel) const override;
     QWidget* getViewWidget(QWidget* parent = nullptr) override;
+    void setUserInput(std::shared_ptr<ElementUserInputs> userInput) override;
+    std::shared_ptr<ElementUserInputs> getUserInput() override;
 
 private:
     std::shared_ptr<BuilderContainer> variableContainer;

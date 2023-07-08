@@ -1,12 +1,22 @@
 #include "ForLoopElement.h"
 #include "BuilderContainer.h"
 #include "CodeText.h"
-#include "PlaceHolder.h"
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qwidget.h>
+
+#include "ElementUserInputs.h"
+
+namespace key {
+const std::string comboSelectionString = "comboSelection";
+const std::string variableContainer = "variableContainer";
+const std::string startContainer = "startContainer";
+const std::string incrementContainer = "incrementContainer";
+const std::string bodyContainer = "bodyContainer";
+const std::string endContainer = "endContainer";
+}
 
 ForLoopElement::ForLoopElement()
 {
@@ -21,6 +31,29 @@ ForLoopElement::ForLoopElement()
     incrementContainer = std::make_shared<BuilderContainer>(nullptr, true);
     bodyContainer = std::make_shared<BuilderContainer>(nullptr, true);
     endContainer = std::make_shared<BuilderContainer>(nullptr, true);
+}
+
+void ForLoopElement::setUserInput(std::shared_ptr<ElementUserInputs> userInput)
+{
+    if (userInput != nullptr) {
+        comboSelection = userInput->getString(key::comboSelectionString);
+        variableContainer = userInput->getContainer(key::variableContainer);
+        startContainer = userInput->getContainer(key::startContainer);
+        incrementContainer = userInput->getContainer(key::incrementContainer);
+        bodyContainer = userInput->getContainer(key::bodyContainer);
+        endContainer = userInput->getContainer(key::endContainer);
+    }
+}
+std::shared_ptr<ElementUserInputs> ForLoopElement::getUserInput()
+{
+    std::shared_ptr<ElementUserInputs> ret = std::make_shared<ElementUserInputs>();
+    ret->addString(key::comboSelectionString, comboSelection);
+    ret->addContainer(key::variableContainer, variableContainer);
+    ret->addContainer(key::startContainer, startContainer);
+    ret->addContainer(key::incrementContainer, incrementContainer);
+    ret->addContainer(key::bodyContainer, bodyContainer);
+    ret->addContainer(key::endContainer, endContainer);
+    return ret;
 }
 
 std::shared_ptr<AbstractElement> ForLoopElement::clone() const
@@ -68,12 +101,12 @@ std::shared_ptr<CodeText> ForLoopElement::getText(int indentLevel) const
                 ret->addToBody("\n");
             }
         } else {
-                if (startContainer && incrementContainer) {
-                    ret->addToBody("for " + variableContainer->getText(0)->getResult() + QString(" in range(%1, %2, %3):").arg(startContainer->getText(0)->getResult()).arg(endContainer->getText(0)->getResult()).arg(incrementContainer->getText(0)->getResult()));
-                    ret->addToBody("\n");
-                }
+            if (startContainer && incrementContainer) {
+                ret->addToBody("for " + variableContainer->getText(0)->getResult() + QString(" in range(%1, %2, %3):").arg(startContainer->getText(0)->getResult()).arg(endContainer->getText(0)->getResult()).arg(incrementContainer->getText(0)->getResult()));
+                ret->addToBody("\n");
             }
         }
+    }
 
     if (bodyContainer) {
         ret->increaseIndentOfBody();
@@ -111,7 +144,6 @@ QWidget* ForLoopElement::getViewWidget(QWidget* parent)
     QGroupBox* variableGroup = new QGroupBox("", wdg);
     QVBoxLayout* variableLay = new QVBoxLayout(variableGroup);
 
-
     QList<BasicElementType> acceptedTypes = { BasicElementType::CONSTANT_DECIMAL, BasicElementType::READ_VARIABLE };
     bool subContainer = true;
     if (variableContainer) {
@@ -132,8 +164,6 @@ QWidget* ForLoopElement::getViewWidget(QWidget* parent)
 
     endCondition->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     endVariableLay->addWidget(endCondition, Qt::AlignLeft | Qt::AlignTop);
-
-    
 
     if (startContainer) {
         startContainer->setAcceptedTypes(acceptedTypes);

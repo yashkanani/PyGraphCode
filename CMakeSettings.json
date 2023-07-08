@@ -10,7 +10,12 @@
       "cmakeCommandArgs": "",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
-      "variables": []
+      "variables": [
+        {
+          "name": "CMAKE_PREFIX_PATH",
+          "value": "${env.QT_ROOT_DIR}/msvc2019_64/"
+        }	
+	  ]
     },
     {
       "name": "x64-Release",
@@ -22,7 +27,12 @@
       "cmakeCommandArgs": "",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
-      "variables": []
+      "variables": [
+		{
+			"name": "CMAKE_PREFIX_PATH",
+			"value": "${env.QT_ROOT_DIR}/msvc2019_64/"
+		}	
+	  ]
     },
 	{
       "name": "Mingw64-Debug",
@@ -34,7 +44,12 @@
       "cmakeCommandArgs": "",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
-      "variables": []
+      "variables": [
+        {
+          "name": "CMAKE_PREFIX_PATH",
+          "value": "${env.QT_ROOT_DIR}/mingw81_64/"
+        }	
+	  ]
     },
 	{
       "name": "Mingw64-Release",
@@ -46,7 +61,12 @@
       "cmakeCommandArgs": "",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
-      "variables": []
+      "variables": [
+        {
+          "name": "CMAKE_PREFIX_PATH",
+          "value": "${env.QT_ROOT_DIR}/mingw81_64/"
+        }	
+	  ]
     },
 	{
       "name": "x86-Debug",

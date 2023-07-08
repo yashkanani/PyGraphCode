@@ -10,7 +10,6 @@
 #include "AbstractElement.h"
 #include "BuilderContainer.h"
 #include "CodeText.h"
-#include "ElementManager.h"
 #include "InternalDragEventHandler.h"
 
 BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
@@ -81,6 +80,7 @@ void BuilderContainer::appendContainerInformationList(const ContainerInformation
         addInformationAndView(element, insertIndex);
         ++insertIndex;
     }
+    emit updateResultedTextView(); // Update the text in ResultedTextView Widget.
 }
 
 void BuilderContainer::removeElementFromContainerInformation(const AbstractElement* element)
@@ -121,7 +121,7 @@ void BuilderContainer::dragEnterEvent(QDragEnterEvent* event)
     }
 
     const QMimeData* mimeData = event->mimeData();
-    QVariant& elementPointer = mimeData->property("element");
+    const QVariant& elementPointer = mimeData->property("element");
     if (elementPointer.isValid()) {
         std::shared_ptr<AbstractElement> element = qvariant_cast<AbstractElement*>(elementPointer)->clone();
         if (element && isDropAccepted(element->getType())) {
@@ -268,7 +268,7 @@ void BuilderContainer::mousePressEvent(QMouseEvent* event)
 void BuilderContainer::dropEvent(QDropEvent* event)
 {
     const QMimeData* mimeData = event->mimeData();
-    QVariant& elementPointer = mimeData->property("element");
+    const QVariant& elementPointer = mimeData->property("element");
     if (elementPointer.isValid()) {
         std::shared_ptr<AbstractElement> element = qvariant_cast<AbstractElement*>(elementPointer)->clone();
         if (element) {

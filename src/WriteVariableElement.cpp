@@ -1,13 +1,18 @@
 #include "WriteVariableElement.h"
 #include "BuilderContainer.h"
 #include "CodeText.h"
-#include "PlaceHolder.h"
 #include <qcombobox.h>
 #include <qgroupbox.h>
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qwidget.h>
+
+#include "ElementUserInputs.h"
+
+namespace key {
+   const std::string dynamicValueContainer = "value";
+}
 
 WriteVariableElement::WriteVariableElement()
 {
@@ -17,7 +22,18 @@ WriteVariableElement::WriteVariableElement()
 
     dynamicValueContainer = std::make_shared<BuilderContainer>(nullptr, true);
 }
-
+void WriteVariableElement::setUserInput(std::shared_ptr<ElementUserInputs> userInput)
+{
+    if (userInput != nullptr) {
+        dynamicValueContainer = userInput->getContainer(key::dynamicValueContainer);
+    }
+}
+std::shared_ptr<ElementUserInputs> WriteVariableElement::getUserInput()
+{
+    std::shared_ptr<ElementUserInputs> ret = std::make_shared<ElementUserInputs>();
+    ret->addContainer(key::dynamicValueContainer, dynamicValueContainer);
+    return ret;
+}
 std::shared_ptr<AbstractElement> WriteVariableElement::clone() const
 {
     auto ret = std::make_shared<WriteVariableElement>();
@@ -65,8 +81,6 @@ QWidget* WriteVariableElement::getViewWidget(QWidget* parent)
     QVBoxLayout* wdgLayout = new QVBoxLayout(wdg);
     wdgLayout->setContentsMargins(0, 0, 0, 0);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-
-    
 
     // Set the accepted types for the BuilderContainer
     QList<BasicElementType> acceptedTypes = { BasicElementType::WRITE_VARIABLE, BasicElementType::CONDITIONS, BasicElementType::CONSTANT_TEXT, BasicElementType::CONSTANT_DECIMAL };

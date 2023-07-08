@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/">
-		<file>qml/SerachBar.qml</file>
-		<file>qml/CustomToolBarItem.qml</file>
 		<file>resource/search.png</file>
 		<file>resource/If_loop.png</file>
 		<file>resource/For_loop.png</file>

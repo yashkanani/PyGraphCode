@@ -20,14 +20,13 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt5 COMPONENTS Core Concurrent Widgets Quick Gui OpenGL Test Network QuickWidgets REQUIRED)
+
+find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 #enable_testing()
 
 # Add resource files
 set(RESOURCES 
    ${CMAKE_CURRENT_SOURCE_DIR}/src/resources.qrc
-   ${CMAKE_CURRENT_SOURCE_DIR}/src/qml/CustomToolBarItem.qml
-   ${CMAKE_CURRENT_SOURCE_DIR}/src/qml/SerachBar.qml
 )
 
 
@@ -43,7 +42,6 @@ set(HEADERS
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementDragEventHandler.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderContainer.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ContainerInformation.h
-	  ${CMAKE_CURRENT_SOURCE_DIR}/src/PlaceHolder.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/OperationElement.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ResultedTextView.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/CodeText.h
@@ -53,6 +51,12 @@ set(HEADERS
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ConstantDecimalElement.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ConstantTextElement.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/InternalDragEventHandler.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderControlsButtons.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementUserInputs.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/JSONDataHandler.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsListWidget.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/UserDefinedElement.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/CustomElementInputDialog.h
    )
 
 set(SOURCES
@@ -67,7 +71,6 @@ set(SOURCES
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementManager.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementDragEventHandler.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderContainer.cpp
-	  ${CMAKE_CURRENT_SOURCE_DIR}/src/PlaceHolder.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/OperationElement.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ResultedTextView.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/CodeText.cpp
@@ -76,10 +79,16 @@ set(SOURCES
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ConstantDecimalElement.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ConstantTextElement.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/InternalDragEventHandler.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderControlsButtons.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementUserInputs.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/JSONDataHandler.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsListWidget.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/UserDefinedElement.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/CustomElementInputDialog.cpp
     )
 
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} ${RESOURCES})
-target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui Qt5::Widgets Qt5::OpenGL Qt5::Concurrent Qt5::Network Qt5::Quick Qt5::QuickWidgets)
+target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui Qt5::Widgets)
 
 

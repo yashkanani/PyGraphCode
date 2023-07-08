@@ -1,8 +1,13 @@
 #include "ConstantDecimalElement.h"
 #include "CodeText.h"
+#include "ElementUserInputs.h"
 #include <QGroupBox>
 #include <QLayout>
 #include <QLineEdit>
+
+namespace key {
+const std::string lineEditValue = "inputText";
+}
 
 ConstantDecimalElement::ConstantDecimalElement()
 {
@@ -12,7 +17,18 @@ ConstantDecimalElement::ConstantDecimalElement()
 
     lineEditValue = "1.0";
 }
-
+void ConstantDecimalElement::setUserInput(std::shared_ptr<ElementUserInputs> userInput)
+{
+    if (userInput != nullptr) {
+        lineEditValue = userInput->getString(key::lineEditValue);
+    }
+}
+std::shared_ptr<ElementUserInputs> ConstantDecimalElement::getUserInput()
+{
+    std::shared_ptr<ElementUserInputs> ret = std::make_shared<ElementUserInputs>();
+    ret->addString(key::lineEditValue, lineEditValue);
+    return ret;
+}
 std::shared_ptr<AbstractElement> ConstantDecimalElement::clone() const
 {
     auto ret = std::make_shared<ConstantDecimalElement>();

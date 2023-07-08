@@ -6,13 +6,14 @@
 #include <QWidget>
 #include <qgridlayout.h>
 
+class ElementsListWidget;
 class AbstractElement;
 class ElementsCreator : public QWidget {
     Q_OBJECT
 
 public:
     explicit ElementsCreator(QWidget* parent = nullptr);
-   
+    
 private slots:
     void onAddVariableClicked();
 
@@ -21,9 +22,8 @@ private:
     void addReadVariableElement(const QString& variableName);
     void addWriteVariableElement(const QString& variableName);
 
-    QGridLayout* variableListLayout;
-    int columnCount = 0;
-    int rowCount = 0;
+    ElementsListWidget* elementsListHolder;
+   
 
 
     std::vector<std::shared_ptr<AbstractElement>> customeReadVariables;

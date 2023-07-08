@@ -1,12 +1,18 @@
 #include "IfLoopElement.h"
 #include "BuilderContainer.h"
 #include "CodeText.h"
-#include "PlaceHolder.h"
+#include "ElementUserInputs.h"
 #include <qcombobox.h>
 #include <qgroupbox.h>
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
+
+namespace key {
+const std::string conditionsContainer = "conditionsContainer";
+const std::string onTrueContainer = "onTrueContainer";
+const std::string onFalseContainer = "onFalseContainer";
+}
 
 IfLoopElement::IfLoopElement()
 {
@@ -14,9 +20,27 @@ IfLoopElement::IfLoopElement()
     image = QPixmap(":/resource/If_loop.png");
     type = BasicElementType::IF_LOOP;
 
-    conditionsContainer = std::make_shared<BuilderContainer>(nullptr,true);
+    conditionsContainer = std::make_shared<BuilderContainer>(nullptr, true);
     onTrueContainer = std::make_shared<BuilderContainer>(nullptr, true);
     onFalseContainer = std::make_shared<BuilderContainer>(nullptr, true);
+}
+
+void IfLoopElement::setUserInput(std::shared_ptr<ElementUserInputs> userInput)
+{
+    if (userInput != nullptr) {
+
+        conditionsContainer = userInput->getContainer(key::conditionsContainer);
+        onTrueContainer = userInput->getContainer(key::onTrueContainer);
+        onFalseContainer = userInput->getContainer(key::onFalseContainer);
+    }
+}
+std::shared_ptr<ElementUserInputs> IfLoopElement::getUserInput()
+{
+    std::shared_ptr<ElementUserInputs> ret = std::make_shared<ElementUserInputs>();
+    ret->addContainer(key::conditionsContainer, conditionsContainer);
+    ret->addContainer(key::onTrueContainer, onTrueContainer);
+    ret->addContainer(key::onFalseContainer, onFalseContainer);
+    return ret;
 }
 
 std::shared_ptr<AbstractElement> IfLoopElement::clone() const
@@ -87,7 +111,6 @@ QWidget* IfLoopElement::getViewWidget(QWidget* parent)
     QGridLayout* wdgLay = new QGridLayout(wdg);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-   
     if (conditionsContainer) {
         // Set the accepted types for the BuilderContainer
         QList<BasicElementType> acceptedTypes = { BasicElementType::CONDITIONS, BasicElementType::READ_VARIABLE };
@@ -105,7 +128,6 @@ QWidget* IfLoopElement::getViewWidget(QWidget* parent)
     if (onTrueContainer) {
         QObject::connect(onTrueContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
         onTrueLay->addWidget(onTrueContainer.get());
-        
     }
     wdgLay->addWidget(onTrueGroupBox, 1, 0);
 
