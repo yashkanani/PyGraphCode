@@ -4,6 +4,8 @@
 #include "ElementManager.h"
 #include "ElementUserInputs.h"
 #include "UserDefinedElement.h"
+#include "ReadVariableElement.h"
+#include "WriteVariableElement.h"
 #include <QJsonArray>
 #include <qfile.h>
 #include <qjsondocument.h>
@@ -13,10 +15,12 @@ namespace JSONSting {
 const QString type = "type";
 const QString element = "element";
 const QString container = "container";
-const QString userelement = "userelement";
+const QString userelement = "userElement";
+const QString readElement = "readVariable";
+const QString writeElement = "writeVariable";
 const QString elementName = "name";
-const QString elementinputs = "elementinputs";
-const QString containerinputs = "containerinputs";
+const QString elementinputs = "elementInputs";
+const QString containerinputs = "containerInputs";
 const QString displayName = "displayName";
 const QString inputData = "inputData";
 }
@@ -56,7 +60,12 @@ QJsonObject JSONDataHandler::convertContainerInformationListToJson(const Contain
 
             if (containerInfo.elementPointer->getType() == BasicElementType::USER_DEFINED) {
                 jsonObject[JSONSting::type] = JSONSting::userelement;
-            } else {
+            } else if (containerInfo.elementPointer->getType() == BasicElementType::WRITE_VARIABLE) {
+                jsonObject[JSONSting::type] = JSONSting::writeElement;
+            } else if (containerInfo.elementPointer->getType() == BasicElementType::READ_VARIABLE) {
+                jsonObject[JSONSting::type] = JSONSting::readElement;
+            } 
+            else {
                 jsonObject[JSONSting::type] = JSONSting::element;
             }
 
@@ -141,7 +150,17 @@ ContainerInformationList JSONDataHandler::convertJsonToContainerInformationList(
                         QString elementType = containerInfoObject[JSONSting::type].toString();
                         if (elementType == JSONSting::element) {
                             containerInfo.elementPointer = ElementManager::getInstance().createElementFromName(elementName);
-                        } else if (elementType == JSONSting::userelement) {
+                        } 
+                        else if (elementType == JSONSting::readElement) {
+                            containerInfo.elementPointer = std::make_shared<ReadVariableElement>();
+                            containerInfo.elementPointer->setName(elementName);
+                        } 
+                        else if (elementType == JSONSting::writeElement) {
+                            containerInfo.elementPointer = std::make_shared<WriteVariableElement>();
+                            containerInfo.elementPointer->setName(elementName);
+                        }
+                        else if (elementType == JSONSting::userelement)
+                        {
                             containerInfo.elementPointer = std::make_shared<UserDefinedElement>();
                             containerInfo.elementPointer->setName(elementName);
                         }
