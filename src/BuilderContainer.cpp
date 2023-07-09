@@ -298,6 +298,7 @@ void BuilderContainer::addInformationAndView(std::shared_ptr<AbstractElement> el
     viewWidget->installEventFilter(new InternalDragEventHandler(this));
     addElementWidget(viewWidget, insertIndex);
     connect(element.get(), &AbstractElement::childValueChanged, this, &BuilderContainer::updateResultedTextView);
+    connect(element.get(), &AbstractElement::updateParameterWidgets, this, &BuilderContainer::updateParameterWidgets);
 
     // add information
     ContainerInformation info;

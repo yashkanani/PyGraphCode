@@ -27,6 +27,7 @@ public:
 
 signals:
     void childValueChanged();
+    void updateParameterWidgets(QWidget* element, bool addWidget, QString label = "");
 
 protected:
     BasicElementType type;

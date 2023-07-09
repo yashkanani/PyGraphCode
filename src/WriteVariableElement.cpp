@@ -87,6 +87,7 @@ QWidget* WriteVariableElement::getViewWidget(QWidget* parent)
     dynamicValueContainer->setAcceptedTypes(acceptedTypes);
     dynamicValueContainer->setMaxElements(1);
     QObject::connect(dynamicValueContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+    QObject::connect(dynamicValueContainer.get(), &BuilderContainer::updateParameterWidgets, this, &AbstractElement::updateParameterWidgets);
     wdgLayout->addWidget(dynamicValueContainer.get());
 
     return wdg;

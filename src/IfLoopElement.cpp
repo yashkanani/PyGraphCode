@@ -117,6 +117,7 @@ QWidget* IfLoopElement::getViewWidget(QWidget* parent)
         conditionsContainer->setAcceptedTypes(acceptedTypes);
         conditionsContainer->setMaxElements(1);
         QObject::connect(conditionsContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+        QObject::connect(conditionsContainer.get(), &BuilderContainer::updateParameterWidgets, this, &AbstractElement::updateParameterWidgets);
 
         // Add the condition widget to the layout
         wdgLay->addWidget(conditionsContainer.get(), 0, 0, 1, 2);
@@ -127,6 +128,7 @@ QWidget* IfLoopElement::getViewWidget(QWidget* parent)
 
     if (onTrueContainer) {
         QObject::connect(onTrueContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+        QObject::connect(onTrueContainer.get(), &BuilderContainer::updateParameterWidgets, this, &AbstractElement::updateParameterWidgets);
         onTrueLay->addWidget(onTrueContainer.get());
     }
     wdgLay->addWidget(onTrueGroupBox, 1, 0);
@@ -137,6 +139,7 @@ QWidget* IfLoopElement::getViewWidget(QWidget* parent)
 
     if (onFalseContainer) {
         QObject::connect(onFalseContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+        QObject::connect(onFalseContainer.get(), &BuilderContainer::updateParameterWidgets, this, &AbstractElement::updateParameterWidgets);
         onFalseLay->addWidget(onFalseContainer.get());
     }
 
