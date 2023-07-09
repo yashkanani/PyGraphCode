@@ -292,13 +292,15 @@ void BuilderContainer::addInformationAndView(std::shared_ptr<AbstractElement> el
         return;
     }
 
+    connect(element.get(), &AbstractElement::childValueChanged, this, &BuilderContainer::updateResultedTextView);
+    connect(element.get(), &AbstractElement::updateParameterWidgets, this, &BuilderContainer::updateParameterWidgets);
+
     // add element view
     QWidget* viewWidget = element->getViewWidget();
     viewWidget->setProperty("element", QVariant::fromValue(dynamic_cast<AbstractElement*>(element.get())));
     viewWidget->installEventFilter(new InternalDragEventHandler(this));
     addElementWidget(viewWidget, insertIndex);
-    connect(element.get(), &AbstractElement::childValueChanged, this, &BuilderContainer::updateResultedTextView);
-    connect(element.get(), &AbstractElement::updateParameterWidgets, this, &BuilderContainer::updateParameterWidgets);
+    
 
     // add information
     ContainerInformation info;
