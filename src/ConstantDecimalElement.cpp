@@ -5,6 +5,7 @@
 #include <QLayout>
 #include <QLineEdit>
 #include <qcheckbox.h>
+#include "InputLabelDialog.h"
 
 namespace key {
 const std::string lineEditValue = "inputText";
@@ -82,8 +83,13 @@ QWidget* ConstantDecimalElement::getViewWidget(QWidget* parent)
 
     QObject::connect(addToUIcheckBox, &QCheckBox::stateChanged, [=](int state) {
         if (state == Qt::Checked) {
-            // add staticValueLineEdit to parameter List, and it will auto matically remove widget from element Group box.
-            emit updateParameterWidgets(staticValueLineEdit, true, "hello"); 
+            InputLabelDialog dialog("Parameter Label:", wdg);
+
+            if (dialog.exec() == QDialog::Accepted) {
+                // add staticValueLineEdit to parameter List, and it will auto matically remove widget from element Group box.
+                emit updateParameterWidgets(staticValueLineEdit, true, dialog.getText()); 
+            }
+
         } else {
             emit updateParameterWidgets(staticValueLineEdit, false); // Remove from parameter List staticValueLineEdit
             wdgLayout->addWidget(staticValueLineEdit);  // add again back to element Group box.
