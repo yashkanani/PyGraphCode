@@ -4,6 +4,7 @@
 #include <QGroupBox>
 #include <QLayout>
 #include <QLineEdit>
+#include <qcheckbox.h>
 
 namespace key {
 const std::string lineEditValue = "inputText";
@@ -75,7 +76,23 @@ QWidget* ConstantDecimalElement::getViewWidget(QWidget* parent)
         lineEditValue = value;
         emit childValueChanged();
     });
+
+    QCheckBox* addToUIcheckBox = new QCheckBox("addToUI", wdg);
+    addToUIcheckBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+    QObject::connect(addToUIcheckBox, &QCheckBox::stateChanged, [=](int state) {
+        if (state == Qt::Checked) {
+            // add staticValueLineEdit to parameter List, and it will auto matically remove widget from element Group box.
+            emit updateParameterWidgets(staticValueLineEdit, true, "hello"); 
+        } else {
+            emit updateParameterWidgets(staticValueLineEdit, false); // Remove from parameter List staticValueLineEdit
+            wdgLayout->addWidget(staticValueLineEdit);  // add again back to element Group box.
+        }
+    });
+
     staticValueLineEdit->setText(lineEditValue);
+    
+    wdgLayout->addWidget(addToUIcheckBox);
     wdgLayout->addWidget(staticValueLineEdit);
 
     return wdg;
