@@ -9,6 +9,7 @@
 #include <qlabel.h>
 #include "ElementDragEventHandler.h"
 #include "ElementsListWidget.h"
+#include "InputLabelDialog.h"
 
 ElementsCreator::ElementsCreator(QWidget* parent)
     : QWidget(parent)
@@ -30,20 +31,10 @@ ElementsCreator::ElementsCreator(QWidget* parent)
 
 void ElementsCreator::onAddVariableClicked()
 {
-    QDialog dialog(this);
-    dialog.setWindowTitle("Enter Variable Name");
-
-    QFormLayout formLayout(&dialog);
-    QLineEdit nameLineEdit(&dialog);
-    formLayout.addRow("Variable Name:", &nameLineEdit);
-
-    QPushButton okButton("OK", &dialog);
-    connect(&okButton, &QPushButton::clicked, &dialog, &QDialog::accept);
-    formLayout.addRow(&okButton);
+    InputLabelDialog dialog("Variable Name:", this);
 
     if (dialog.exec() == QDialog::Accepted) {
-        QString variableName = nameLineEdit.text();
-
+        QString variableName = dialog.getText();
         addReadVariableElement(variableName);
         addWriteVariableElement(variableName);
     }
