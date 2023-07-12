@@ -17,12 +17,15 @@ private slots:
     void updateParameterList(QWidget* element, bool addWidget, QString label = "");
 
 private:
+
     void addToUI(QString label, QWidget* widget);
     void removeFromUI(QWidget* widget);
+    void handleParentDestroyed(QObject* parentObj);
     void clearWidgets();
 
     QVBoxLayout* mainLayout;
     QHash<QWidget*, QLabel*> widgetLabelMap;
+    QHash<QWidget*, QObject*> originalParents;
     BuilderContainer* m_builderContainer;
 };
 

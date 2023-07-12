@@ -28,7 +28,12 @@ void ParameterUIBuilder::updateParameterList(QWidget* element, bool addWidget, Q
 
 void ParameterUIBuilder::addToUI(QString label, QWidget* widget)
 {
-    if (!widgetLabelMap.contains(widget)) {
+    if (!widgetLabelMap.contains(widget) && widget && (widget->parent() != nullptr)) {
+
+        // Connect the destroyed signal of the widget's parent to handleParentDestroyed slot
+        originalParents.insert(widget, widget->parent());
+        connect(widget->parent(), &QObject::destroyed, this, &ParameterUIBuilder::handleParentDestroyed);
+
         QHBoxLayout* rowLayout = new QHBoxLayout();
         QLabel* labelWidget = new QLabel(label);
         rowLayout->addWidget(labelWidget);
@@ -72,5 +77,19 @@ void ParameterUIBuilder::clearWidgets()
 
         QLabel* labelWidget = widgetLabelMap.take(widget);
         labelWidget->deleteLater();
+    }
+}
+
+void ParameterUIBuilder::handleParentDestroyed(QObject* parentObj)
+{
+    QWidget* parent = qobject_cast<QWidget*>(parentObj);
+
+    for (auto it = originalParents.begin(); it != originalParents.end(); ++it) {
+        if (it.value() == parent) {
+            QWidget* widget = it.key();
+            removeFromUI(widget);
+            widget->deleteLater();
+            break;
+        }
     }
 }
