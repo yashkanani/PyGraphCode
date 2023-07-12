@@ -55,7 +55,7 @@ std::shared_ptr<CodeText> UserDefinedElement::getText(int indentLevel) const
 {
     std::shared_ptr<CodeText> ret = std::make_shared<CodeText>(indentLevel);
 
-    ret = userContainer->getText(0);
+    ret->append(*(userContainer->getText(ret->getCurrentIndentOfBody())));
 
     return ret;
 }
