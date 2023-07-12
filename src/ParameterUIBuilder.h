@@ -1,11 +1,13 @@
 #ifndef PARAMETERUIBUILDER_H
 #define PARAMETERUIBUILDER_H
 
-#include <QWidget>
+#include <QHash>
 #include <QVBoxLayout>
-#include <QList>
+#include <QWidget>
 
 class BuilderContainer;
+class QLabel;
+
 class ParameterUIBuilder : public QWidget {
     Q_OBJECT
 public:
@@ -13,8 +15,6 @@ public:
 
 private slots:
     void updateParameterList(QWidget* element, bool addWidget, QString label = "");
-    
-   
 
 private:
     void addToUI(QString label, QWidget* widget);
@@ -22,7 +22,7 @@ private:
     void clearWidgets();
 
     QVBoxLayout* mainLayout;
-    QList<QWidget*> widgetList;
+    QHash<QWidget*, QLabel*> widgetLabelMap;
     BuilderContainer* m_builderContainer;
 };
 

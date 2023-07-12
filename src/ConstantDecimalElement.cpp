@@ -78,7 +78,7 @@ QWidget* ConstantDecimalElement::getViewWidget(QWidget* parent)
         emit childValueChanged();
     });
 
-    QCheckBox* addToUIcheckBox = new QCheckBox("addToUI", wdg);
+    QCheckBox* addToUIcheckBox = new QCheckBox("add to UI", wdg);
     addToUIcheckBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     QObject::connect(addToUIcheckBox, &QCheckBox::stateChanged, [=](int state) {
