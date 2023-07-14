@@ -9,6 +9,8 @@
 
 namespace key {
 const std::string lineEditValue = "inputText";
+const std::string addedToUI = "addedToUI";
+const std::string lableForUI = "UILable";
 }
 
 ConstantDecimalElement::ConstantDecimalElement()
@@ -18,10 +20,14 @@ ConstantDecimalElement::ConstantDecimalElement()
     type = BasicElementType::CONSTANT_DECIMAL;
 
     lineEditValue = "1.0";
+    isAddedToUI = false;
+    labelForUI = "";
 }
 void ConstantDecimalElement::setUserInput(std::shared_ptr<ElementUserInputs> userInput)
 {
     if (userInput != nullptr) {
+        isAddedToUI = userInput->getString(key::addedToUI).toInt();
+        labelForUI = userInput->getString(key::lableForUI);
         lineEditValue = userInput->getString(key::lineEditValue);
     }
 }
@@ -29,12 +35,16 @@ std::shared_ptr<ElementUserInputs> ConstantDecimalElement::getUserInput()
 {
     std::shared_ptr<ElementUserInputs> ret = std::make_shared<ElementUserInputs>();
     ret->addString(key::lineEditValue, lineEditValue);
+    ret->addString(key::addedToUI, QString::number(isAddedToUI));
+    ret->addString(key::lableForUI, labelForUI);
     return ret;
 }
 std::shared_ptr<AbstractElement> ConstantDecimalElement::clone() const
 {
     auto ret = std::make_shared<ConstantDecimalElement>();
     ret->lineEditValue = lineEditValue;
+    ret->isAddedToUI = isAddedToUI;
+    ret->labelForUI = labelForUI;
 
     return ret;
 }
@@ -80,6 +90,9 @@ QWidget* ConstantDecimalElement::getViewWidget(QWidget* parent)
 
     QCheckBox* addToUIcheckBox = new QCheckBox("add to UI", wdg);
     addToUIcheckBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    addToUIcheckBox->setChecked(isAddedToUI);
+    
+
 
     QObject::connect(addToUIcheckBox, &QCheckBox::stateChanged, [=](int state) {
         if (state == Qt::Checked) {
@@ -87,10 +100,14 @@ QWidget* ConstantDecimalElement::getViewWidget(QWidget* parent)
 
             if (dialog.exec() == QDialog::Accepted) {
                 // add staticValueLineEdit to parameter List, and it will auto matically remove widget from element Group box.
+                isAddedToUI = true;
+                labelForUI = dialog.getText();
                 emit updateParameterWidgets(staticValueLineEdit, true, dialog.getText()); 
             }
 
         } else {
+            isAddedToUI = false;
+            labelForUI = "";
             emit updateParameterWidgets(staticValueLineEdit, false); // Remove from parameter List staticValueLineEdit
             wdgLayout->addWidget(staticValueLineEdit);  // add again back to element Group box.
         }
@@ -101,5 +118,9 @@ QWidget* ConstantDecimalElement::getViewWidget(QWidget* parent)
     wdgLayout->addWidget(addToUIcheckBox);
     wdgLayout->addWidget(staticValueLineEdit);
 
+    if (isAddedToUI) {
+        emit updateParameterWidgets(staticValueLineEdit, true, labelForUI); 
+    }
+   
     return wdg;
 }

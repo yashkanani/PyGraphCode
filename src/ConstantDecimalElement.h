@@ -18,6 +18,8 @@ public:
 
 private:
     QString lineEditValue;
+    bool isAddedToUI;
+    QString labelForUI;
 };
 
 #endif // CONSTANT_DECIMAL_ELEMENT_H
