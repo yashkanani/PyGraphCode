@@ -55,6 +55,7 @@ void MainWindowUI::createCentralWidget()
 
     ParameterUIBuilder* parameterHolderWidget = new ParameterUIBuilder(builderContainer, centralWidget);
 
+    centralLayout->addWidget(parameterHolderWidget, 0, 3,2,1);
     // Set the column stretch to distribute remaining space
     centralLayout->setRowStretch(1, 1);
     centralLayout->setRowStretch(2, 2);

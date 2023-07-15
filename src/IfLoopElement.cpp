@@ -7,6 +7,7 @@
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
+#include "ParameterUIBuilder.h"
 
 namespace key {
 const std::string conditionsContainer = "conditionsContainer";
@@ -23,6 +24,18 @@ IfLoopElement::IfLoopElement()
     conditionsContainer = std::make_shared<BuilderContainer>(nullptr, true);
     onTrueContainer = std::make_shared<BuilderContainer>(nullptr, true);
     onFalseContainer = std::make_shared<BuilderContainer>(nullptr, true);
+}
+void IfLoopElement::updateParameterWidgets(ParameterUIBuilder* const parameterUIBuilder)
+{
+    if (conditionsContainer) {
+        conditionsContainer->updateParameterWidgets(parameterUIBuilder);
+    }
+    if (onTrueContainer) {
+        onTrueContainer->updateParameterWidgets(parameterUIBuilder);
+    }
+    if (onFalseContainer) {
+        onFalseContainer->updateParameterWidgets(parameterUIBuilder);
+    }
 }
 
 void IfLoopElement::setUserInput(std::shared_ptr<ElementUserInputs> userInput)
@@ -117,7 +130,7 @@ QWidget* IfLoopElement::getViewWidget(QWidget* parent)
         conditionsContainer->setAcceptedTypes(acceptedTypes);
         conditionsContainer->setMaxElements(1);
         QObject::connect(conditionsContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-        QObject::connect(conditionsContainer.get(), &BuilderContainer::updateParameterWidgets, this, &AbstractElement::updateParameterWidgets);
+        QObject::connect(conditionsContainer.get(), &BuilderContainer::notifyToParameterWidgets, this, &AbstractElement::notifyToParameterWidgets);
 
         // Add the condition widget to the layout
         wdgLay->addWidget(conditionsContainer.get(), 0, 0, 1, 2);
@@ -128,7 +141,7 @@ QWidget* IfLoopElement::getViewWidget(QWidget* parent)
 
     if (onTrueContainer) {
         QObject::connect(onTrueContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-        QObject::connect(onTrueContainer.get(), &BuilderContainer::updateParameterWidgets, this, &AbstractElement::updateParameterWidgets);
+        QObject::connect(onTrueContainer.get(), &BuilderContainer::notifyToParameterWidgets, this, &AbstractElement::notifyToParameterWidgets);
         onTrueLay->addWidget(onTrueContainer.get());
     }
     wdgLay->addWidget(onTrueGroupBox, 1, 0);
@@ -139,7 +152,7 @@ QWidget* IfLoopElement::getViewWidget(QWidget* parent)
 
     if (onFalseContainer) {
         QObject::connect(onFalseContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-        QObject::connect(onFalseContainer.get(), &BuilderContainer::updateParameterWidgets, this, &AbstractElement::updateParameterWidgets);
+        QObject::connect(onFalseContainer.get(), &BuilderContainer::notifyToParameterWidgets, this, &AbstractElement::notifyToParameterWidgets);
         onFalseLay->addWidget(onFalseContainer.get());
     }
 

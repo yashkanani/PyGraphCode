@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QPushButton>
 
+
 ParameterUIBuilder::ParameterUIBuilder(BuilderContainer* builderContainer, QWidget* parent)
     : QWidget(parent)
     , m_builderContainer(builderContainer)
@@ -13,17 +14,18 @@ ParameterUIBuilder::ParameterUIBuilder(BuilderContainer* builderContainer, QWidg
 
     if (m_builderContainer) {
         // Create a connection to add or remove elements when the builderContainer emits the signal
-        connect(m_builderContainer, &BuilderContainer::updateParameterWidgets, this, &ParameterUIBuilder::updateParameterList);
+        connect(m_builderContainer, &BuilderContainer::notifyToParameterWidgets, this, &ParameterUIBuilder::updateParameterList);
     }
 }
 
-void ParameterUIBuilder::updateParameterList(QWidget* element, bool addWidget, QString label)
+void ParameterUIBuilder::updateParameterList()
 {
-    if (addWidget) {
-        addToUI(label, element);
-    } else {
-        removeFromUI(element);
+   
+    if (m_builderContainer) {
+        m_builderContainer->updateParameterWidgets(this);
     }
+
+    // New UPdateParameter UI Funcation Needs too call.
 }
 
 void ParameterUIBuilder::addToUI(QString label, QWidget* widget)

@@ -14,7 +14,7 @@ public:
     QWidget* getViewWidget(QWidget* parent = nullptr) override;
     void setUserInput(std::shared_ptr<ElementUserInputs> userInput) override;
     std::shared_ptr<ElementUserInputs> getUserInput() override;
-    
+    void updateParameterWidgets(ParameterUIBuilder* const parameterUIBuilder) override;
    
 
 private:

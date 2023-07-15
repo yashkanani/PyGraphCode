@@ -8,6 +8,7 @@
 #include "BuilderContainer.h"
 #include "CodeText.h"
 #include "ElementUserInputs.h"
+#include "ParameterUIBuilder.h"
 
 namespace key {
 const std::string comboSelectionString = "comboSelection";
@@ -25,6 +26,16 @@ OperationElement::OperationElement()
     secondVariableContainer = std::make_shared<BuilderContainer>(nullptr, true);
     firstVariableContainer = std::make_shared<BuilderContainer>(nullptr, true);
 }
+void OperationElement::updateParameterWidgets(ParameterUIBuilder* const parameterUIBuilder)
+{
+    if (secondVariableContainer) {
+        secondVariableContainer->updateParameterWidgets(parameterUIBuilder);
+    }
+    if (firstVariableContainer) {
+        firstVariableContainer->updateParameterWidgets(parameterUIBuilder);
+    }
+}
+
 void OperationElement::setUserInput(std::shared_ptr<ElementUserInputs> userInput)
 {
     if (userInput != nullptr) {
@@ -119,7 +130,7 @@ QWidget* OperationElement::getViewWidget(QWidget* parent)
         firstVariableContainer->setAcceptedTypes(acceptedTypes);
         firstVariableContainer->setMaxElements(1);
         QObject::connect(firstVariableContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-        QObject::connect(firstVariableContainer.get(), &BuilderContainer::updateParameterWidgets, this, &AbstractElement::updateParameterWidgets);
+        QObject::connect(firstVariableContainer.get(), &BuilderContainer::notifyToParameterWidgets, this, &AbstractElement::notifyToParameterWidgets);
         wdgLay->addWidget(firstVariableContainer.get(), 0, 0);
     }
 
@@ -141,7 +152,7 @@ QWidget* OperationElement::getViewWidget(QWidget* parent)
         secondVariableContainer->setAcceptedTypes(acceptedTypes);
         secondVariableContainer->setMaxElements(1);
         QObject::connect(secondVariableContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-        QObject::connect(secondVariableContainer.get(), &BuilderContainer::updateParameterWidgets, this, &AbstractElement::updateParameterWidgets);
+        QObject::connect(secondVariableContainer.get(), &BuilderContainer::notifyToParameterWidgets, this, &AbstractElement::notifyToParameterWidgets);
         wdgLay->addWidget(secondVariableContainer.get(), 0, 2);
     }
 
