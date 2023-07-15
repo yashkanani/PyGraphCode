@@ -33,7 +33,7 @@ protected:
 signals:
     void updateResultedTextView();
     void EnsureVisible(int xPosition, int yPosition, int xmargin = 50, int ymargin = 50);
-    void updateParameterWidgets(QWidget* element, bool addWidget, QString label = "");
+    void notifyToParameterWidgets();
 
 private:
     ContainerInformationList containerInformationList;

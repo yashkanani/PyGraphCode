@@ -13,17 +13,22 @@ ParameterUIBuilder::ParameterUIBuilder(BuilderContainer* builderContainer, QWidg
 
     if (m_builderContainer) {
         // Create a connection to add or remove elements when the builderContainer emits the signal
-        connect(m_builderContainer, &BuilderContainer::updateParameterWidgets, this, &ParameterUIBuilder::updateParameterList);
+        connect(m_builderContainer, &BuilderContainer::notifyToParameterWidgets, this, &ParameterUIBuilder::updateParameterList);
     }
 }
 
-void ParameterUIBuilder::updateParameterList(QWidget* element, bool addWidget, QString label)
+void ParameterUIBuilder::updateParameterList()
 {
+    QWidget* element = nullptr;
+    bool addWidget = false;
+    QString label = "";
     if (addWidget) {
         addToUI(label, element);
     } else {
         removeFromUI(element);
     }
+
+    // New UPdateParameter UI Funcation Needs too call.
 }
 
 void ParameterUIBuilder::addToUI(QString label, QWidget* widget)

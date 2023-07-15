@@ -123,7 +123,8 @@ void BuilderContainer::dragEnterEvent(QDragEnterEvent* event)
     const QMimeData* mimeData = event->mimeData();
     const QVariant& elementPointer = mimeData->property("element");
     if (elementPointer.isValid()) {
-        std::shared_ptr<AbstractElement> element = qvariant_cast<AbstractElement*>(elementPointer)->clone();
+        //std::shared_ptr<AbstractElement> element = qvariant_cast<AbstractElement*>(elementPointer)->clone();
+        AbstractElement* element = qvariant_cast<AbstractElement*>(elementPointer);
         if (element && isDropAccepted(element->getType())) {
             event->acceptProposedAction();
             return;
@@ -293,7 +294,7 @@ void BuilderContainer::addInformationAndView(std::shared_ptr<AbstractElement> el
     }
 
     connect(element.get(), &AbstractElement::childValueChanged, this, &BuilderContainer::updateResultedTextView);
-    connect(element.get(), &AbstractElement::updateParameterWidgets, this, &BuilderContainer::updateParameterWidgets);
+    connect(element.get(), &AbstractElement::notifyToParameterWidgets, this, &BuilderContainer::notifyToParameterWidgets);
 
     // add element view
     QWidget* viewWidget = element->getViewWidget();

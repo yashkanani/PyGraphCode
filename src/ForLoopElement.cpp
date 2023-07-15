@@ -149,7 +149,7 @@ QWidget* ForLoopElement::getViewWidget(QWidget* parent)
     if (variableContainer) {
         startContainer->setAcceptedTypes(acceptedTypes);
         QObject::connect(variableContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-        QObject::connect(variableContainer.get(), &BuilderContainer::updateParameterWidgets, this, &AbstractElement::updateParameterWidgets);
+        QObject::connect(variableContainer.get(), &BuilderContainer::notifyToParameterWidgets, this, &AbstractElement::notifyToParameterWidgets);
         variableLay->addWidget(variableContainer.get());
     }
 
@@ -170,7 +170,7 @@ QWidget* ForLoopElement::getViewWidget(QWidget* parent)
         startContainer->setAcceptedTypes(acceptedTypes);
         startContainer->setMaxElements(1);
         QObject::connect(startContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-        QObject::connect(startContainer.get(), &BuilderContainer::updateParameterWidgets, this, &AbstractElement::updateParameterWidgets);
+        QObject::connect(startContainer.get(), &BuilderContainer::notifyToParameterWidgets, this, &AbstractElement::notifyToParameterWidgets);
         endVariableLay->addWidget(startContainer.get());
         startContainer->hide();
     }
@@ -179,7 +179,7 @@ QWidget* ForLoopElement::getViewWidget(QWidget* parent)
         endContainer->setAcceptedTypes(acceptedTypes);
         endContainer->setMaxElements(1);
         QObject::connect(endContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-        QObject::connect(endContainer.get(), &BuilderContainer::updateParameterWidgets, this, &AbstractElement::updateParameterWidgets);
+        QObject::connect(endContainer.get(), &BuilderContainer::notifyToParameterWidgets, this, &AbstractElement::notifyToParameterWidgets);
         endVariableLay->addWidget(endContainer.get());
         endContainer->show();
     }
@@ -188,7 +188,7 @@ QWidget* ForLoopElement::getViewWidget(QWidget* parent)
         incrementContainer->setAcceptedTypes(acceptedTypes);
         incrementContainer->setMaxElements(1);
         QObject::connect(incrementContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-        QObject::connect(incrementContainer.get(), &BuilderContainer::updateParameterWidgets, this, &AbstractElement::updateParameterWidgets);
+        QObject::connect(incrementContainer.get(), &BuilderContainer::notifyToParameterWidgets, this, &AbstractElement::notifyToParameterWidgets);
         endVariableLay->addWidget(incrementContainer.get());
         incrementContainer->hide();
     }
@@ -197,7 +197,7 @@ QWidget* ForLoopElement::getViewWidget(QWidget* parent)
 
     if (bodyContainer) {
         QObject::connect(bodyContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-        QObject::connect(bodyContainer.get(), &BuilderContainer::updateParameterWidgets, this, &AbstractElement::updateParameterWidgets);
+        QObject::connect(bodyContainer.get(), &BuilderContainer::notifyToParameterWidgets, this, &AbstractElement::notifyToParameterWidgets);
         wdgLayout->addWidget(bodyContainer.get(), 1, 0, 1, 2);
     }
 

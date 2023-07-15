@@ -75,7 +75,7 @@ QWidget* UserDefinedElement::getViewWidget(QWidget* parent)
 
     if (userContainer != nullptr) {
         QObject::connect(userContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-        QObject::connect(userContainer.get(), &BuilderContainer::updateParameterWidgets, this, &AbstractElement::updateParameterWidgets);
+        QObject::connect(userContainer.get(), &BuilderContainer::notifyToParameterWidgets, this, &AbstractElement::notifyToParameterWidgets);
         containerLayout->addWidget(userContainer.get());
     }
 

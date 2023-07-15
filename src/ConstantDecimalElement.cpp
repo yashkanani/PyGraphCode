@@ -102,13 +102,13 @@ QWidget* ConstantDecimalElement::getViewWidget(QWidget* parent)
                 // add staticValueLineEdit to parameter List, and it will auto matically remove widget from element Group box.
                 isAddedToUI = true;
                 labelForUI = dialog.getText();
-                emit updateParameterWidgets(staticValueLineEdit, true, dialog.getText()); 
+                emit notifyToParameterWidgets(); 
             }
 
         } else {
             isAddedToUI = false;
             labelForUI = "";
-            emit updateParameterWidgets(staticValueLineEdit, false); // Remove from parameter List staticValueLineEdit
+            emit notifyToParameterWidgets(); // Remove from parameter List staticValueLineEdit
             wdgLayout->addWidget(staticValueLineEdit);  // add again back to element Group box.
         }
     });
@@ -119,7 +119,7 @@ QWidget* ConstantDecimalElement::getViewWidget(QWidget* parent)
     wdgLayout->addWidget(staticValueLineEdit);
 
     if (isAddedToUI) {
-        emit updateParameterWidgets(staticValueLineEdit, true, labelForUI); 
+        emit notifyToParameterWidgets(); 
     }
    
     return wdg;

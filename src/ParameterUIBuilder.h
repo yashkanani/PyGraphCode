@@ -14,7 +14,7 @@ public:
     explicit ParameterUIBuilder(BuilderContainer* builderContainer, QWidget* parent = nullptr);
 
 private slots:
-    void updateParameterList(QWidget* element, bool addWidget, QString label = "");
+    void updateParameterList();
 
 private:
 

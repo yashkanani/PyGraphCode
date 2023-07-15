@@ -125,7 +125,7 @@ QWidget* ConditionalElement::getViewWidget(QWidget* parent)
         firstVariableContainer->setAcceptedTypes(acceptedTypes);
         firstVariableContainer->setMaxElements(1);
         QObject::connect(firstVariableContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-        QObject::connect(firstVariableContainer.get(), &BuilderContainer::updateParameterWidgets, this, &AbstractElement::updateParameterWidgets);
+        QObject::connect(firstVariableContainer.get(), &BuilderContainer::notifyToParameterWidgets, this, &AbstractElement::notifyToParameterWidgets);
         wdgLay->addWidget(firstVariableContainer.get(), 0, 0);
     }
 
@@ -151,7 +151,7 @@ QWidget* ConditionalElement::getViewWidget(QWidget* parent)
         secondVariableContainer->setAcceptedTypes(acceptedTypes);
         secondVariableContainer->setMaxElements(1);
         QObject::connect(secondVariableContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
-        QObject::connect(secondVariableContainer.get(), &BuilderContainer::updateParameterWidgets, this, &AbstractElement::updateParameterWidgets);
+        QObject::connect(secondVariableContainer.get(), &BuilderContainer::notifyToParameterWidgets, this, &AbstractElement::notifyToParameterWidgets);
         wdgLay->addWidget(secondVariableContainer.get(), 0, 2);
     }
 

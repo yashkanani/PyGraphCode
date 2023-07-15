@@ -10,6 +10,7 @@
 
 class ElementUserInputs;
 class CodeText;
+class ParameterUIBuilder;
 class AbstractElement : public QObject {
     Q_OBJECT
 public:
@@ -24,10 +25,10 @@ public:
     virtual QWidget* getViewWidget(QWidget* parent = nullptr) = 0;
     virtual void setUserInput(std::shared_ptr<ElementUserInputs> userInput) = 0;
     virtual std::shared_ptr<ElementUserInputs> getUserInput() = 0;
-
+    virtual void updateParameterWidgets(std::shared_ptr<ParameterUIBuilder> parameterUIBuilder) {};
 signals:
     void childValueChanged();
-    void updateParameterWidgets(QWidget* element, bool addWidget, QString label = "");
+    void notifyToParameterWidgets();
 
 protected:
     BasicElementType type;
