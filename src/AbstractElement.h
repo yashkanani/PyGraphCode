@@ -25,7 +25,7 @@ public:
     virtual QWidget* getViewWidget(QWidget* parent = nullptr) = 0;
     virtual void setUserInput(std::shared_ptr<ElementUserInputs> userInput) = 0;
     virtual std::shared_ptr<ElementUserInputs> getUserInput() = 0;
-    virtual void updateParameterWidgets(std::shared_ptr<ParameterUIBuilder> parameterUIBuilder) {};
+    virtual void updateParameterWidgets(ParameterUIBuilder* const parameterUIBuilder) = 0;
 signals:
     void childValueChanged();
     void notifyToParameterWidgets();

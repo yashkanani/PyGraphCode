@@ -8,6 +8,7 @@
 
 #include "BuilderContainer.h"
 #include "CodeText.h"
+#include "ParameterUIBuilder.h"
 #include "ElementUserInputs.h"
 
 namespace key {
@@ -26,6 +27,17 @@ ConditionalElement::ConditionalElement()
     secondVariableContainer = std::make_shared<BuilderContainer>(nullptr, true);
     comboSelection = "is Greater than (>)";
 }
+
+void ConditionalElement::updateParameterWidgets(ParameterUIBuilder* const parameterUIBuilder)
+{
+    if (firstVariableContainer) {
+        firstVariableContainer->updateParameterWidgets(parameterUIBuilder);
+    }
+    if (secondVariableContainer) {
+        secondVariableContainer->updateParameterWidgets(parameterUIBuilder);
+    }
+}
+
 void ConditionalElement::setUserInput(std::shared_ptr<ElementUserInputs> userInput)
 {
     if (userInput != nullptr) {

@@ -12,14 +12,15 @@ class ParameterUIBuilder : public QWidget {
     Q_OBJECT
 public:
     explicit ParameterUIBuilder(BuilderContainer* builderContainer, QWidget* parent = nullptr);
+    void addToUI(QString label, QWidget* widget);
+    void removeFromUI(QWidget* widget);
+   
 
 private slots:
     void updateParameterList();
 
 private:
-
-    void addToUI(QString label, QWidget* widget);
-    void removeFromUI(QWidget* widget);
+    
     void handleParentDestroyed(QObject* parentObj);
     void clearWidgets();
 

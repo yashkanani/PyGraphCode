@@ -4,6 +4,7 @@
 #include <QLayout>
 #include <QLineEdit>
 #include "ElementUserInputs.h"
+#include "ParameterUIBuilder.h"
 
 namespace key {
     const std::string lineEditText = "inputText";
@@ -19,7 +20,9 @@ ConstantTextElement::ConstantTextElement()
 
     lineEditText = "PyGraph";
 }
-
+void ConstantTextElement::updateParameterWidgets(ParameterUIBuilder* const parameterUIBuilder)
+{
+}
 std::shared_ptr<AbstractElement> ConstantTextElement::clone() const
 {
     auto ret = std::make_shared<ConstantTextElement>();

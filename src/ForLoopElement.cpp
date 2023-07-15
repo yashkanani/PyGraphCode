@@ -8,6 +8,7 @@
 #include <qwidget.h>
 
 #include "ElementUserInputs.h"
+#include "ParameterUIBuilder.h"
 
 namespace key {
 const std::string comboSelectionString = "comboSelection";
@@ -32,7 +33,24 @@ ForLoopElement::ForLoopElement()
     bodyContainer = std::make_shared<BuilderContainer>(nullptr, true);
     endContainer = std::make_shared<BuilderContainer>(nullptr, true);
 }
-
+void ForLoopElement::updateParameterWidgets(ParameterUIBuilder* const  parameterUIBuilder)
+{
+    if (variableContainer) {
+        variableContainer->updateParameterWidgets(parameterUIBuilder);
+    }
+    if (startContainer) {
+        startContainer->updateParameterWidgets(parameterUIBuilder);
+    }
+    if (incrementContainer) {
+        incrementContainer->updateParameterWidgets(parameterUIBuilder);
+    }
+    if (bodyContainer) {
+        bodyContainer->updateParameterWidgets(parameterUIBuilder);
+    }
+    if (endContainer) {
+        endContainer->updateParameterWidgets(parameterUIBuilder);
+    }
+}
 void ForLoopElement::setUserInput(std::shared_ptr<ElementUserInputs> userInput)
 {
     if (userInput != nullptr) {

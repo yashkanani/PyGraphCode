@@ -9,6 +9,7 @@
 #include "ContainerInformation.h"
 #include <qframe.h>
 
+class ParameterUIBuilder;
 class CodeText;
 class BuilderContainer : public QFrame {
     Q_OBJECT
@@ -21,6 +22,8 @@ public:
     void removeElementFromContainerInformation(const AbstractElement* element);
     const ContainerInformationList& getContainerInformation() const;
     void appendContainerInformationList(const ContainerInformationList& informationList, int insertIndex = 0);
+    void updateParameterWidgets(ParameterUIBuilder* const parameterUIBuilder);
+
 
 protected:
     void dragEnterEvent(QDragEnterEvent* event) override;

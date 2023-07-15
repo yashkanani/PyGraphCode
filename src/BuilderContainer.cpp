@@ -10,6 +10,7 @@
 #include "AbstractElement.h"
 #include "BuilderContainer.h"
 #include "CodeText.h"
+#include "ParameterUIBuilder.h"
 #include "InternalDragEventHandler.h"
 
 BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
@@ -35,6 +36,17 @@ BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
     // which helps ensure that the arrow is drawn correctly.
     // To achieve this, a paint event is generated using the update function.
     QObject::connect(this, &BuilderContainer::updateResultedTextView, this, [=]() { update(); });
+}
+
+void BuilderContainer::updateParameterWidgets(ParameterUIBuilder* const parameterUIBuilder)
+{
+    for (const auto& child : containerInformationList) {
+        if (child.droppedItem == DroppedItem::ELEMENT) {
+            if (child.elementPointer) {
+                child.elementPointer->updateParameterWidgets(parameterUIBuilder);
+            }
+        }
+    }
 }
 
 std::shared_ptr<CodeText> BuilderContainer::getText(int indentLevel) const
@@ -281,6 +293,7 @@ void BuilderContainer::dropEvent(QDropEvent* event)
             hideDropIndicator(); // Hide the drop indicator
 
             emit updateResultedTextView(); // Update the text in ResultedTextView Widget.
+            emit notifyToParameterWidgets(); // Update the Parameter widget in ParameterUIBuilder.
 
             event->acceptProposedAction();
         }

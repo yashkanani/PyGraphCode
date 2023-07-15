@@ -6,6 +6,7 @@
 #include <QLineEdit>
 #include <qcheckbox.h>
 #include "InputLabelDialog.h"
+#include "ParameterUIBuilder.h"
 
 namespace key {
 const std::string lineEditValue = "inputText";
@@ -18,11 +19,23 @@ ConstantDecimalElement::ConstantDecimalElement()
     name = "Constant Number";
     image = QPixmap(":/resource/Variable.png");
     type = BasicElementType::CONSTANT_DECIMAL;
-
+   
+    tempLineHolder = nullptr;
     lineEditValue = "1.0";
     isAddedToUI = false;
-    labelForUI = "";
+    labelForUI = "";  
 }
+void ConstantDecimalElement::updateParameterWidgets(ParameterUIBuilder* const parameterUIBuilder)
+{
+   if (isAddedToUI && tempLineHolder) {
+        parameterUIBuilder->addToUI(labelForUI, tempLineHolder);
+   }
+
+   if ((isAddedToUI == false) && tempLineHolder) {
+       parameterUIBuilder->removeFromUI(tempLineHolder);
+   }
+}
+
 void ConstantDecimalElement::setUserInput(std::shared_ptr<ElementUserInputs> userInput)
 {
     if (userInput != nullptr) {
@@ -82,6 +95,7 @@ QWidget* ConstantDecimalElement::getViewWidget(QWidget* parent)
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     QLineEdit* staticValueLineEdit = new QLineEdit(wdg);
+    tempLineHolder = staticValueLineEdit;
     staticValueLineEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     QObject::connect(staticValueLineEdit, &QLineEdit::textChanged, [=](const QString& value) {
         lineEditValue = value;
@@ -118,9 +132,5 @@ QWidget* ConstantDecimalElement::getViewWidget(QWidget* parent)
     wdgLayout->addWidget(addToUIcheckBox);
     wdgLayout->addWidget(staticValueLineEdit);
 
-    if (isAddedToUI) {
-        emit notifyToParameterWidgets(); 
-    }
-   
     return wdg;
 }

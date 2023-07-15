@@ -7,6 +7,7 @@
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
+#include "ParameterUIBuilder.h"
 
 namespace key {
 const std::string conditionsContainer = "conditionsContainer";
@@ -23,6 +24,18 @@ IfLoopElement::IfLoopElement()
     conditionsContainer = std::make_shared<BuilderContainer>(nullptr, true);
     onTrueContainer = std::make_shared<BuilderContainer>(nullptr, true);
     onFalseContainer = std::make_shared<BuilderContainer>(nullptr, true);
+}
+void IfLoopElement::updateParameterWidgets(ParameterUIBuilder* const parameterUIBuilder)
+{
+    if (conditionsContainer) {
+        conditionsContainer->updateParameterWidgets(parameterUIBuilder);
+    }
+    if (onTrueContainer) {
+        onTrueContainer->updateParameterWidgets(parameterUIBuilder);
+    }
+    if (onFalseContainer) {
+        onFalseContainer->updateParameterWidgets(parameterUIBuilder);
+    }
 }
 
 void IfLoopElement::setUserInput(std::shared_ptr<ElementUserInputs> userInput)

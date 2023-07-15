@@ -8,6 +8,7 @@
 #include "BuilderContainer.h"
 #include "CodeText.h"
 #include "ElementUserInputs.h"
+#include "ParameterUIBuilder.h"
 
 namespace key {
 const std::string comboSelectionString = "comboSelection";
@@ -25,6 +26,16 @@ OperationElement::OperationElement()
     secondVariableContainer = std::make_shared<BuilderContainer>(nullptr, true);
     firstVariableContainer = std::make_shared<BuilderContainer>(nullptr, true);
 }
+void OperationElement::updateParameterWidgets(ParameterUIBuilder* const parameterUIBuilder)
+{
+    if (secondVariableContainer) {
+        secondVariableContainer->updateParameterWidgets(parameterUIBuilder);
+    }
+    if (firstVariableContainer) {
+        firstVariableContainer->updateParameterWidgets(parameterUIBuilder);
+    }
+}
+
 void OperationElement::setUserInput(std::shared_ptr<ElementUserInputs> userInput)
 {
     if (userInput != nullptr) {
