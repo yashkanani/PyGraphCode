@@ -1,6 +1,7 @@
 #include "CustomElementInputDialog.h"
 #include <QFormLayout>
 #include <QPushButton>
+#include "SettingsManager.h"
 
 CustomElementInputDialog::CustomElementInputDialog(QWidget* parent)
     : QDialog(parent)
@@ -58,6 +59,14 @@ QString CustomElementInputDialog::getSaveLocation() const
 
 void CustomElementInputDialog::handleBrowseButtonClicked()
 {
-    QString saveDirectory = QFileDialog::getExistingDirectory(this, "Select Save Directory");
-    saveLocationLineEdit->setText(saveDirectory);
+    QString lastSaveDirectory = SettingsManager::instance()->getValue("LastSaveDirectory").toString();
+
+    QString saveDirectory = QFileDialog::getExistingDirectory(this, "Select Save Directory", lastSaveDirectory);
+
+    if (!saveDirectory.isEmpty()) {
+        // Save the last selected directory
+        SettingsManager::instance()->setValue("LastSaveDirectory", saveDirectory);
+
+        saveLocationLineEdit->setText(saveDirectory);
+    }
 }
