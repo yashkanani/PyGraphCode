@@ -1,25 +1,15 @@
 #include "MainWindowUI.h"
 #include "MainWindow.h"
-
-#include "BuilderContainer.h"
-#include "BuilderControlsButtons.h"
-#include "ElementDragEventHandler.h"
 #include "ElementManager.h"
-#include "ElementsCreator.h"
 #include "ElementsListWidget.h"
-#include "ParameterUIBuilder.h"
-#include "ResultedTextView.h"
+#include "BuilderControlPanel.h"
 
-#include <iostream>
 #include <qcombobox.h>
 #include <qdebug.h>
-#include <qdrag.h>
 #include <qgridlayout.h>
 #include <qlabel.h>
 #include <qlineedit.h>
-#include <qmimedata.h>
 #include <qpushbutton.h>
-#include <qscrollarea.h>
 
 MainWindowUI::MainWindowUI(MainAppWindow* main)
     : d_mainWindow(main)
@@ -38,29 +28,10 @@ void MainWindowUI::createCentralWidget()
 
     ElementsListWidget* customElementWidget = new ElementsListWidget(centralWidget);
 
-    centralLayout->addWidget(getElementsWidget(centralWidget), 0, 0, 2, 1);
-    centralLayout->addWidget(customElementWidget, 2, 0, 2, 1);
-
-    QScrollArea* scrollBuilderArea = new QScrollArea(centralWidget);
-    scrollBuilderArea->setWidgetResizable(true); // Allow the scroll area to resize the widget
-    BuilderContainer* builderContainer = new BuilderContainer(scrollBuilderArea);
-    QObject::connect(builderContainer, &BuilderContainer::EnsureVisible, scrollBuilderArea, &QScrollArea::ensureVisible);
-    scrollBuilderArea->setWidget(builderContainer);
-
-    centralLayout->addWidget(getButtonWidget(builderContainer, customElementWidget, centralWidget), 0, 1);
-    centralLayout->addWidget(scrollBuilderArea, 1, 1, 3, 1);
-
-    centralLayout->addWidget(getElementsCreatorWidget(centralWidget), 0, 2, 2, 1);
-    centralLayout->addWidget(getResultedTextViewWidget(centralWidget, builderContainer), 2, 2, 2, 1);
-
-    ParameterUIBuilder* parameterHolderWidget = new ParameterUIBuilder(builderContainer, centralWidget);
-
-    centralLayout->addWidget(parameterHolderWidget, 0, 3,2,1);
-    // Set the column stretch to distribute remaining space
-    centralLayout->setRowStretch(1, 1);
-    centralLayout->setRowStretch(2, 2);
-    centralLayout->setColumnStretch(1, 2);
-    centralLayout->setColumnStretch(2, 1);
+    centralLayout->addWidget(getElementsWidget(centralWidget), 0, 0);
+    centralLayout->addWidget(customElementWidget, 1, 0);
+    centralLayout->addWidget(new BuilderControlPanel(customElementWidget, centralWidget), 0, 1, 2, 1);
+    centralLayout->setColumnStretch(1, 1);
 }
 
 QWidget* MainWindowUI::getElementsWidget(QWidget* parent)
@@ -119,23 +90,6 @@ QWidget* MainWindowUI::getElementsWidget(QWidget* parent)
     return elementHolder;
 }
 
-QWidget* MainWindowUI::getResultedTextViewWidget(QWidget* parent, BuilderContainer* builderContainer)
-{
-    ResultedTextView* resultedTextView = new ResultedTextView(parent, builderContainer);
-    return resultedTextView;
-}
-
-QWidget* MainWindowUI::getElementsCreatorWidget(QWidget* parent)
-{
-    ElementsCreator* elementsCreator = new ElementsCreator(parent);
-    return elementsCreator;
-}
-
-QWidget* MainWindowUI::getButtonWidget(BuilderContainer* builderContainer, ElementsListWidget* customElementWidget, QWidget* parent)
-{
-    BuilderControlsButtons* controlButtons = new BuilderControlsButtons(builderContainer, customElementWidget, parent);
-    return controlButtons;
-}
 void MainWindowUI::onSearchTextChanged(const QString& searchText)
 {
     qDebug() << "change text " << searchText;
