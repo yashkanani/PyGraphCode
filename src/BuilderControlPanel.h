@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QGridLayout>
+#include <qtablewidget.h>
 
 class ElementsListWidget;
 class BuilderContainer;
@@ -13,6 +14,8 @@ public:
     explicit BuilderControlPanel(ElementsListWidget* customElementWidget, QWidget* parent = nullptr);
 
 private:
+    QTabWidget* createTabWidget(BuilderContainer* builderContainer);
+
     QWidget* getResultedTextViewWidget(QWidget*, BuilderContainer* builderContainer);
     QWidget* getElementsCreatorWidget(QWidget* parent);
 
