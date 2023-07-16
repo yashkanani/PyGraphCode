@@ -60,6 +60,7 @@ set(HEADERS
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ParameterUIBuilder.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/InputLabelDialog.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/SettingsManager.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderControlPanel.h
    )
 
 set(SOURCES
@@ -91,6 +92,7 @@ set(SOURCES
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ParameterUIBuilder.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/InputLabelDialog.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/SettingsManager.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderControlPanel.cpp
     )
 
 
