@@ -9,6 +9,7 @@
 #include <qwidget.h>
 
 #include "ElementUserInputs.h"
+#include "ParameterUIBuilder.h"
 
 namespace key {
    const std::string dynamicValueContainer = "value";
@@ -22,6 +23,13 @@ WriteVariableElement::WriteVariableElement()
 
     dynamicValueContainer = std::make_shared<BuilderContainer>(nullptr, true);
 }
+
+void WriteVariableElement::updateParameterWidgets(ParameterUIBuilder* const parameterUIBuilder)
+{
+    if (dynamicValueContainer) {
+        dynamicValueContainer->updateParameterWidgets(parameterUIBuilder);
+    }
+}
 void WriteVariableElement::setUserInput(std::shared_ptr<ElementUserInputs> userInput)
 {
     if (userInput != nullptr) {
@@ -34,7 +42,8 @@ std::shared_ptr<ElementUserInputs> WriteVariableElement::getUserInput()
     ret->addContainer(key::dynamicValueContainer, dynamicValueContainer);
     return ret;
 }
-std::shared_ptr<AbstractElement> WriteVariableElement::clone() const
+
+    std::shared_ptr<AbstractElement> WriteVariableElement::clone() const
 {
     auto ret = std::make_shared<WriteVariableElement>();
     ret->setName(this->name);
@@ -87,6 +96,7 @@ QWidget* WriteVariableElement::getViewWidget(QWidget* parent)
     dynamicValueContainer->setAcceptedTypes(acceptedTypes);
     dynamicValueContainer->setMaxElements(1);
     QObject::connect(dynamicValueContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+    QObject::connect(dynamicValueContainer.get(), &BuilderContainer::notifyToParameterWidgets, this, &AbstractElement::notifyToParameterWidgets);
     wdgLayout->addWidget(dynamicValueContainer.get());
 
     return wdg;

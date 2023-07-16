@@ -10,6 +10,7 @@
 #include "AbstractElement.h"
 #include "BuilderContainer.h"
 #include "CodeText.h"
+#include "ParameterUIBuilder.h"
 #include "InternalDragEventHandler.h"
 
 BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
@@ -35,6 +36,17 @@ BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
     // which helps ensure that the arrow is drawn correctly.
     // To achieve this, a paint event is generated using the update function.
     QObject::connect(this, &BuilderContainer::updateResultedTextView, this, [=]() { update(); });
+}
+
+void BuilderContainer::updateParameterWidgets(ParameterUIBuilder* const parameterUIBuilder)
+{
+    for (const auto& child : containerInformationList) {
+        if (child.droppedItem == DroppedItem::ELEMENT) {
+            if (child.elementPointer) {
+                child.elementPointer->updateParameterWidgets(parameterUIBuilder);
+            }
+        }
+    }
 }
 
 std::shared_ptr<CodeText> BuilderContainer::getText(int indentLevel) const
@@ -123,7 +135,8 @@ void BuilderContainer::dragEnterEvent(QDragEnterEvent* event)
     const QMimeData* mimeData = event->mimeData();
     const QVariant& elementPointer = mimeData->property("element");
     if (elementPointer.isValid()) {
-        std::shared_ptr<AbstractElement> element = qvariant_cast<AbstractElement*>(elementPointer)->clone();
+        //std::shared_ptr<AbstractElement> element = qvariant_cast<AbstractElement*>(elementPointer)->clone();
+        AbstractElement* element = qvariant_cast<AbstractElement*>(elementPointer);
         if (element && isDropAccepted(element->getType())) {
             event->acceptProposedAction();
             return;
@@ -280,6 +293,7 @@ void BuilderContainer::dropEvent(QDropEvent* event)
             hideDropIndicator(); // Hide the drop indicator
 
             emit updateResultedTextView(); // Update the text in ResultedTextView Widget.
+            emit notifyToParameterWidgets(); // Update the Parameter widget in ParameterUIBuilder.
 
             event->acceptProposedAction();
         }
@@ -292,12 +306,15 @@ void BuilderContainer::addInformationAndView(std::shared_ptr<AbstractElement> el
         return;
     }
 
+    connect(element.get(), &AbstractElement::childValueChanged, this, &BuilderContainer::updateResultedTextView);
+    connect(element.get(), &AbstractElement::notifyToParameterWidgets, this, &BuilderContainer::notifyToParameterWidgets);
+
     // add element view
     QWidget* viewWidget = element->getViewWidget();
     viewWidget->setProperty("element", QVariant::fromValue(dynamic_cast<AbstractElement*>(element.get())));
     viewWidget->installEventFilter(new InternalDragEventHandler(this));
     addElementWidget(viewWidget, insertIndex);
-    connect(element.get(), &AbstractElement::childValueChanged, this, &BuilderContainer::updateResultedTextView);
+    
 
     // add information
     ContainerInformation info;

@@ -4,9 +4,14 @@
 #include <QGroupBox>
 #include <QLayout>
 #include <QLineEdit>
+#include <qcheckbox.h>
+#include "InputLabelDialog.h"
+#include "ParameterUIBuilder.h"
 
 namespace key {
 const std::string lineEditValue = "inputText";
+const std::string addedToUI = "addedToUI";
+const std::string lableForUI = "UILable";
 }
 
 ConstantDecimalElement::ConstantDecimalElement()
@@ -14,12 +19,28 @@ ConstantDecimalElement::ConstantDecimalElement()
     name = "Constant Number";
     image = QPixmap(":/resource/Variable.png");
     type = BasicElementType::CONSTANT_DECIMAL;
-
+   
+    tempLineHolder = nullptr;
     lineEditValue = "1.0";
+    isAddedToUI = false;
+    labelForUI = "";  
 }
+void ConstantDecimalElement::updateParameterWidgets(ParameterUIBuilder* const parameterUIBuilder)
+{
+   if (isAddedToUI && tempLineHolder) {
+        parameterUIBuilder->addToUI(labelForUI, tempLineHolder);
+   }
+
+   if ((isAddedToUI == false) && tempLineHolder) {
+       parameterUIBuilder->removeFromUI(tempLineHolder);
+   }
+}
+
 void ConstantDecimalElement::setUserInput(std::shared_ptr<ElementUserInputs> userInput)
 {
     if (userInput != nullptr) {
+        isAddedToUI = userInput->getString(key::addedToUI).toInt();
+        labelForUI = userInput->getString(key::lableForUI);
         lineEditValue = userInput->getString(key::lineEditValue);
     }
 }
@@ -27,12 +48,16 @@ std::shared_ptr<ElementUserInputs> ConstantDecimalElement::getUserInput()
 {
     std::shared_ptr<ElementUserInputs> ret = std::make_shared<ElementUserInputs>();
     ret->addString(key::lineEditValue, lineEditValue);
+    ret->addString(key::addedToUI, QString::number(isAddedToUI));
+    ret->addString(key::lableForUI, labelForUI);
     return ret;
 }
 std::shared_ptr<AbstractElement> ConstantDecimalElement::clone() const
 {
     auto ret = std::make_shared<ConstantDecimalElement>();
     ret->lineEditValue = lineEditValue;
+    ret->isAddedToUI = isAddedToUI;
+    ret->labelForUI = labelForUI;
 
     return ret;
 }
@@ -70,12 +95,41 @@ QWidget* ConstantDecimalElement::getViewWidget(QWidget* parent)
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     QLineEdit* staticValueLineEdit = new QLineEdit(wdg);
+    tempLineHolder = staticValueLineEdit;
     staticValueLineEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     QObject::connect(staticValueLineEdit, &QLineEdit::textChanged, [=](const QString& value) {
         lineEditValue = value;
         emit childValueChanged();
     });
+
+    QCheckBox* addToUIcheckBox = new QCheckBox("add to UI", wdg);
+    addToUIcheckBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    addToUIcheckBox->setChecked(isAddedToUI);
+    
+
+
+    QObject::connect(addToUIcheckBox, &QCheckBox::stateChanged, [=](int state) {
+        if (state == Qt::Checked) {
+            InputLabelDialog dialog("Parameter Label:", wdg);
+
+            if (dialog.exec() == QDialog::Accepted) {
+                // add staticValueLineEdit to parameter List, and it will auto matically remove widget from element Group box.
+                isAddedToUI = true;
+                labelForUI = dialog.getText();
+                emit notifyToParameterWidgets(); 
+            }
+
+        } else {
+            isAddedToUI = false;
+            labelForUI = "";
+            emit notifyToParameterWidgets(); // Remove from parameter List staticValueLineEdit
+            wdgLayout->addWidget(staticValueLineEdit);  // add again back to element Group box.
+        }
+    });
+
     staticValueLineEdit->setText(lineEditValue);
+    
+    wdgLayout->addWidget(addToUIcheckBox);
     wdgLayout->addWidget(staticValueLineEdit);
 
     return wdg;

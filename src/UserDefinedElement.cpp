@@ -2,6 +2,7 @@
 #include "BuilderContainer.h"
 #include "CodeText.h"
 #include "ElementUserInputs.h"
+#include "ParameterUIBuilder.h"
 
 #include <qcheckbox.h>
 #include <qgroupbox.h>
@@ -20,7 +21,12 @@ UserDefinedElement::UserDefinedElement()
     userContainer = std::make_shared<BuilderContainer>(nullptr, true);
     isWidgetVisible = false;
 }
-
+void UserDefinedElement::updateParameterWidgets(ParameterUIBuilder* const parameterUIBuilder)
+{
+    if (userContainer) {
+        userContainer->updateParameterWidgets(parameterUIBuilder);
+    }
+}
 void UserDefinedElement::setUserInput(std::shared_ptr<ElementUserInputs> userInput)
 {
     if (userInput != nullptr) {
@@ -34,6 +40,8 @@ std::shared_ptr<ElementUserInputs> UserDefinedElement::getUserInput()
     ret->addContainer(key::usercontainerKey, userContainer);
     return ret;
 }
+
+
 
 std::string UserDefinedElement::getUserInputkey()
 {
@@ -55,7 +63,7 @@ std::shared_ptr<CodeText> UserDefinedElement::getText(int indentLevel) const
 {
     std::shared_ptr<CodeText> ret = std::make_shared<CodeText>(indentLevel);
 
-    ret = userContainer->getText(0);
+    ret->append(*(userContainer->getText(ret->getCurrentIndentOfBody())));
 
     return ret;
 }
@@ -75,6 +83,7 @@ QWidget* UserDefinedElement::getViewWidget(QWidget* parent)
 
     if (userContainer != nullptr) {
         QObject::connect(userContainer.get(), &BuilderContainer::updateResultedTextView, this, &AbstractElement::childValueChanged);
+        QObject::connect(userContainer.get(), &BuilderContainer::notifyToParameterWidgets, this, &AbstractElement::notifyToParameterWidgets);
         containerLayout->addWidget(userContainer.get());
     }
 

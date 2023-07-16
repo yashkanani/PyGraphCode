@@ -19,7 +19,9 @@ ReadVariableElement::ReadVariableElement()
     image = QPixmap(":/resource/Variable.png");
     type = BasicElementType::READ_VARIABLE;
 }
-
+void ReadVariableElement::updateParameterWidgets(ParameterUIBuilder* const parameterUIBuilder)
+{
+}
 void ReadVariableElement::setUserInput(std::shared_ptr<ElementUserInputs> userInput)
 {
     if (userInput != nullptr) {

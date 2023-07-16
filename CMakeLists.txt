@@ -57,6 +57,8 @@ set(HEADERS
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsListWidget.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/UserDefinedElement.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/CustomElementInputDialog.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ParameterUIBuilder.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/InputLabelDialog.h
    )
 
 set(SOURCES
@@ -85,6 +87,8 @@ set(SOURCES
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsListWidget.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/UserDefinedElement.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/CustomElementInputDialog.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ParameterUIBuilder.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/InputLabelDialog.cpp
     )
 
 

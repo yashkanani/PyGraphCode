@@ -2,15 +2,17 @@
 #include "MainWindow.h"
 
 #include "BuilderContainer.h"
+#include "BuilderControlsButtons.h"
 #include "ElementDragEventHandler.h"
 #include "ElementManager.h"
 #include "ElementsCreator.h"
-#include "ResultedTextView.h"
-#include "BuilderControlsButtons.h"
 #include "ElementsListWidget.h"
+#include "ParameterUIBuilder.h"
+#include "ResultedTextView.h"
 
 #include <iostream>
 #include <qcombobox.h>
+#include <qdebug.h>
 #include <qdrag.h>
 #include <qgridlayout.h>
 #include <qlabel.h>
@@ -18,7 +20,6 @@
 #include <qmimedata.h>
 #include <qpushbutton.h>
 #include <qscrollarea.h>
-#include <qdebug.h>
 
 MainWindowUI::MainWindowUI(MainAppWindow* main)
     : d_mainWindow(main)
@@ -35,10 +36,7 @@ void MainWindowUI::createCentralWidget()
     QGridLayout* centralLayout = new QGridLayout(centralWidget);
     d_mainWindow->setCentralWidget(centralWidget);
 
-    
-
     ElementsListWidget* customElementWidget = new ElementsListWidget(centralWidget);
-  
 
     centralLayout->addWidget(getElementsWidget(centralWidget), 0, 0, 2, 1);
     centralLayout->addWidget(customElementWidget, 2, 0, 2, 1);
@@ -55,6 +53,9 @@ void MainWindowUI::createCentralWidget()
     centralLayout->addWidget(getElementsCreatorWidget(centralWidget), 0, 2, 2, 1);
     centralLayout->addWidget(getResultedTextViewWidget(centralWidget, builderContainer), 2, 2, 2, 1);
 
+    ParameterUIBuilder* parameterHolderWidget = new ParameterUIBuilder(builderContainer, centralWidget);
+
+    centralLayout->addWidget(parameterHolderWidget, 0, 3,2,1);
     // Set the column stretch to distribute remaining space
     centralLayout->setRowStretch(1, 1);
     centralLayout->setRowStretch(2, 2);
@@ -107,7 +108,7 @@ QWidget* MainWindowUI::getElementsWidget(QWidget* parent)
     // Iterate through all elements and create draggable icons in the grid layout
     ElementManager& elementManager = ElementManager::getInstance();
     std::vector<AbstractElement*> allElements = elementManager.getAllElements();
-    for (AbstractElement* element : allElements) { 
+    for (AbstractElement* element : allElements) {
         elementsListHolder->addElement(element);
     }
 
@@ -117,7 +118,6 @@ QWidget* MainWindowUI::getElementsWidget(QWidget* parent)
 
     return elementHolder;
 }
-
 
 QWidget* MainWindowUI::getResultedTextViewWidget(QWidget* parent, BuilderContainer* builderContainer)
 {
@@ -133,7 +133,7 @@ QWidget* MainWindowUI::getElementsCreatorWidget(QWidget* parent)
 
 QWidget* MainWindowUI::getButtonWidget(BuilderContainer* builderContainer, ElementsListWidget* customElementWidget, QWidget* parent)
 {
-    BuilderControlsButtons* controlButtons = new BuilderControlsButtons(builderContainer, customElementWidget, parent); 
+    BuilderControlsButtons* controlButtons = new BuilderControlsButtons(builderContainer, customElementWidget, parent);
     return controlButtons;
 }
 void MainWindowUI::onSearchTextChanged(const QString& searchText)
