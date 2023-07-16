@@ -4,7 +4,7 @@
 #include "ElementManager.h"
 #include "ElementsListWidget.h"
 #include "JSONDataHandler.h"
-
+#include "SettingsManager.h"
 #include <QtWidgets>
 
 BuilderControlsButtons::BuilderControlsButtons(BuilderContainer* builderContainer, ElementsListWidget* customElementWidget, QWidget* parent)
@@ -65,7 +65,6 @@ void BuilderControlsButtons::handleSaveButtonClicked()
             std::shared_ptr<AbstractElement> customElement = ElementManager::getInstance().createCustomElement(resultedJsonPacket.displayName, resultedJsonPacket.containerinformationList);
             m_customElementWidget->addElement(customElement.get());
 
-            qDebug() << "JSON data written to file successfully.";
         }
     }
 }
@@ -75,8 +74,10 @@ void BuilderControlsButtons::handleLoadButtonClicked()
     // Use the builderContainer pointer here
     if (m_customElementWidget) {
 
+        QString lastLocation = SettingsManager::instance()->getValue("LastOpenLocation").toString();
+
         // Open file dialog for JSON file selection
-        QStringList fileNames = QFileDialog::getOpenFileNames(nullptr, "Select JSON Files", "", "JSON Files (*.json)");
+        QStringList fileNames = QFileDialog::getOpenFileNames(nullptr, "Select JSON Files", lastLocation, "JSON Files (*.json)");
 
         // Process each selected file
         for (const QString& filePath : fileNames) {
@@ -86,6 +87,13 @@ void BuilderControlsButtons::handleLoadButtonClicked()
             // Create the Custom Element and added in Customelement Widget.
             std::shared_ptr<AbstractElement> customElement = ElementManager::getInstance().createCustomElement(jsonPacket.displayName, jsonPacket.containerinformationList);
             m_customElementWidget->addElement(customElement.get());
+        }
+
+        if (!fileNames.isEmpty()) {
+            // Save the last open location
+            QFileInfo fileInfo(fileNames.first());
+            QString selectedDirectory = fileInfo.absolutePath();
+            SettingsManager::instance()->setValue("LastOpenLocation", selectedDirectory);
         }
 
         return;
