@@ -47,9 +47,9 @@ QTabWidget* BuilderControlPanel::createTabWidget(BuilderContainer* builderContai
 
     ParameterUIBuilder* parameterHolderWidget = new ParameterUIBuilder(builderContainer, this);
 
+    tabWidget->addTab(parameterHolderWidget, "Parameters");
     tabWidget->addTab(codeViewWidget, "SourceCode");
-    tabWidget->addTab(parameterHolderWidget, "UserInput");
-
+    
     return tabWidget;
 }
 
