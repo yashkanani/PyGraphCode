@@ -24,7 +24,7 @@ private:
     void handleParentDestroyed(QObject* parentObj);
     void clearWidgets();
 
-    QVBoxLayout* mainLayout;
+    QVBoxLayout* parameterLay;
     QHash<QWidget*, QLabel*> widgetLabelMap;
     QHash<QWidget*, QObject*> originalParents;
     BuilderContainer* m_builderContainer;

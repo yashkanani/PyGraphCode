@@ -8,8 +8,15 @@ ParameterUIBuilder::ParameterUIBuilder(BuilderContainer* builderContainer, QWidg
     : QWidget(parent)
     , m_builderContainer(builderContainer)
 {
-    mainLayout = new QVBoxLayout(this);
-    mainLayout->addWidget(new QPushButton("hello"));
+
+    QVBoxLayout* mainLayout = new QVBoxLayout(this);
+
+    QWidget* parameterWidget = new QWidget(this);
+    parameterLay = new QVBoxLayout(parameterWidget);
+
+    mainLayout->addWidget(parameterWidget);
+    mainLayout->addStretch();
+
     setLayout(mainLayout);
 
     if (m_builderContainer) {
@@ -41,7 +48,7 @@ void ParameterUIBuilder::addToUI(QString label, QWidget* widget)
         rowLayout->addWidget(labelWidget);
         rowLayout->addWidget(widget);
 
-        mainLayout->addLayout(rowLayout);
+        parameterLay->addLayout(rowLayout);
         widgetLabelMap.insert(widget, labelWidget);
     }
 }
@@ -50,8 +57,8 @@ void ParameterUIBuilder::removeFromUI(QWidget* widget)
 {
     if (widgetLabelMap.contains(widget)) {
         QHBoxLayout* rowLayout = nullptr;
-        for (int i = 0; i < mainLayout->count(); ++i) {
-            if (QLayoutItem* item = mainLayout->itemAt(i)) {
+        for (int i = 0; i < parameterLay->count(); ++i) {
+            if (QLayoutItem* item = parameterLay->itemAt(i)) {
                 if (QHBoxLayout* layout = qobject_cast<QHBoxLayout*>(item->layout())) {
                     if (layout->indexOf(widget) >= 0) {
                         rowLayout = layout;
@@ -62,7 +69,7 @@ void ParameterUIBuilder::removeFromUI(QWidget* widget)
         }
 
         if (rowLayout) {
-            mainLayout->removeItem(rowLayout);
+            parameterLay->removeItem(rowLayout);
 
             QLabel* labelWidget = widgetLabelMap.take(widget);
             rowLayout->removeWidget(labelWidget);
@@ -75,7 +82,7 @@ void ParameterUIBuilder::clearWidgets()
 {
     while (!widgetLabelMap.isEmpty()) {
         QWidget* widget = widgetLabelMap.keys().first();
-        mainLayout->removeWidget(widget);
+        parameterLay->removeWidget(widget);
 
         QLabel* labelWidget = widgetLabelMap.take(widget);
         labelWidget->deleteLater();
