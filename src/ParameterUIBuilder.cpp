@@ -57,10 +57,13 @@ void ParameterUIBuilder::addToUI(QString label, QWidget* widget)
 
         QHBoxLayout* rowLayout = new QHBoxLayout();
         QLabel* labelWidget = new QLabel(label);
-        rowLayout->addWidget(labelWidget);
-        rowLayout->addWidget(widget);
+        rowLayout->addWidget(labelWidget, 0, Qt::AlignRight);
+        rowLayout->addWidget(widget, 0, Qt::AlignLeft);
+      
 
         parameterLay->addLayout(rowLayout);
+        parameterLay->setAlignment(rowLayout,  Qt::AlignHCenter);
+
         widgetLabelMap.insert(widget, labelWidget);
     }
 }
