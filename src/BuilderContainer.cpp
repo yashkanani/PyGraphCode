@@ -22,15 +22,14 @@ BuilderContainer::BuilderContainer(QWidget* parent, bool isSubContainer)
     builderContainerlayout->addStretch(1);
     builderContainerlayout->setSpacing(25);
     setLayout(builderContainerlayout);
-
+    setObjectName("BuilderContainer");
+    
     if (isSubContainer) {
-        setObjectName("BuilderContainerWidget");
-        setStyleSheet(
-            "QWidget#BuilderContainerWidget {"
-            "   border: 1px solid black;"
-            "   border-radius: 5px;"
-            "}");
+        setProperty("isSubContainer", true);
+    } else {
+        setProperty("isSubContainer", false);
     }
+
 
     // If any changes occur in the child, the updateResultedTextView signal is emitted,
     // which helps ensure that the arrow is drawn correctly.
