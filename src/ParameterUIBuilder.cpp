@@ -2,14 +2,33 @@
 #include "BuilderContainer.h"
 #include <QLabel>
 #include <QPushButton>
-
+#include <qscrollarea.h>
 
 ParameterUIBuilder::ParameterUIBuilder(BuilderContainer* builderContainer, QWidget* parent)
     : QWidget(parent)
     , m_builderContainer(builderContainer)
 {
-    mainLayout = new QVBoxLayout(this);
-    mainLayout->addWidget(new QPushButton("hello"));
+
+    QVBoxLayout* mainLayout = new QVBoxLayout(this);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+
+    QScrollArea* scrollArea = new QScrollArea(this);
+    scrollArea->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+    scrollArea->setWidgetResizable(true);
+
+    // This widget is help to add the Stretch at the end;
+    QWidget* holder = new QWidget(scrollArea);
+    QVBoxLayout* holderLay = new QVBoxLayout(holder);
+
+    QWidget* parameterWidget = new QWidget(holder);
+    parameterLay = new QVBoxLayout(parameterWidget);
+    holderLay->addWidget(parameterWidget);
+    holderLay->addStretch();
+
+    scrollArea->setWidget(holder);
+
+    mainLayout->addWidget(scrollArea);
+
     setLayout(mainLayout);
 
     if (m_builderContainer) {
@@ -20,7 +39,7 @@ ParameterUIBuilder::ParameterUIBuilder(BuilderContainer* builderContainer, QWidg
 
 void ParameterUIBuilder::updateParameterList()
 {
-   
+
     if (m_builderContainer) {
         m_builderContainer->updateParameterWidgets(this);
     }
@@ -38,10 +57,13 @@ void ParameterUIBuilder::addToUI(QString label, QWidget* widget)
 
         QHBoxLayout* rowLayout = new QHBoxLayout();
         QLabel* labelWidget = new QLabel(label);
-        rowLayout->addWidget(labelWidget);
-        rowLayout->addWidget(widget);
+        rowLayout->addWidget(labelWidget, 0, Qt::AlignRight);
+        rowLayout->addWidget(widget, 0, Qt::AlignLeft);
+      
 
-        mainLayout->addLayout(rowLayout);
+        parameterLay->addLayout(rowLayout);
+        parameterLay->setAlignment(rowLayout,  Qt::AlignHCenter);
+
         widgetLabelMap.insert(widget, labelWidget);
     }
 }
@@ -50,8 +72,8 @@ void ParameterUIBuilder::removeFromUI(QWidget* widget)
 {
     if (widgetLabelMap.contains(widget)) {
         QHBoxLayout* rowLayout = nullptr;
-        for (int i = 0; i < mainLayout->count(); ++i) {
-            if (QLayoutItem* item = mainLayout->itemAt(i)) {
+        for (int i = 0; i < parameterLay->count(); ++i) {
+            if (QLayoutItem* item = parameterLay->itemAt(i)) {
                 if (QHBoxLayout* layout = qobject_cast<QHBoxLayout*>(item->layout())) {
                     if (layout->indexOf(widget) >= 0) {
                         rowLayout = layout;
@@ -62,7 +84,7 @@ void ParameterUIBuilder::removeFromUI(QWidget* widget)
         }
 
         if (rowLayout) {
-            mainLayout->removeItem(rowLayout);
+            parameterLay->removeItem(rowLayout);
 
             QLabel* labelWidget = widgetLabelMap.take(widget);
             rowLayout->removeWidget(labelWidget);
@@ -75,7 +97,7 @@ void ParameterUIBuilder::clearWidgets()
 {
     while (!widgetLabelMap.isEmpty()) {
         QWidget* widget = widgetLabelMap.keys().first();
-        mainLayout->removeWidget(widget);
+        parameterLay->removeWidget(widget);
 
         QLabel* labelWidget = widgetLabelMap.take(widget);
         labelWidget->deleteLater();
