@@ -2,7 +2,7 @@
 #include "BuilderContainer.h"
 #include <QLabel>
 #include <QPushButton>
-
+#include <qscrollarea.h>
 
 ParameterUIBuilder::ParameterUIBuilder(BuilderContainer* builderContainer, QWidget* parent)
     : QWidget(parent)
@@ -10,12 +10,24 @@ ParameterUIBuilder::ParameterUIBuilder(BuilderContainer* builderContainer, QWidg
 {
 
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
 
-    QWidget* parameterWidget = new QWidget(this);
+    QScrollArea* scrollArea = new QScrollArea(this);
+    scrollArea->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+    scrollArea->setWidgetResizable(true);
+
+    // This widget is help to add the Stretch at the end;
+    QWidget* holder = new QWidget(scrollArea);
+    QVBoxLayout* holderLay = new QVBoxLayout(holder);
+
+    QWidget* parameterWidget = new QWidget(holder);
     parameterLay = new QVBoxLayout(parameterWidget);
+    holderLay->addWidget(parameterWidget);
+    holderLay->addStretch();
 
-    mainLayout->addWidget(parameterWidget);
-    mainLayout->addStretch();
+    scrollArea->setWidget(holder);
+
+    mainLayout->addWidget(scrollArea);
 
     setLayout(mainLayout);
 
@@ -27,7 +39,7 @@ ParameterUIBuilder::ParameterUIBuilder(BuilderContainer* builderContainer, QWidg
 
 void ParameterUIBuilder::updateParameterList()
 {
-   
+
     if (m_builderContainer) {
         m_builderContainer->updateParameterWidgets(this);
     }
