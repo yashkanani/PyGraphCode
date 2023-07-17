@@ -141,7 +141,7 @@ QWidget* ForLoopElement::getViewWidget(QWidget* parent)
     wdg->setObjectName("ForLoopGroupBox");
 
     // Set the style sheet to customize the appearance
-    wdg->setStyleSheet(
+    /*wdg->setStyleSheet(
         "QGroupBox#ForLoopGroupBox {"
         "   border: 1px solid #888888;"
         "   border-radius: 5px;"
@@ -153,7 +153,7 @@ QWidget* ForLoopElement::getViewWidget(QWidget* parent)
         "   subcontrol-origin: margin;"
         "   subcontrol-position: top center;"
         "   padding: 5px;"
-        "}");
+        "}");*/
 
     QGridLayout* wdgLayout = new QGridLayout(wdg);
     wdgLayout->setContentsMargins(0, 0, 0, 0);

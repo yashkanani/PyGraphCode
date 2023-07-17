@@ -107,7 +107,7 @@ QWidget* IfLoopElement::getViewWidget(QWidget* parent)
     wdg->setObjectName("IfLoopGroupBox");
 
     // Set the style sheet to customize the appearance
-    wdg->setStyleSheet(
+    /*wdg->setStyleSheet(
         "QGroupBox#IfLoopGroupBox {"
         "   border: 1px solid #888888;"
         "   border-radius: 5px;"
@@ -119,7 +119,7 @@ QWidget* IfLoopElement::getViewWidget(QWidget* parent)
         "   subcontrol-origin: margin;"
         "   subcontrol-position: top center;"
         "   padding: 5px;"
-        "}");
+        "}");*/
 
     QGridLayout* wdgLay = new QGridLayout(wdg);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);

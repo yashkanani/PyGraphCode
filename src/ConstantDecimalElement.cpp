@@ -76,7 +76,7 @@ QWidget* ConstantDecimalElement::getViewWidget(QWidget* parent)
     wdg->setObjectName("ConstantDecimalGroupBox");
 
     // Set the style sheet to customize the appearance
-    wdg->setStyleSheet(
+    /*wdg->setStyleSheet(
         "QGroupBox#ConstantDecimalGroupBox {"
         "   border: 1px solid #888888;"
         "   border-radius: 5px;"
@@ -88,7 +88,7 @@ QWidget* ConstantDecimalElement::getViewWidget(QWidget* parent)
         "   subcontrol-origin: margin;"
         "   subcontrol-position: top center;"
         "   padding: 5px;"
-        "}");
+        "}");*/
 
     QVBoxLayout* wdgLayout = new QVBoxLayout(wdg);
     wdgLayout->setContentsMargins(0, 0, 0, 0);
