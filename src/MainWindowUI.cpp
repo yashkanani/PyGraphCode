@@ -23,11 +23,12 @@ MainWindowUI::~MainWindowUI()
 void MainWindowUI::createCentralWidget()
 {
     QWidget* centralWidget = new QWidget(d_mainWindow);
+    centralWidget->setObjectName("centralWidget");
+
     QGridLayout* centralLayout = new QGridLayout(centralWidget);
     d_mainWindow->setCentralWidget(centralWidget);
 
     ElementsListWidget* customElementWidget = new ElementsListWidget(centralWidget);
-
     centralLayout->addWidget(getElementsWidget(centralWidget), 0, 0);
     centralLayout->addWidget(customElementWidget, 1, 0);
     centralLayout->addWidget(new BuilderControlPanel(customElementWidget, centralWidget), 0, 1, 2, 1);
@@ -74,6 +75,7 @@ QWidget* MainWindowUI::getElementsWidget(QWidget* parent)
     filterComboBox->addItem("Filter 3");
 
     ElementsListWidget* elementsListHolder = new ElementsListWidget(searchBarWidget);
+    
 
     // Get all elements from the ElementManager
     // Iterate through all elements and create draggable icons in the grid layout
