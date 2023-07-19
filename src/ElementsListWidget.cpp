@@ -1,6 +1,6 @@
 #include "ElementsListWidget.h"
-#include "ElementDragEventHandler.h"
 #include "AbstractElement.h"
+#include "ElementDragEventHandler.h"
 #include <QAbstractScrollArea>
 #include <QGridLayout>
 #include <QLabel>
@@ -8,11 +8,9 @@
 #include <QScrollArea>
 #include <QVariant>
 
-
 ElementsListWidget::ElementsListWidget(QWidget* parent)
     : QWidget(parent)
 {
-
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
 
@@ -21,9 +19,10 @@ ElementsListWidget::ElementsListWidget(QWidget* parent)
     scrollArea->setWidgetResizable(true);
 
     QWidget* elementsListHolder = new QWidget(scrollArea);
+    elementsListHolder->setObjectName("ElementsListHolder");
     elementsListLayout = new QGridLayout(elementsListHolder);
-    elementsListLayout->setContentsMargins(10, 10, 10, 10);
-    elementsListLayout->setSpacing(10);
+    /*elementsListLayout->setContentsMargins(10, 10, 10, 10);
+    elementsListLayout->setSpacing(10);*/
 
     scrollArea->setWidget(elementsListHolder);
 
@@ -35,15 +34,30 @@ ElementsListWidget::ElementsListWidget(QWidget* parent)
 
 void ElementsListWidget::addElement(AbstractElement* element)
 {
-    QLabel* elementIconLabel = new QLabel(this);
+
+    // Add the element icon label to the grid layout at the appropriate position
+    QWidget* elementDispalyWidget = new QWidget(this);
+    elementDispalyWidget->setObjectName("elementDisplayUnit");
+
+    QVBoxLayout* elementdisplayLay = new QVBoxLayout(elementDispalyWidget);
+    elementdisplayLay->setContentsMargins(0, 0, 0, 0);
+
+    QLabel* elementIconLabel = new QLabel(elementDispalyWidget);
+    elementIconLabel->setObjectName("elementIconLabel");
     elementIconLabel->setAlignment(Qt::AlignCenter);
-    elementIconLabel->setStyleSheet("QLabel:hover { background-color: lightgray; }");
+    /*elementIconLabel->setStyleSheet("QLabel:hover { background-color: lightgray; }");*/
     elementIconLabel->setProperty("element", QVariant::fromValue(static_cast<AbstractElement*>(element)));
     elementIconLabel->setCursor(Qt::OpenHandCursor);
     elementIconLabel->setAlignment(Qt::AlignCenter);
     elementIconLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     elementIconLabel->installEventFilter(new ElementDragEventHandler(elementIconLabel)); // Install event filter
     elementIconLabel->setPixmap(element->getImage().scaled(50, 50));
+
+
+    QLabel* elementNameLabel = new QLabel(element->getName(), elementDispalyWidget);
+    elementNameLabel->setObjectName("elementNameLabel");
+    elementNameLabel->setAlignment(Qt::AlignCenter);
+    elementNameLabel->setWordWrap(true);
 
     // Calculate the row and column count for the new element
     int rowCount = elementsListLayout->count() / elementsPerRow;
@@ -53,8 +67,12 @@ void ElementsListWidget::addElement(AbstractElement* element)
     elementsListLayout->setRowStretch(rowCount, 0);
     elementsListLayout->setColumnStretch(columnCount, 0);
 
-    // Add the element icon label to the grid layout at the appropriate position
-    elementsListLayout->addWidget(elementIconLabel, rowCount, columnCount);
+
+    elementdisplayLay->addWidget(elementIconLabel);
+    elementdisplayLay->addWidget(elementNameLabel);
+    elementdisplayLay->addStretch();
+
+    elementsListLayout->addWidget(elementDispalyWidget, rowCount, columnCount);
     rowCount++;
     columnCount++;
 
