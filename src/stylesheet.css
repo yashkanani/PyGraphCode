@@ -39,11 +39,10 @@ QWidget#ElementsListHolder
 	background-color: #ffffff;
     border: 1px solid #BEC9CD;
     height: 64px;
-    display: flex;
     position: relative;
-    align-items: center;
+    /* align-items: center; */
     border-radius: 5px;
-    justify-content: center;
+    /* justify-content: center; */
     background-color: #FFFFFF;
 }
 #elementIconLabel:hover {
@@ -55,9 +54,9 @@ QWidget#ElementsListHolder
     max-width: 64px;
     text-align: center;
     line-height: 12px;
-    text-overflow: ellipsis;
+    /* text-overflow: ellipsis; */
 	background-color: transparent;
-    word-wrap: break-word;
+    /* word-wrap: break-word; */
 	font-weight: bold; 
 }
 
