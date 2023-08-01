@@ -17,7 +17,7 @@ const std::string lableForUI = "UILable";
 ConstantDecimalElement::ConstantDecimalElement()
 {
     name = "Constant Number";
-    image = QPixmap(":/resource/Variable.png");
+    image = QPixmap(":/resource/number_input.png");
     type = BasicElementType::CONSTANT_DECIMAL;
    
     tempLineHolder = nullptr;

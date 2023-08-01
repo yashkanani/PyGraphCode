@@ -16,7 +16,7 @@ const std::string variableName = "value";
 ReadVariableElement::ReadVariableElement()
 {
     name = "Read Variable";
-    image = QPixmap(":/resource/Variable.png");
+    image = QPixmap(":/resource/read_variable.png");
     type = BasicElementType::READ_VARIABLE;
 }
 void ReadVariableElement::updateParameterWidgets(ParameterUIBuilder* const parameterUIBuilder)

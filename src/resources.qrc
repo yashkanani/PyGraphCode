@@ -3,10 +3,14 @@
 		<file>resource/search.png</file>
 		<file>resource/If_loop.png</file>
 		<file>resource/For_loop.png</file>
-		<file>resource/Variable.png</file>
+		<file>resource/number_input.png</file>
+		<file>resource/text_input.png</file>
+		<file>resource/write_variable.png</file>
+		<file>resource/read_variable.png</file>
 		<file>resource/Conditional.png</file>
 		<file>resource/Operation.png</file>
 		<file>stylesheet.css</file>
+		<file>resource/save_icon.png</file>
          <!-- <file alias="Squidstat_Cycler_Firmware.hex">../../../firmware/firmware_for_cycler/hex_files/Squidstat_Cycler_Firmware.hex</file> -->
     </qresource>
 </RCC>

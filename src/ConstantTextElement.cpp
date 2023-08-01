@@ -15,7 +15,7 @@ namespace key {
 ConstantTextElement::ConstantTextElement()
 {
     name = "Constant Text";
-    image = QPixmap(":/resource/Variable.png");
+    image = QPixmap(":/resource/text_input.png");
     type = BasicElementType::CONSTANT_TEXT;
 
     lineEditText = "PyGraph";

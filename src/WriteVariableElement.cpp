@@ -18,7 +18,7 @@ namespace key {
 WriteVariableElement::WriteVariableElement()
 {
     name = "Write Variable";
-    image = QPixmap(":/resource/Variable.png");
+    image = QPixmap(":/resource/write_variable.png");
     type = BasicElementType::WRITE_VARIABLE;
 
     dynamicValueContainer = std::make_shared<BuilderContainer>(nullptr, true);
