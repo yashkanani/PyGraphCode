@@ -14,7 +14,7 @@ const std::string usercontainerKey = "CustomInput";
 UserDefinedElement::UserDefinedElement()
 {
     name = "User Defined Element";
-    image = QPixmap(":/resource/Operation.png");
+    image = QPixmap(":/resource/custom_workflow.png");
     type = BasicElementType::USER_DEFINED;
 
     // Initialize other member variables
