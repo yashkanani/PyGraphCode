@@ -17,6 +17,7 @@ QWidget#centralWidget {
 	color: #fff; 			 /*-----text color-----*/
 }
 
+
 QWidget#BuilderContainer {	
 	background-color: #f4f4f4;  
 	color: #3B5571; 			 /*-----text color-----*/
@@ -83,36 +84,63 @@ QGroupBox::title
 }
 
 /*-----QPushButton-----*/
-/* QPushButton { */
-	/* display: inline-flex; */
-    /* height: 36px; */
-    /* padding: 0px; */
-    /* border: 1px solid rgb(255, 255, 255); */
-    /* border-radius: 4px; */
-    /* background-color: rgb(255, 255, 255); */
-    /* color: rgb(28, 52, 79); */
-    /* font-size: 14px; */
-    /* text-transform: none; */
-    /* font-weight: bold; */
-    /* white-space: nowrap; */
-    /* user-select: none; */
-    /* cursor: default;	 */
-/* } */
+QPushButton {
+	
+    height: 36px;
+    padding: 0px;
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 4px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(28, 52, 79);
+    font-size: 14px;
+    text-transform: none;
+    font-weight: bold;
+    white-space: nowrap;
+}
 
-/* QPushButton::hover */
-/* { */
-	/* background-color: rgba(218, 224, 233, 70%); */
-	/* border: 1px solid #b78620; */
+QPushButton:hover
+{
+	background-color: #DAE0E9;
+	border: 1px solid #DAE0E9;
+    opacity: 0.5;
+}
 
-/* } */
+QPushButton:pressed
+{
+	background-color: #BEC9CD;
+	border: 1px solid #BEC9CD;
+    opacity: 0.8;
+}
 
+#builderControlsButtons_saveButton
+{
+	border: none;
+	background-color: transparent;
+	image: url(:/resource/save_icon.png);
+}
+#builderControlsButtons_loadButton
+{
+	border: none;
+	background-color: transparent;
+	image: url(:/resource/load_from_file.png);
+}
+#builderControlsButtons_loadButton:hover,
+#builderControlsButtons_saveButton:hover
+{
+	background-color: rgb(59, 85, 113);
+}
 
-/* QPushButton::pressed */
-/* { */
-	/* background-color: rgba(218, 224, 233, 50%); */
-	/* border: 1px solid #b78620; */
-
-/* } */
+#imageButtonText {
+	margin: 0px;
+    padding: 0px;
+    font-size: 11px;
+    max-width: 64px;
+    text-align: center;
+    line-height: 12px;
+	font-weight: bold;
+	background-color:transparent;
+	color: #fff;
+}
 
 /*-----QLabel-----*/
 

@@ -10,6 +10,8 @@
 BuilderControlPanel::BuilderControlPanel(ElementsListWidget* customElementWidget, QWidget* parent)
     : QWidget(parent)
 {
+    setObjectName("builderControlPanel");
+
     m_layout = new QGridLayout(this);
     m_layout->setContentsMargins(0, 0, 0, 0);
     setLayout(m_layout);

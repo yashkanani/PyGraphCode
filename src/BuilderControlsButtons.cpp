@@ -6,16 +6,19 @@
 #include "JSONDataHandler.h"
 #include "SettingsManager.h"
 #include <QtWidgets>
+#include "ImageButton.h"
 
 BuilderControlsButtons::BuilderControlsButtons(BuilderContainer* builderContainer, ElementsListWidget* customElementWidget, QWidget* parent)
     : QWidget(parent)
     , m_builderContainer(builderContainer)
     , m_customElementWidget(customElementWidget)
 {
+    setObjectName("builderControlsButtons");
+    
     // Create the buttons
-    QPushButton* saveButton = new QPushButton("Save", this);
-    QPushButton* loadButton = new QPushButton("Load", this);
-
+    ImageButton* saveButton = new ImageButton("builderControlsButtons_saveButton", "Save", this);
+    ImageButton* loadButton = new ImageButton("builderControlsButtons_loadButton", "Load", this);
+   
     // Create the horizontal layout
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -26,10 +29,10 @@ BuilderControlsButtons::BuilderControlsButtons(BuilderContainer* builderContaine
 
     // Set the layout for the widget
     setLayout(layout);
-
+    
     // Connect button signals to slots or actions as needed
-    connect(saveButton, &QPushButton::clicked, this, &BuilderControlsButtons::handleSaveButtonClicked);
-    connect(loadButton, &QPushButton::clicked, this, &BuilderControlsButtons::handleLoadButtonClicked);
+    connect(saveButton, &ImageButton::clicked, this, &BuilderControlsButtons::handleSaveButtonClicked);
+    connect(loadButton, &ImageButton::clicked, this, &BuilderControlsButtons::handleLoadButtonClicked);
 }
 
 void BuilderControlsButtons::handleSaveButtonClicked()

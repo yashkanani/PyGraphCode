@@ -11,6 +11,7 @@
 		<file>resource/Operation.png</file>
 		<file>stylesheet.css</file>
 		<file>resource/save_icon.png</file>
+		<file>resource/load_from_file.png</file>
 		<file>resource/custom_workflow.png</file>
          <!-- <file alias="Squidstat_Cycler_Firmware.hex">../../../firmware/firmware_for_cycler/hex_files/Squidstat_Cycler_Firmware.hex</file> -->
     </qresource>
