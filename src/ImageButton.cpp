@@ -14,14 +14,15 @@ ImageButton::ImageButton(const QString &objectName, const QString &text, QWidget
     button->setObjectName(m_objectName);
 
     connect(button, &QPushButton::clicked, this, &ImageButton::clicked);
-
-    QLabel *label = new QLabel(text, this);
-    label->setObjectName("imageButtonText");
-    label->setAlignment(Qt::AlignCenter);
-    label->setWordWrap(true);
-
     layout->addWidget(button);
-    layout->addWidget(label);
+
+    if (!text.isEmpty()) {
+        QLabel* label = new QLabel(text, this);
+        label->setObjectName("imageButtonText");
+        label->setAlignment(Qt::AlignCenter);
+        label->setWordWrap(true);
+        layout->addWidget(label);
+    }
 
     layout->setAlignment(Qt::AlignHCenter);
     setLayout(layout);
