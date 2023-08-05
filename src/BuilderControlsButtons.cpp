@@ -7,6 +7,7 @@
 #include "SettingsManager.h"
 #include <QtWidgets>
 #include "ImageButton.h"
+#include "DeleteItem.h"
 
 BuilderControlsButtons::BuilderControlsButtons(BuilderContainer* builderContainer, ElementsListWidget* customElementWidget, QWidget* parent)
     : QWidget(parent)
@@ -25,6 +26,7 @@ BuilderControlsButtons::BuilderControlsButtons(BuilderContainer* builderContaine
 
     layout->addWidget(saveButton);
     layout->addWidget(loadButton);
+    layout->addWidget(new DeleteItem(this));
     layout->setAlignment(Qt::AlignHCenter); // Align buttons horizontally in the middle
 
     // Set the layout for the widget

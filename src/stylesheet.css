@@ -2,6 +2,8 @@
 /* image-icon-color: #3F6085 */
 /* image-icon-size: 56 * 56 */
 /* image-padding: 30% */
+/* save-icon-size: 40 * 40 */
+/* delete-icon-blue-color: #3B5571 */
 
 
 /*-----QWidget-----*/
@@ -9,12 +11,12 @@ QWidget
 {
 	/* background-color: #D2D8DF; */
 	background-color: #fff;
-	color: #3B5571;
+	color: #3B5571; 		/*-----text color-----*/
 }
 
 QWidget#centralWidget {
 	background-color: #1c344f;  /*-----dark blue color-----*/
-	color: #fff; 			 /*-----text color-----*/
+	color: #fff; 			 	/*-----text color-----*/
 }
 
 
