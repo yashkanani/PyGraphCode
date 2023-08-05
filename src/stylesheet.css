@@ -86,8 +86,8 @@ QGroupBox::title
 }
 
 /*-----QPushButton-----*/
+
 QPushButton {
-	
     height: 36px;
     padding: 0px;
     border: 1px solid rgb(255, 255, 255);
@@ -116,12 +116,14 @@ QPushButton:pressed
 
 #builderControlsButtons_saveButton
 {
+	height: 40px;
 	border: none;
 	background-color: transparent;
 	image: url(:/resource/save_icon.png);
 }
 #builderControlsButtons_loadButton
 {
+	height: 40px;
 	border: none;
 	background-color: transparent;
 	image: url(:/resource/load_from_file.png);
@@ -131,6 +133,7 @@ QPushButton:pressed
 {
 	background-color: rgb(59, 85, 113);
 }
+
 
 #imageButtonText {
 	margin: 0px;
@@ -143,6 +146,8 @@ QPushButton:pressed
 	background-color:transparent;
 	color: #fff;
 }
+
+
 
 /*-----QLabel-----*/
 

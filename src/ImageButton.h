@@ -7,13 +7,10 @@
 class ImageButton : public QWidget {
     Q_OBJECT
 public:
-    ImageButton(const QString &objectName, const QString &text, QWidget *parent = nullptr);
-
-signals: 
-    void clicked(bool checked = false);
+    ImageButton(QWidget* customWidget, const QString& text, const QString& labelObjectName, QWidget* parent = nullptr);
 
 private:
-    QString m_objectName;
+    QWidget* m_customWidget;
 };
 
 #endif // IMAGEBUTTON_H

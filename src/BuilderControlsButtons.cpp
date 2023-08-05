@@ -17,24 +17,27 @@ BuilderControlsButtons::BuilderControlsButtons(BuilderContainer* builderContaine
     setObjectName("builderControlsButtons");
     
     // Create the buttons
-    ImageButton* saveButton = new ImageButton("builderControlsButtons_saveButton", "Save", this);
-    ImageButton* loadButton = new ImageButton("builderControlsButtons_loadButton", "Load", this);
+    QPushButton* saveButton = new QPushButton(this);
+    saveButton->setObjectName("builderControlsButtons_saveButton");
    
+    QPushButton* loadButton = new QPushButton(this);
+    loadButton->setObjectName("builderControlsButtons_loadButton");
+
     // Create the horizontal layout
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
 
-    layout->addWidget(saveButton);
-    layout->addWidget(loadButton);
-    layout->addWidget(new DeleteItem(this));
+    layout->addWidget(new ImageButton(saveButton, "Save", "imageButtonText", this));
+    layout->addWidget(new ImageButton(loadButton, "Load", "imageButtonText", this));
+    layout->addWidget(new ImageButton(new DeleteItem(this), "Delete", "imageButtonText", this));
     layout->setAlignment(Qt::AlignHCenter); // Align buttons horizontally in the middle
 
     // Set the layout for the widget
     setLayout(layout);
     
     // Connect button signals to slots or actions as needed
-    connect(saveButton, &ImageButton::clicked, this, &BuilderControlsButtons::handleSaveButtonClicked);
-    connect(loadButton, &ImageButton::clicked, this, &BuilderControlsButtons::handleLoadButtonClicked);
+    connect(saveButton, &QPushButton::clicked, this, &BuilderControlsButtons::handleSaveButtonClicked);
+    connect(loadButton, &QPushButton::clicked, this, &BuilderControlsButtons::handleLoadButtonClicked);
 }
 
 void BuilderControlsButtons::handleSaveButtonClicked()

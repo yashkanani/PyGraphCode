@@ -4,21 +4,23 @@
 #include <QVBoxLayout>
 #include <QIcon>
 
-ImageButton::ImageButton(const QString &objectName, const QString &text, QWidget *parent)
-    : QWidget(parent), m_objectName(objectName) {
+ImageButton::ImageButton(QWidget* customWidget, const QString& text, const QString& labelObjectName, QWidget* parent)
+    : QWidget(parent)
+    , m_customWidget(customWidget)
+{
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
 
-    QPushButton *button = new QPushButton(this);
-    button->setObjectName(m_objectName);
+    if (m_customWidget) {
+        m_customWidget->setParent(this);
+        layout->addWidget(m_customWidget);
+    }
 
-    connect(button, &QPushButton::clicked, this, &ImageButton::clicked);
-    layout->addWidget(button);
 
     if (!text.isEmpty()) {
         QLabel* label = new QLabel(text, this);
-        label->setObjectName("imageButtonText");
+        label->setObjectName(labelObjectName);
         label->setAlignment(Qt::AlignCenter);
         label->setWordWrap(true);
         layout->addWidget(label);
