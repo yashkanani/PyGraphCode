@@ -17,8 +17,8 @@ ElementsControlButtons::ElementsControlButtons(QWidget* parent)
     layout->setContentsMargins(0, 0, 0, 0);
 
     layout->addWidget(new ImageButton(addButton, "Add", "elementcontrol_imageButtonText", this));
-    layout->addWidget(new ImageButton(new DeleteItem(":/resource/textcolor_empty_trash.png", ":/resource/textcolor_full_trash.png", this), "Remove", "elementcontrol_imageButtonText", this));
-    layout->setAlignment(Qt::AlignTop); // Align button horizontally in the middle
+    layout->addWidget(new ImageButton(new DeleteItem(":/resource/textcolor_empty_trash.png", ":/resource/textcolor_full_trash.png", this), "Delete", "elementcontrol_imageButtonText", this));
+    layout->setAlignment(Qt::AlignTop | Qt::AlignHCenter); // Align button horizontally in the middle
 
     // Set the layout for the widget
     setLayout(layout);

@@ -3,6 +3,7 @@
 /* image-icon-size: 56 * 56 */
 /* image-padding: 30% */
 /* save-icon-size: 40 * 40 */
+/* add-variable-icon-size: 32 * 32 */
 /* delete-icon-blue-color: #3B5571 */
 
 
@@ -140,7 +141,7 @@ QPushButton:pressed
 	image: url(:/resource/load_from_file.png);
 }
 #elementsControlButtons_addbutton {
-	height: 40px;
+	height: 32px;
 	border: none;
 	background-color: transparent;
 	image: url(:/resource/add.png);
