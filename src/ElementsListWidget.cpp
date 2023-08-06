@@ -15,6 +15,7 @@ ElementsListWidget::ElementsListWidget(QWidget* parent)
     layout->setContentsMargins(0, 0, 0, 0);
 
     QScrollArea* scrollArea = new QScrollArea(this);
+    scrollArea->setObjectName("ElementListScrollArea");
     scrollArea->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     scrollArea->setWidgetResizable(true);
 

@@ -1,15 +1,13 @@
 #include "ElementsControlButtons.h"
+#include "DeleteItem.h"
+#include "ImageButton.h"
 #include <QPushButton>
 #include <QVBoxLayout>
-#include "ImageButton.h"
-#include "DeleteItem.h"
 
 ElementsControlButtons::ElementsControlButtons(QWidget* parent)
     : QWidget(parent)
 {
-    
 
-    
     // Create the "Add" button
     QPushButton* addButton = new QPushButton(this);
     addButton->setObjectName("elementsControlButtons_addbutton");
