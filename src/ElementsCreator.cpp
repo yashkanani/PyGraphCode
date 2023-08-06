@@ -10,22 +10,29 @@
 #include "ElementDragEventHandler.h"
 #include "ElementsListWidget.h"
 #include "InputLabelDialog.h"
+#include "ElementsControlButtons.h"
 
 ElementsCreator::ElementsCreator(QWidget* parent)
     : QWidget(parent)
 {
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    setObjectName("elementsCreatorWidget");
+
+    QHBoxLayout* layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-    QPushButton* addButton = new QPushButton("Add Variable", this);
-    connect(addButton, &QPushButton::clicked, this, &ElementsCreator::onAddVariableClicked);
-    layout->addWidget(addButton);
 
     elementsListHolder = new ElementsListWidget(this);
     elementsListHolder->setElementsPerRow(8);
-
     layout->addWidget(elementsListHolder);
 
+
+    ElementsControlButtons* controls = new ElementsControlButtons(this);
+    controls->setObjectName("ElementsControlButtons");
+
+    connect(controls, &ElementsControlButtons::addButtonClicked, this, &ElementsCreator::onAddVariableClicked);
+    layout->addWidget(controls);
+
     setLayout(layout);
+    
 }
 
 

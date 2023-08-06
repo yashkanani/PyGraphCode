@@ -29,7 +29,7 @@ BuilderControlsButtons::BuilderControlsButtons(BuilderContainer* builderContaine
 
     layout->addWidget(new ImageButton(saveButton, "Save", "imageButtonText", this));
     layout->addWidget(new ImageButton(loadButton, "Load", "imageButtonText", this));
-    layout->addWidget(new ImageButton(new DeleteItem(this), "Delete", "imageButtonText", this));
+    layout->addWidget(new ImageButton(new DeleteItem(":/resource/white_empty_trash.png", ":/resource/white_full_trash.png", this), "Delete", "imageButtonText", this));
     layout->setAlignment(Qt::AlignHCenter); // Align buttons horizontally in the middle
 
     // Set the layout for the widget

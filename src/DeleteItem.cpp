@@ -11,15 +11,15 @@
 
 #include "AbstractElement.h"
 
-DeleteItem::DeleteItem(QWidget* parent)
+DeleteItem::DeleteItem(const QString& closeImage, const QString& openImage,QWidget* parent)
     : QWidget(parent)
 {
     isDustbinOpen = false;
 
     setAcceptDrops(true); // Enable drag-and-drop events
 
-    closePixmap.load(":/resource/white_empty_trash.png");
-    openPixmap.load(":/resource/white_full_trash.png");
+    closePixmap.load(closeImage);
+    openPixmap.load(openImage);
 
     setFixedSize(closePixmap.size());
 }

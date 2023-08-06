@@ -63,6 +63,7 @@ set(HEADERS
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderControlPanel.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ImageButton.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/DeleteItem.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsControlButtons.h
    )
 
 set(SOURCES
@@ -97,6 +98,7 @@ set(SOURCES
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderControlPanel.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ImageButton.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/DeleteItem.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsControlButtons.cpp
     )
 
 

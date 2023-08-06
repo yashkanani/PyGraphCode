@@ -32,12 +32,21 @@ QWidget#BuilderContainer[isSubContainer="true"] {
 
 /*-----Element List Widget-----*/
 
+#elementsCreatorWidget {
+	background-color: #DAE0E9;
+	color: #3B5571;
+}
 QWidget#ElementsListHolder
 {
 	background-color: #DAE0E9;
 	color: #3B5571;
 }
-
+QWidget#imageButton {
+	background-color: transparent;
+}
+QWidget#ElementsControlButtons {
+	background-color: transparent;
+}
 #elementDisplayUnit {
 	background-color: transparent;
 	font-size: 14px;
@@ -128,6 +137,12 @@ QPushButton:pressed
 	background-color: transparent;
 	image: url(:/resource/load_from_file.png);
 }
+#elementsControlButtons_addbutton {
+	height: 40px;
+	border: none;
+	image: url(:/resource/add.png);
+}
+
 #builderControlsButtons_loadButton:hover,
 #builderControlsButtons_saveButton:hover
 {
@@ -135,6 +150,8 @@ QPushButton:pressed
 }
 
 
+
+#elementcontrol_imageButtonText,
 #imageButtonText {
 	margin: 0px;
     padding: 0px;
@@ -147,7 +164,9 @@ QPushButton:pressed
 	color: #fff;
 }
 
-
+#elementcontrol_imageButtonText { 
+	color: #3B5571;
+}
 
 /*-----QLabel-----*/
 

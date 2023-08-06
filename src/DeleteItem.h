@@ -10,7 +10,7 @@ class DeleteItem : public QWidget {
     Q_OBJECT
 
 public:
-    explicit DeleteItem(QWidget* parent = nullptr);
+    explicit DeleteItem(const QString& closeImage,const QString& openImage, QWidget* parent = nullptr);
 
 protected:
     void dragEnterEvent(QDragEnterEvent* event) override;

@@ -8,6 +8,7 @@ ImageButton::ImageButton(QWidget* customWidget, const QString& text, const QStri
     : QWidget(parent)
     , m_customWidget(customWidget)
 {
+    
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -28,4 +29,5 @@ ImageButton::ImageButton(QWidget* customWidget, const QString& text, const QStri
 
     layout->setAlignment(Qt::AlignHCenter);
     setLayout(layout);
+    setObjectName("imageButton");
 }
