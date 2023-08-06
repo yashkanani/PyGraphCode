@@ -15,23 +15,28 @@
 ElementsCreator::ElementsCreator(QWidget* parent)
     : QWidget(parent)
 {
-    setObjectName("elementsCreatorWidget");
+    QVBoxLayout* mainlayout = new QVBoxLayout(this);
 
-    QHBoxLayout* layout = new QHBoxLayout(this);
+    QWidget* wdg = new QWidget(this);
+    wdg->setObjectName("ElementsCreator");
+
+    QHBoxLayout* layout = new QHBoxLayout(wdg);
     layout->setContentsMargins(0, 0, 0, 0);
 
-    elementsListHolder = new ElementsListWidget(this);
+    elementsListHolder = new ElementsListWidget(wdg);
     elementsListHolder->setElementsPerRow(8);
     layout->addWidget(elementsListHolder);
 
-
-    ElementsControlButtons* controls = new ElementsControlButtons(this);
-    controls->setObjectName("ElementsControlButtons");
-
+    
+    ElementsControlButtons* controls = new ElementsControlButtons(wdg);
     connect(controls, &ElementsControlButtons::addButtonClicked, this, &ElementsCreator::onAddVariableClicked);
     layout->addWidget(controls);
 
-    setLayout(layout);
+    mainlayout->addWidget(wdg);
+    mainlayout->setContentsMargins(0, 0, 0, 0);
+    setLayout(mainlayout);
+
+    
     
 }
 

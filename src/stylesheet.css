@@ -30,23 +30,21 @@ QWidget#BuilderContainer[isSubContainer="true"] {
     border-radius: 5px;
 }
 
+
+
 /*-----Element List Widget-----*/
 
-#elementsCreatorWidget {
+QWidget#ElementsCreator {
 	background-color: #DAE0E9;
 	color: #3B5571;
 }
+
 QWidget#ElementsListHolder
 {
 	background-color: #DAE0E9;
 	color: #3B5571;
 }
-QWidget#imageButton {
-	background-color: transparent;
-}
-QWidget#ElementsControlButtons {
-	background-color: transparent;
-}
+
 #elementDisplayUnit {
 	background-color: transparent;
 	font-size: 14px;
@@ -140,6 +138,7 @@ QPushButton:pressed
 #elementsControlButtons_addbutton {
 	height: 40px;
 	border: none;
+	background-color: transparent;
 	image: url(:/resource/add.png);
 }
 
