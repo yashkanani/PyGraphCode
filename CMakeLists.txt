@@ -27,6 +27,7 @@ find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 # Add resource files
 set(RESOURCES 
    ${CMAKE_CURRENT_SOURCE_DIR}/src/resources.qrc
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/stylesheet.css
 )
 
 
