@@ -244,12 +244,6 @@ QScrollBar::sub-line:vertical {
 	subcontrol-origin: margin;
 }
 
-
-QScrollBar::handle:horizontal:hover,
-QScrollBar::handle:vertical:hover {
-	background-color: green; /* Change this to your desired red color */
-}
-
 /*-----QLabel-----*/
 
 /* QLabel */
@@ -371,23 +365,23 @@ QScrollBar::handle:vertical:hover {
 /* } */
 
 
-/* QComboBox:on */
-/* { */
-    /* background-color: #b78620; */
-	/* color: #000; */
+/* QComboBox:on 
+ { 
+     background-color: #b78620; 
+	 color: #000; 
 
-/* } */
+ } */
 
 
-/* QComboBox QAbstractItemView */
-/* { */
-    /* background-color: #383838; */
-    /* color: #ffffff; */
-    /* border: 1px solid black; */
-    /* selection-background-color: #b78620; */
-    /* outline: 0; */
+/* QComboBox QAbstractItemView 
+ { 
+     background-color: #383838; 
+     color: #ffffff; 
+     border: 1px solid black; 
+     selection-background-color: #b78620; 
+     outline: 0; 
 
-/* } */
+ } */
 
 
 /* QComboBox::drop-down */
