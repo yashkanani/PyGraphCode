@@ -11,10 +11,16 @@
 ElementsListWidget::ElementsListWidget(QWidget* parent)
     : QWidget(parent)
 {
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    QVBoxLayout* mainlayout = new QVBoxLayout(this);
+    mainlayout->setContentsMargins(0, 0, 0, 0);
+
+    QWidget* wdg = new QWidget(this);
+    wdg->setObjectName("ElementsListWidget");
+   
+    QVBoxLayout* layout = new QVBoxLayout(wdg);
     layout->setContentsMargins(0, 0, 0, 0);
 
-    QScrollArea* scrollArea = new QScrollArea(this);
+    QScrollArea* scrollArea = new QScrollArea(wdg);
     scrollArea->setObjectName("ElementListScrollArea");
     scrollArea->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     scrollArea->setWidgetResizable(true);
@@ -28,7 +34,9 @@ ElementsListWidget::ElementsListWidget(QWidget* parent)
     scrollArea->setWidget(elementsListHolder);
 
     layout->addWidget(scrollArea);
-    setLayout(layout);
+
+    mainlayout->addWidget(wdg);
+    setLayout(mainlayout);
 
     elementsPerRow = 3;
 }

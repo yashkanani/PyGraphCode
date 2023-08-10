@@ -39,10 +39,13 @@ QWidget#ElementsCreator {
 	background-color: #DAE0E9;
 	color: #3B5571;
 }
+QWidget#ElementsListWidget {
+	background-color: #DAE0E9;
+	color: #3B5571;
+}
 
-QWidget#ElementsListHolder
-{
-	background-color: #DAE0E9; 
+QWidget#ElementsListHolder {
+	background-color: transparent;
 	color: #3B5571;
 }
 
@@ -76,10 +79,6 @@ QWidget#ElementsListHolder
 	font-weight: bold; 
 }
 
-/*-----QScrollArea-----*/
-QScrollArea#ElementListScrollArea{
-	border:none;
-}
 /*-----QGroupBox-----*/
 QGroupBox {
     border: 1px solid #BEC9CD; 
@@ -176,11 +175,20 @@ QPushButton:pressed
 
 QScrollArea {
 	background-color: transparent;
+	border: none;
 }
 
 /*-----QScrollBar-----*/
-QScrollBar:horizontal {
+QScrollBar:vertical,
+QScrollBar:horizontal,
+QScrollBar::add-page:horizontal,
+QScrollBar::sub-page:horizontal,
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
 	background-color: transparent;
+}
+
+QScrollBar:horizontal {
 	height: 14px;
 }
 
@@ -193,7 +201,6 @@ QScrollBar::add-line:horizontal {
 
 
 QScrollBar::sub-line:horizontal {
-	
 	border: none;
 	height: 0px;
 	subcontrol-position: left;
@@ -217,22 +224,16 @@ QScrollBar::sub-line:horizontal {
  height: 6px; 
 
  } 
+*/
 
-
- QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal 
- { 
- background: none; 
-
- } */
 
 QScrollBar:vertical {
-	background-color: transparent;
 	width: 14px;
 }
 
 QScrollBar::handle:horizontal,
 QScrollBar::handle:vertical {
-	background-color: rgb(190, 201, 205);
+	background-color: #BEC9CD;
 	border: 3px solid transparent;
 	border-radius: 7px;
 	background-clip: content-box;
@@ -274,13 +275,10 @@ QScrollBar::sub-line:vertical {
 
  }
 */
-/*
- QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical 
- { 
-	background: none; 
-
- } */
-
+QScrollBar::handle:horizontal:hover,
+QScrollBar::handle:vertical:hover {
+	background-color: green; /* Change this to your desired red color */
+}
 
 /*-----QLabel-----*/
 
