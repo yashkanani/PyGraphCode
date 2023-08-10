@@ -5,7 +5,7 @@
 #include "ResultedTextView.h"
 #include "ParameterUIBuilder.h"
 #include "BuilderControlsButtons.h"
-
+#include <qscrollbar.h>
 
 BuilderControlPanel::BuilderControlPanel(ElementsListWidget* customElementWidget, QWidget* parent)
     : QWidget(parent)
@@ -16,14 +16,25 @@ BuilderControlPanel::BuilderControlPanel(ElementsListWidget* customElementWidget
     m_layout->setContentsMargins(0, 0, 0, 0);
     setLayout(m_layout);
 
+    QWidget* m_container = new QWidget(this);
+    m_container->setObjectName("builderContainerHolder");
+
+    QHBoxLayout* m_containerLay = new QHBoxLayout(m_container);
+    m_containerLay->setContentsMargins(0, 0, 0, 0);
+
     QScrollArea* scrollBuilderArea = new QScrollArea(this);
     scrollBuilderArea->setWidgetResizable(true); // Allow the scroll area to resize the widget
+    scrollBuilderArea->verticalScrollBar()->parent()->setProperty("background_transparent", true);
+    scrollBuilderArea->horizontalScrollBar()->parent()->setProperty("background_transparent", true);
+
     BuilderContainer* builderContainer = new BuilderContainer(scrollBuilderArea);
     QObject::connect(builderContainer, &BuilderContainer::EnsureVisible, scrollBuilderArea, &QScrollArea::ensureVisible);
     scrollBuilderArea->setWidget(builderContainer);
 
+    m_containerLay->addWidget(scrollBuilderArea);
+
     m_layout->addWidget(getButtonWidget(builderContainer, customElementWidget, this), 0, 0);
-    m_layout->addWidget(scrollBuilderArea, 1, 0);
+    m_layout->addWidget(m_container, 1, 0);
     m_layout->addWidget(createTabWidget(builderContainer), 0, 1,2,1);
    
     // Set the column stretch to distribute remaining space

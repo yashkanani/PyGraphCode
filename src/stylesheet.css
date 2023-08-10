@@ -24,9 +24,12 @@ QWidget#centralWidget {
 		color: #fff; /*-----text color-----*/
 }
 
+QWidget#builderContainerHolder {
+	background-color: #f4f4f4;	
+}
 
 QWidget#BuilderContainer {
-	background-color: #f4f4f4;
+	background-color: transparent;
 	color: #3B5571; /*-----text color-----*/
 }
 
