@@ -15,9 +15,13 @@ QWidget
 	color: #3B5571; 		/*-----text color-----*/
 }
 
+QWidget[background_transparent="true"] {
+	background-color: transparent;
+}
+
 QWidget#centralWidget {
-	background-color: #1c344f;  /*-----dark blue color-----*/
-	color: #fff; 			 	/*-----text color-----*/
+		background-color: #1c344f; /*-----dark blue color-----*/
+		color: #fff; /*-----text color-----*/
 }
 
 

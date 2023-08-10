@@ -7,6 +7,7 @@
 #include <QPixmap>
 #include <QScrollArea>
 #include <QVariant>
+#include <qscrollbar.h>
 
 ElementsListWidget::ElementsListWidget(QWidget* parent)
     : QWidget(parent)
@@ -24,6 +25,8 @@ ElementsListWidget::ElementsListWidget(QWidget* parent)
     scrollArea->setObjectName("ElementListScrollArea");
     scrollArea->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     scrollArea->setWidgetResizable(true);
+    scrollArea->verticalScrollBar()->parent()->setProperty("background_transparent", true);
+    scrollArea->horizontalScrollBar()->parent()->setProperty("background_transparent", true);
 
     QWidget* elementsListHolder = new QWidget(scrollArea);
     elementsListHolder->setObjectName("ElementsListHolder");
