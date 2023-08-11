@@ -17,6 +17,7 @@
 		<file>resource/white_full_trash.png</file>
 		<file>resource/textcolor_empty_trash.png</file>
 		<file>resource/textcolor_full_trash.png</file>
+		<file>resource/dropdown_arrow.png</file>
 		<file>resource/add.png</file>
          <!-- <file alias="Squidstat_Cycler_Firmware.hex">../../../firmware/firmware_for_cycler/hex_files/Squidstat_Cycler_Firmware.hex</file> -->
     </qresource>
