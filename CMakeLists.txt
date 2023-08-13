@@ -65,6 +65,7 @@ set(HEADERS
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ImageButton.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/DeleteItem.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsControlButtons.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsLeftNavigator.h
    )
 
 set(SOURCES
@@ -100,6 +101,7 @@ set(SOURCES
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ImageButton.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/DeleteItem.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsControlButtons.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsLeftNavigator.cpp
     )
 
 
