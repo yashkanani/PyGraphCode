@@ -31,7 +31,7 @@ QWidget#builderContainerHolder {
 }
 
 QWidget#BuilderContainer {
-	background-color: transparent;
+	background-color: #f4f4f4;
 	color: #3B5571; /*-----text color-----*/
 }
 
