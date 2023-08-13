@@ -48,6 +48,7 @@ ElementsLeftNavigator::ElementsLeftNavigator(ElementsListWidget* builderContaine
     // Create a first tab.
     QPushButton* prebuiltSelectorButton = new QPushButton(tabBar);
     prebuiltSelectorButton->setCheckable(true);
+    prebuiltSelectorButton->setChecked(true);
     prebuiltSelectorButton->setObjectName("elementsLeftNavigator_PrebuiltButton");
     tabBarLay->addWidget(new ImageButton(prebuiltSelectorButton, "Prebuilt", "imageButtonText", tabBar));
     m_stackedWidget->addWidget(getElementsWidget(tabWidget));
