@@ -25,7 +25,6 @@ ElementsLeftNavigator::ElementsLeftNavigator(ElementsListWidget* builderContaine
 
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(0, 0, 0, 0);
-   
 
     QWidget* tabWidget = new QWidget(this);
     tabWidget->setObjectName("elementNavigatorTabwidget");
@@ -36,6 +35,7 @@ ElementsLeftNavigator::ElementsLeftNavigator(ElementsListWidget* builderContaine
 
     QWidget* tabBar = new QWidget(tabWidget);
     tabBar->setObjectName("elementNavigatorTabwidget_tabBar");
+
     QVBoxLayout* tabBarLay = new QVBoxLayout(tabBar);
     tabBarLay->setContentsMargins(0, 0, 0, 0);
     
@@ -50,7 +50,7 @@ ElementsLeftNavigator::ElementsLeftNavigator(ElementsListWidget* builderContaine
     prebuiltSelectorButton->setCheckable(true);
     prebuiltSelectorButton->setChecked(true);
     prebuiltSelectorButton->setObjectName("elementsLeftNavigator_PrebuiltButton");
-    tabBarLay->addWidget(new ImageButton(prebuiltSelectorButton, "Prebuilt", "imageButtonText", tabBar));
+    tabBarLay->addWidget(new ImageButton(prebuiltSelectorButton, "Element", "imageButtonText", tabBar));
     m_stackedWidget->addWidget(getElementsWidget(tabWidget));
     buttonGroup->addButton(prebuiltSelectorButton);
 
@@ -64,7 +64,7 @@ ElementsLeftNavigator::ElementsLeftNavigator(ElementsListWidget* builderContaine
     QPushButton* customSelectorButton = new QPushButton(tabBar);
     customSelectorButton->setCheckable(true);
     customSelectorButton->setObjectName("elementsLeftNavigator_customButton");
-    tabBarLay->addWidget(new ImageButton(customSelectorButton, "Custom", "imageButtonText", tabBar));
+    tabBarLay->addWidget(new ImageButton(customSelectorButton, "Modules", "imageButtonText", tabBar));
     m_stackedWidget->addWidget(m_builderContainer);
     buttonGroup->addButton(customSelectorButton);
 
