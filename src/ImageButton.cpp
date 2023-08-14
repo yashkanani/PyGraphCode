@@ -12,7 +12,7 @@ ImageButton::ImageButton(QWidget* customWidget, const QString& text, const QStri
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
+    //layout->setSpacing(0);
 
     if (m_customWidget) {
         m_customWidget->setParent(this);
