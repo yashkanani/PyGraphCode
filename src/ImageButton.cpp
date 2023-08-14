@@ -28,6 +28,6 @@ ImageButton::ImageButton(QWidget* customWidget, const QString& text, const QStri
         layout->addWidget(label);
     }
 
-    layout->setAlignment(Qt::AlignHCenter);
+    //layout->setAlignment(Qt::AlignHCenter);
     setLayout(layout);
 }
