@@ -72,25 +72,25 @@ void ElementsListWidget::addElement(AbstractElement* element)
     elementNameLabel->setWordWrap(true);
 
     // Calculate the row and column count for the new element
-    int rowCount = elementsListLayout->count() / elementsPerRow;
-    int columnCount = elementsListLayout->count() % elementsPerRow;
+    int row = elementsListLayout->count() / elementsPerRow;
+    int column = elementsListLayout->count() % elementsPerRow;
 
     // Remove the stretch from the last row and col
-    elementsListLayout->setRowStretch(rowCount, 0);
-    elementsListLayout->setColumnStretch(columnCount, 0);
+    elementsListLayout->setRowStretch(row, 0);
+    elementsListLayout->setColumnStretch(column, 0);
 
 
     elementdisplayLay->addWidget(elementIconLabel);
     elementdisplayLay->addWidget(elementNameLabel);
     elementdisplayLay->addStretch();
 
-    elementsListLayout->addWidget(elementDispalyWidget, rowCount, columnCount);
-    rowCount++;
-    columnCount++;
+    elementsListLayout->addWidget(elementDispalyWidget, row, column);
+    row++;
+    column++;
 
     // Add the stretch to the new last row and col
-    elementsListLayout->setRowStretch(rowCount, 1);
-    elementsListLayout->setColumnStretch(columnCount, 1);
+    elementsListLayout->setRowStretch(row, 1);
+    elementsListLayout->setColumnStretch(column, 1);
 }
 
 void ElementsListWidget::setElementsPerRow(int numberOfelementsPerRow)

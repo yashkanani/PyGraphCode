@@ -15,7 +15,7 @@ private slots:
 
 private:
     void createCentralWidget();
-    QWidget* getElementsWidget(QWidget* parent);
+    //QWidget* getElementsWidget(QWidget* parent);
     
     MainAppWindow* d_mainWindow;
 };
