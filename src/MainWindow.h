@@ -14,6 +14,7 @@ public:
     ~MainAppWindow();
 
 private:
+    void applyStyleSheet();
     std::unique_ptr<MainWindowUI> mainUI;
 };
 #endif

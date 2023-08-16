@@ -113,7 +113,7 @@ QWidget* ConditionalElement::getViewWidget(QWidget* parent)
     wdg->setObjectName("ConditionalGroupBox");
 
     // Set the style sheet to customize the appearance
-    wdg->setStyleSheet(
+    /*wdg->setStyleSheet(
         "QGroupBox#ConditionalGroupBox {"
         "   border: 1px solid #888888;"
         "   border-radius: 5px;"
@@ -125,7 +125,7 @@ QWidget* ConditionalElement::getViewWidget(QWidget* parent)
         "   subcontrol-origin: margin;"
         "   subcontrol-position: top center;"
         "   padding: 5px;"
-        "}");
+        "}");*/
 
     QGridLayout* wdgLay = new QGridLayout(wdg);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);

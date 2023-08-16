@@ -6,27 +6,35 @@
 #include "JSONDataHandler.h"
 #include "SettingsManager.h"
 #include <QtWidgets>
+#include "ImageButton.h"
+#include "DeleteItem.h"
 
 BuilderControlsButtons::BuilderControlsButtons(BuilderContainer* builderContainer, ElementsListWidget* customElementWidget, QWidget* parent)
     : QWidget(parent)
     , m_builderContainer(builderContainer)
     , m_customElementWidget(customElementWidget)
 {
+    setObjectName("builderControlsButtons");
+    
     // Create the buttons
-    QPushButton* saveButton = new QPushButton("Save", this);
-    QPushButton* loadButton = new QPushButton("Load", this);
+    QPushButton* saveButton = new QPushButton(this);
+    saveButton->setObjectName("builderControlsButtons_saveButton");
+   
+    QPushButton* loadButton = new QPushButton(this);
+    loadButton->setObjectName("builderControlsButtons_loadButton");
 
     // Create the horizontal layout
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
 
-    layout->addWidget(saveButton);
-    layout->addWidget(loadButton);
+    layout->addWidget(new ImageButton(saveButton, "Save", "imageButtonText", this));
+    layout->addWidget(new ImageButton(loadButton, "Load", "imageButtonText", this));
+    layout->addWidget(new ImageButton(new DeleteItem(":/resource/white_empty_trash.png", ":/resource/white_full_trash.png", this), "Delete", "imageButtonText", this));
     layout->setAlignment(Qt::AlignHCenter); // Align buttons horizontally in the middle
 
     // Set the layout for the widget
     setLayout(layout);
-
+    
     // Connect button signals to slots or actions as needed
     connect(saveButton, &QPushButton::clicked, this, &BuilderControlsButtons::handleSaveButtonClicked);
     connect(loadButton, &QPushButton::clicked, this, &BuilderControlsButtons::handleLoadButtonClicked);

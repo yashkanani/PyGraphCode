@@ -18,7 +18,7 @@ namespace key {
 WriteVariableElement::WriteVariableElement()
 {
     name = "Write Variable";
-    image = QPixmap(":/resource/Variable.png");
+    image = QPixmap(":/resource/write_variable.png");
     type = BasicElementType::WRITE_VARIABLE;
 
     dynamicValueContainer = std::make_shared<BuilderContainer>(nullptr, true);
@@ -73,7 +73,7 @@ QWidget* WriteVariableElement::getViewWidget(QWidget* parent)
     wdg->setObjectName("VariableGroupBox");
 
     // Set the style sheet to customize the appearance
-    wdg->setStyleSheet(
+    /*wdg->setStyleSheet(
         "QGroupBox#VariableGroupBox {"
         "   border: 1px solid #888888;"
         "   border-radius: 5px;"
@@ -85,7 +85,7 @@ QWidget* WriteVariableElement::getViewWidget(QWidget* parent)
         "   subcontrol-origin: margin;"
         "   subcontrol-position: top center;"
         "   padding: 5px;"
-        "}");
+        "}");*/
 
     QVBoxLayout* wdgLayout = new QVBoxLayout(wdg);
     wdgLayout->setContentsMargins(0, 0, 0, 0);

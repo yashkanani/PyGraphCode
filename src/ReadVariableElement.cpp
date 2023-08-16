@@ -16,7 +16,7 @@ const std::string variableName = "value";
 ReadVariableElement::ReadVariableElement()
 {
     name = "Read Variable";
-    image = QPixmap(":/resource/Variable.png");
+    image = QPixmap(":/resource/read_variable.png");
     type = BasicElementType::READ_VARIABLE;
 }
 void ReadVariableElement::updateParameterWidgets(ParameterUIBuilder* const parameterUIBuilder)
@@ -55,7 +55,7 @@ QWidget* ReadVariableElement::getViewWidget(QWidget* parent)
     wdg->setObjectName("ReadVariableGroupBox");
 
     // Set the style sheet to customize the appearance
-    wdg->setStyleSheet(
+    /*wdg->setStyleSheet(
         "QGroupBox#ReadVariableGroupBox {"
         "   border: 1px solid #888888;"
         "   border-radius: 5px;"
@@ -67,7 +67,7 @@ QWidget* ReadVariableElement::getViewWidget(QWidget* parent)
         "   subcontrol-origin: margin;"
         "   subcontrol-position: top center;"
         "   padding: 5px;"
-        "}");
+        "}");*/
     QVBoxLayout* wdgLayout = new QVBoxLayout(wdg);
     wdgLayout->setContentsMargins(1, 1, 1, 1);
     wdg->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);

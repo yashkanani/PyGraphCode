@@ -27,6 +27,7 @@ find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 # Add resource files
 set(RESOURCES 
    ${CMAKE_CURRENT_SOURCE_DIR}/src/resources.qrc
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/stylesheet.css
 )
 
 
@@ -61,6 +62,9 @@ set(HEADERS
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/InputLabelDialog.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/SettingsManager.h
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderControlPanel.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ImageButton.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/DeleteItem.h
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsControlButtons.h
    )
 
 set(SOURCES
@@ -93,6 +97,9 @@ set(SOURCES
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/InputLabelDialog.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/SettingsManager.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/BuilderControlPanel.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ImageButton.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/DeleteItem.cpp
+	  ${CMAKE_CURRENT_SOURCE_DIR}/src/ElementsControlButtons.cpp
     )
 
 

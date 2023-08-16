@@ -15,7 +15,7 @@ namespace key {
 ConstantTextElement::ConstantTextElement()
 {
     name = "Constant Text";
-    image = QPixmap(":/resource/Variable.png");
+    image = QPixmap(":/resource/text_input.png");
     type = BasicElementType::CONSTANT_TEXT;
 
     lineEditText = "PyGraph";
@@ -61,7 +61,7 @@ QWidget* ConstantTextElement::getViewWidget(QWidget* parent)
     wdg->setObjectName("ConstantTextGroupBox");
 
     // Set the style sheet to customize the appearance
-    wdg->setStyleSheet(
+    /*wdg->setStyleSheet(
         "QGroupBox#ConstantTextGroupBox {"
         "   border: 1px solid #888888;"
         "   border-radius: 5px;"
@@ -73,7 +73,7 @@ QWidget* ConstantTextElement::getViewWidget(QWidget* parent)
         "   subcontrol-origin: margin;"
         "   subcontrol-position: top center;"
         "   padding: 5px;"
-        "}");
+        "}");*/
 
     QVBoxLayout* wdgLayout = new QVBoxLayout(wdg);
     wdgLayout->setContentsMargins(0, 0, 0, 0);
