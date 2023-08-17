@@ -126,6 +126,7 @@ QWidget* ElementsLeftNavigator::getElementsWidget(QWidget* parent)
     filterComboBox->addItem("Filter 3");
 
     ElementsListWidget* elementsListHolder = new ElementsListWidget(searchBarWidget);
+    connect(searchLineEdit, &QLineEdit::textChanged, elementsListHolder, &ElementsListWidget::serachElement);
 
     // Get all elements from the ElementManager
     // Iterate through all elements and create draggable icons in the grid layout

@@ -50,12 +50,13 @@ QWidget#ElementsCreator {
 QWidget#ElementsListWidget {
 	background-color: #DAE0E9;
 	color: #3B5571;
+	border: none;
 }
 
-QWidget#ElementsListHolder {
+/*QWidget#ElementsListHolder {
 	background-color: transparent;
 	color: #3B5571;
-}
+}*/
 
 #elementDisplayUnit {
 	background-color: transparent;
@@ -178,7 +179,6 @@ QPushButton:pressed
 }
 
 /*----- QScrollArea -----*/
-
 QScrollArea {
 	background-color: transparent;
 	border: none;

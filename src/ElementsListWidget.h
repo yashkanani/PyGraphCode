@@ -8,6 +8,9 @@ class QGridLayout;
 class QScrollArea;
 class QAbstractScrollArea;
 class AbstractElement;
+class QTreeView;
+class QStandardItemModel;
+class QSortFilterProxyModel;
 
 class ElementsListWidget : public QWidget {
     Q_OBJECT
@@ -18,9 +21,16 @@ public:
     void addElement(AbstractElement* element);
     void setElementsPerRow(int numberOfelementsPerRow);
 
+signals:
+    void serachElement(const QString& text);
+
 private:
-    QGridLayout* elementsListLayout;
+    QTreeView* elementsListLayout;
+    QSortFilterProxyModel* proxyModel;
+    QStandardItemModel* model;
+    //QGridLayout* elementsListLayout;
     int elementsPerRow;
+    int totalElements;
 };
 
 #endif // ELEMENTSLISTWIDGET_H
