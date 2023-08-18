@@ -13,6 +13,7 @@ class QStandardItemModel;
 class QSortFilterProxyModel;
 class QStandardItem;
 
+
 class ElementsListWidget : public QWidget {
     Q_OBJECT
 public:
@@ -22,7 +23,7 @@ public:
     void addElement(AbstractElement* element);
     void setElementsPerRow(int numberOfelementsPerRow);
 
-signals:
+public slots:
     void serachElement(const QString& text);
 
 private slots:
@@ -31,11 +32,17 @@ private slots:
 private:
     QTreeView* elementsListLayout;
     QStandardItemModel* sourceModel;
+   
     //QGridLayout* elementsListLayout;
     int elementsPerRow;
-    int totalElements;
+    int totalModelElements;
 
-     void insertWidget(QStandardItem* item);
+    QVector<AbstractElement*> elementsModel;
+
+   
+    void clearModel();
+    void showWidgetOnView(QWidget* elementDisplayUnit);
+    QWidget* createDisplayUnit(AbstractElement* element);
 };
 
 #endif // ELEMENTSLISTWIDGET_H

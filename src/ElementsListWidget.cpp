@@ -36,43 +36,23 @@ ElementsListWidget::ElementsListWidget(QWidget* parent)
     setLayout(mainlayout);
 
     elementsPerRow = 2;
-    totalElements = 0;
+    totalModelElements = 0;
     sourceModel->setColumnCount(elementsPerRow);
 }
 
 void ElementsListWidget::addElement(AbstractElement* element)
 {
-
-    QStandardItem* item = new QStandardItem;
-    item->setData(element->getName(), Qt::UserRole);
-    item->setData(QVariant::fromValue(static_cast<AbstractElement*>(element)), Qt::UserRole + 1); // Store element data
-
-    // Calculate the row and column count for the new element
-    int row = totalElements / elementsPerRow;
-    int column = totalElements % elementsPerRow;
-
-    sourceModel->setItem(row, column, item);
-
-    insertWidget(item);
+    elementsModel << element;
+    showWidgetOnView(createDisplayUnit(element));
 }
 
-void ElementsListWidget::setElementsPerRow(int numberOfelementsPerRow)
+QWidget* ElementsListWidget::createDisplayUnit(AbstractElement* element)
 {
-    if (numberOfelementsPerRow > 0) {
-        elementsPerRow = numberOfelementsPerRow;
+
+    if (!element) {
+        return nullptr;
     }
-}
-
-void ElementsListWidget::insertWidget(QStandardItem* item)
-{
-    QModelIndex sourceIndex = item->index(); 
-    if (!sourceIndex.isValid())
-        return;
-
-    AbstractElement* element = static_cast<AbstractElement*>(sourceIndex.data(Qt::UserRole + 1).value<AbstractElement*>());
-
-    if (!element)
-        return;
+        
 
     QWidget* elementDispalyWidget = new QWidget;
     elementDispalyWidget->setObjectName("elementDisplayUnit");
@@ -100,8 +80,52 @@ void ElementsListWidget::insertWidget(QStandardItem* item)
     elementdisplayLay->addStretch();
 
     elementDispalyWidget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-    elementsListLayout->setIndexWidget(sourceIndex, elementDispalyWidget);
-    
 
-    totalElements++;
+    return elementDispalyWidget;
 }
+
+void ElementsListWidget::setElementsPerRow(int numberOfelementsPerRow)
+{
+    if (numberOfelementsPerRow > 0) {
+        elementsPerRow = numberOfelementsPerRow;
+    }
+}
+
+
+
+void ElementsListWidget::serachElement(const QString& searchText)
+{
+    clearModel();
+
+    // Iterate through the stored widgets in elementWidgetModel
+    for (AbstractElement* element : elementsModel) {
+        if (element && element->getName().contains(searchText, Qt::CaseInsensitive)) {
+            showWidgetOnView(createDisplayUnit(element));
+        }
+    }
+
+}
+
+void ElementsListWidget::showWidgetOnView(QWidget* elementDisplayUnit)
+{
+    if (elementDisplayUnit == nullptr) {
+        return;
+    }
+
+    QStandardItem* item = new QStandardItem;
+    
+    // Calculate the row and column count for the new element
+    int row = totalModelElements / elementsPerRow;
+    int column = totalModelElements % elementsPerRow;
+
+    sourceModel->setItem(row, column, item);
+
+    elementsListLayout->setIndexWidget(item->index(), elementDisplayUnit);
+
+    totalModelElements++;
+ }
+
+void ElementsListWidget::clearModel() {
+    sourceModel->clear();
+    totalModelElements = 0;
+ }
