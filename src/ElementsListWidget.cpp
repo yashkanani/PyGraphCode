@@ -6,21 +6,18 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QScrollArea>
+#include <QSortFilterProxyModel>
 #include <QVariant>
 #include <qscrollbar.h>
-#include <qtreeview.h>
 #include <qstandarditemmodel.h>
-#include "ElementItemDelegate.h"
-#include <QSortFilterProxyModel>
-
-
+#include <qtreeview.h>
 
 ElementsListWidget::ElementsListWidget(QWidget* parent)
     : QWidget(parent)
 {
-   QVBoxLayout* mainlayout = new QVBoxLayout(this);
+    QVBoxLayout* mainlayout = new QVBoxLayout(this);
     mainlayout->setContentsMargins(0, 0, 0, 0);
-    
+
     elementsListLayout = new QTreeView(this);
     elementsListLayout->setContentsMargins(0, 0, 0, 0);
     elementsListLayout->setHeaderHidden(true);
@@ -28,41 +25,54 @@ ElementsListWidget::ElementsListWidget(QWidget* parent)
     elementsListLayout->setUniformRowHeights(false);
     elementsListLayout->setObjectName("ElementsListWidget");
     elementsListLayout->setSelectionMode(QAbstractItemView::NoSelection);
-    
+
     elementsListLayout->verticalScrollBar()->parent()->setProperty("background_transparent", true);
     elementsListLayout->horizontalScrollBar()->parent()->setProperty("background_transparent", true);
 
-    model = new QStandardItemModel(this);
-
-    proxyModel = new QSortFilterProxyModel(this);
-    proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-    proxyModel->setSourceModel(model);
+    sourceModel = new QStandardItemModel(this);
+    elementsListLayout->setModel(sourceModel);
     
-
-    elementsListLayout->setModel(proxyModel);
-
-    connect(this, &ElementsListWidget::serachElement, proxyModel, &QSortFilterProxyModel::setFilterFixedString);
-
     mainlayout->addWidget(elementsListLayout);
     setLayout(mainlayout);
 
-    elementsPerRow = 3;
+    elementsPerRow = 2;
     totalElements = 0;
-    model->setColumnCount(elementsPerRow);
+    sourceModel->setColumnCount(elementsPerRow);
 }
 
-void ElementsListWidget::addElement(AbstractElement* element) {
+void ElementsListWidget::addElement(AbstractElement* element)
+{
 
     QStandardItem* item = new QStandardItem;
-    item->setData(element->getName(),Qt::UserRole);
-    //item->setData(QVariant::fromValue(static_cast<AbstractElement*>(element)), Qt::UserRole); // Store element data
+    item->setData(element->getName(), Qt::UserRole);
+    item->setData(QVariant::fromValue(static_cast<AbstractElement*>(element)), Qt::UserRole + 1); // Store element data
 
     // Calculate the row and column count for the new element
     int row = totalElements / elementsPerRow;
     int column = totalElements % elementsPerRow;
-    
-    model->setItem(row, column, item);
-    
+
+    sourceModel->setItem(row, column, item);
+
+    insertWidget(item);
+}
+
+void ElementsListWidget::setElementsPerRow(int numberOfelementsPerRow)
+{
+    if (numberOfelementsPerRow > 0) {
+        elementsPerRow = numberOfelementsPerRow;
+    }
+}
+
+void ElementsListWidget::insertWidget(QStandardItem* item)
+{
+    QModelIndex sourceIndex = item->index(); 
+    if (!sourceIndex.isValid())
+        return;
+
+    AbstractElement* element = static_cast<AbstractElement*>(sourceIndex.data(Qt::UserRole + 1).value<AbstractElement*>());
+
+    if (!element)
+        return;
 
     QWidget* elementDispalyWidget = new QWidget;
     elementDispalyWidget->setObjectName("elementDisplayUnit");
@@ -90,23 +100,8 @@ void ElementsListWidget::addElement(AbstractElement* element) {
     elementdisplayLay->addStretch();
 
     elementDispalyWidget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-
-
+    elementsListLayout->setIndexWidget(sourceIndex, elementDispalyWidget);
     
-    QModelIndex sourceIndex = model->index(row, column, QModelIndex()); // Replace row and column with the appropriate values
-    QModelIndex proxyIndex = proxyModel->mapFromSource(sourceIndex);
 
-    elementsListLayout->setIndexWidget(proxyIndex, elementDispalyWidget);
-    proxyModel->setData(proxyIndex, element->getName(), Qt::UserRole);
-    
     totalElements++;
-    
-    
-}
-
-void ElementsListWidget::setElementsPerRow(int numberOfelementsPerRow)
-{
-    if (numberOfelementsPerRow > 0) {
-        elementsPerRow = numberOfelementsPerRow;
-    }
 }

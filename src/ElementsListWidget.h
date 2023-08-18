@@ -11,6 +11,7 @@ class AbstractElement;
 class QTreeView;
 class QStandardItemModel;
 class QSortFilterProxyModel;
+class QStandardItem;
 
 class ElementsListWidget : public QWidget {
     Q_OBJECT
@@ -24,13 +25,17 @@ public:
 signals:
     void serachElement(const QString& text);
 
+private slots:
+   
+
 private:
     QTreeView* elementsListLayout;
-    QSortFilterProxyModel* proxyModel;
-    QStandardItemModel* model;
+    QStandardItemModel* sourceModel;
     //QGridLayout* elementsListLayout;
     int elementsPerRow;
     int totalElements;
+
+     void insertWidget(QStandardItem* item);
 };
 
 #endif // ELEMENTSLISTWIDGET_H
