@@ -276,21 +276,16 @@ QComboBox::down-arrow {
 /*-------searchBar widget--------*/
 QWidget#searchBarWidget {
 	background-color: transparent;
-	margin-right: 20px;
+	margin: 20px;
 }
 
 QLabel#searchIcon {
-	margin-left: 20px;
-	margin-bottom: 20px;
-	margin-top: 20px;
 	border: none;
 	border-bottom: 1px solid #3B5571;
 	background-color: transparent; /* Make the background transparent */
 }
 
 QLineEdit#searchLineEdit {
-	margin-top: 20px;
-	margin-bottom: 20px;
 	background-color: transparent; /* Make the background transparent */
 	border: none;
 	border-bottom: 1px solid #3B5571;
@@ -300,8 +295,6 @@ QLineEdit#searchLineEdit {
 
 QPushButton#searchClearButton {
 	height: 20px;
-	margin-top: 20px;
-	margin-bottom: 20px;
 	border: none;
 	border-radius: 0px;
 	border-bottom: 1px solid #3B5571;
