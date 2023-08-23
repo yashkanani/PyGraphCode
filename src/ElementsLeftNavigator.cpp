@@ -92,6 +92,7 @@ QWidget* ElementsLeftNavigator::getElementsWidget(QWidget* parent)
 {
     QWidget* elementHolder = new QWidget(parent);
     QVBoxLayout* elementLayout = new QVBoxLayout(elementHolder);
+    elementLayout->setContentsMargins(0, 0, 0, 0);
     elementHolder->setProperty("background_transparent", true);
 
     //// Create the main widget to hold the search bar
