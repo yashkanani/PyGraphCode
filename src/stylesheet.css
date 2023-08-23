@@ -41,14 +41,14 @@ QWidget#BuilderContainer[isSubContainer="true"] {
 }
 
 
-/*-----Element List Widget-----*/
 
+/*-----Element List Widget-----*/
 QWidget#ElementsCreator {
 	background-color: #DAE0E9;
 	color: #3B5571;
 }
 QWidget#ElementsListWidget {
-	background-color: #DAE0E9;
+	background-color: transparent;
 	color: #3B5571;
 	border: none;
 }
@@ -88,6 +88,7 @@ QWidget#ElementsListWidget {
 	font-weight: bold; 
 }
 
+
 /*-----QGroupBox-----*/
 QGroupBox {
     border: 1px solid #BEC9CD; 
@@ -95,6 +96,7 @@ QGroupBox {
     margin-top: 10px;
     padding: 10px;
     background-color: white;
+
  }
 
 QGroupBox::title  
@@ -270,8 +272,13 @@ QComboBox::down-arrow {
 	height: 8px;
 }
 
+/*-------searchBar widget--------*/
+QWidget#searchBarWidget {
+	background-color: transparent;
+}
 
 /*-----Element left Navigation bar -----*/
+
 
 QWidget#elementNavigatorTabwidget {
 	background-color: transparent;
@@ -299,6 +306,10 @@ QWidget#elementNavigatorTabwidget_tabBar {
 	border-bottom-left-radius: 10px;
 	background-color: transparent;
 	image: url(:/resource/module.png);
+}
+
+QWidget#elementNavigatorTabwidget_tabDataWidget {
+	background-color: #DAE0E9;
 }
 
 #elementsLeftNavigator_customButton:open {

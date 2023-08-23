@@ -12,7 +12,7 @@ public:
     ElementsLeftNavigator(ElementsListWidget* builderContainer, QWidget* parent = nullptr);
 
 private:
-    ElementsListWidget* m_builderContainer;
+    ElementsListWidget* m_customElementWidget;
   
 
     QWidget* getElementsWidget(QWidget* parent);
