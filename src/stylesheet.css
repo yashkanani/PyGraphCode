@@ -1,12 +1,13 @@
 
-/* image-icon-color: #3F6085 */
-/* image-icon-size: 56 * 56 */
+/* element-image-icon-color: #3F6085 */
+/* element-image-icon-size: 56 * 56 */
 /* image-padding: 30% */
 /* save-icon-size: 40 * 40 */
 /* add-variable-icon-size: 32 * 32 */
 /* drop-down-aerrw-icon-size: 8 * 8 */
 /* drop-down-aerrw-icon-color: #3B5571 */ 
 /* delete-icon-blue-color: #3B5571 */
+
 
 
 /*-----QWidget-----*/
@@ -275,11 +276,39 @@ QComboBox::down-arrow {
 /*-------searchBar widget--------*/
 QWidget#searchBarWidget {
 	background-color: transparent;
+	margin-right: 20px;
+}
+
+QLabel#searchIcon {
+	margin-left: 20px;
+	margin-bottom: 20px;
+	margin-top: 20px;
+	border: none;
+	border-bottom: 1px solid #3B5571;
+	background-color: transparent; /* Make the background transparent */
+}
+
+QLineEdit#searchLineEdit {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	background-color: transparent; /* Make the background transparent */
+	border: none;
+	border-bottom: 1px solid #3B5571;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+QPushButton#searchClearButton {
+	height: 20px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border: none;
+	border-radius: 0px;
+	border-bottom: 1px solid #3B5571;
+	background-color: transparent;
 }
 
 /*-----Element left Navigation bar -----*/
-
-
 QWidget#elementNavigatorTabwidget {
 	background-color: transparent;
 }
