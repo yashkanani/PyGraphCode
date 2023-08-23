@@ -251,6 +251,7 @@ QComboBox {
 	border: 1px solid #BEC9CD;
 	border-radius: 3px;
 	padding-left: 6px;
+	padding-right: 6px;
 } 
 
 QComboBox QAbstractItemView {
