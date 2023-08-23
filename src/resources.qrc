@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-		<file>resource/search.png</file>
+		<file>resource/search_glass_icon.png</file>
 		<file>resource/If_loop.png</file>
 		<file>resource/For_loop.png</file>
 		<file>resource/number_input.png</file>
@@ -23,6 +23,7 @@
 		<file>resource/module.png</file>
 		<file>resource/code_elements_on_select.png</file>
 		<file>resource/code_elements.png</file>
+		<file>resource/search_clear_button.png</file>
          <!-- <file alias="Squidstat_Cycler_Firmware.hex">../../../firmware/firmware_for_cycler/hex_files/Squidstat_Cycler_Firmware.hex</file> -->
     </qresource>
 </RCC>

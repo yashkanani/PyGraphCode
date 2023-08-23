@@ -1,12 +1,14 @@
 
-/* image-icon-color: #3F6085 */
-/* image-icon-size: 56 * 56 */
+/* element-image-icon-color: #3F6085 */
+/* element-image-icon-size: 56 * 56 */
 /* image-padding: 30% */
 /* save-icon-size: 40 * 40 */
 /* add-variable-icon-size: 32 * 32 */
 /* drop-down-aerrw-icon-size: 8 * 8 */
 /* drop-down-aerrw-icon-color: #3B5571 */ 
 /* delete-icon-blue-color: #3B5571 */
+/* serach-clear--button-icon-color: #88979B */
+
 
 
 /*-----QWidget-----*/
@@ -41,21 +43,22 @@ QWidget#BuilderContainer[isSubContainer="true"] {
 }
 
 
-/*-----Element List Widget-----*/
 
+/*-----Element List Widget-----*/
 QWidget#ElementsCreator {
 	background-color: #DAE0E9;
 	color: #3B5571;
 }
 QWidget#ElementsListWidget {
-	background-color: #DAE0E9;
-	color: #3B5571;
-}
-
-QWidget#ElementsListHolder {
 	background-color: transparent;
 	color: #3B5571;
+	border: none;
 }
+
+/*QWidget#ElementsListHolder {
+	background-color: transparent;
+	color: #3B5571;
+}*/
 
 #elementDisplayUnit {
 	background-color: transparent;
@@ -87,6 +90,7 @@ QWidget#ElementsListHolder {
 	font-weight: bold; 
 }
 
+
 /*-----QGroupBox-----*/
 QGroupBox {
     border: 1px solid #BEC9CD; 
@@ -94,6 +98,7 @@ QGroupBox {
     margin-top: 10px;
     padding: 10px;
     background-color: white;
+
  }
 
 QGroupBox::title  
@@ -178,7 +183,6 @@ QPushButton:pressed
 }
 
 /*----- QScrollArea -----*/
-
 QScrollArea {
 	background-color: transparent;
 	border: none;
@@ -248,6 +252,7 @@ QComboBox {
 	border: 1px solid #BEC9CD;
 	border-radius: 3px;
 	padding-left: 6px;
+	padding-right: 6px;
 } 
 
 QComboBox QAbstractItemView {
@@ -270,9 +275,35 @@ QComboBox::down-arrow {
 	height: 8px;
 }
 
+/*-------searchBar widget--------*/
+QWidget#searchBarWidget {
+	background-color: transparent;
+	margin: 20px;
+}
+
+QLabel#searchIcon {
+	border: none;
+	border-bottom: 1px solid #3B5571;
+	background-color: transparent; /* Make the background transparent */
+}
+
+QLineEdit#searchLineEdit {
+	background-color: transparent; /* Make the background transparent */
+	border: none;
+	border-bottom: 1px solid #3B5571;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+QPushButton#searchClearButton {
+	height: 20px;
+	border: none;
+	border-radius: 0px;
+	border-bottom: 1px solid #3B5571;
+	background-color: transparent;
+}
 
 /*-----Element left Navigation bar -----*/
-
 QWidget#elementNavigatorTabwidget {
 	background-color: transparent;
 }
@@ -299,6 +330,10 @@ QWidget#elementNavigatorTabwidget_tabBar {
 	border-bottom-left-radius: 10px;
 	background-color: transparent;
 	image: url(:/resource/module.png);
+}
+
+QWidget#elementNavigatorTabwidget_tabDataWidget {
+	background-color: #DAE0E9;
 }
 
 #elementsLeftNavigator_customButton:open {
