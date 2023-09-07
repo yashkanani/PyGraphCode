@@ -91,6 +91,8 @@ ElementsLeftNavigator::ElementsLeftNavigator(ElementsListWidget* customElementWi
 QWidget* ElementsLeftNavigator::getElementsWidget(QWidget* parent)
 {
     QWidget* elementHolder = new QWidget(parent);
+    elementHolder->setObjectName("prebuiltElementsList");
+
     QVBoxLayout* elementLayout = new QVBoxLayout(elementHolder);
     elementLayout->setContentsMargins(0, 0, 0, 0);
     elementHolder->setProperty("background_transparent", true);
