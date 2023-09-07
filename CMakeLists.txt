@@ -5,11 +5,6 @@ set (CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set (CMAKE_CXX_EXTENSIONS OFF)
 
-# Hide the seprate console window.
-if(WIN32)
-    #set(CMAKE_WIN32_EXECUTABLE ON)
-endif()
-
 # For IDE intellisense support
 set(CMAKE_EXPORT_COMPILE_COMMANDS)
 
