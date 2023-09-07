@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(PyGraphCode LANGUAGES CXX VERSION 0.1.0)
+project(PyGraph LANGUAGES CXX VERSION 0.1.0)
 
 set (CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -7,7 +7,7 @@ set (CMAKE_CXX_EXTENSIONS OFF)
 
 # Hide the seprate console window.
 if(WIN32)
-    set(CMAKE_WIN32_EXECUTABLE ON)
+    #set(CMAKE_WIN32_EXECUTABLE ON)
 endif()
 
 # For IDE intellisense support
@@ -70,7 +70,6 @@ set(HEADERS
    )
 
 set(SOURCES
-	  ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/src/MainWindow.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/MainWindowUI.cpp
 	  ${CMAKE_CURRENT_SOURCE_DIR}/src/AbstractElement.cpp
@@ -107,7 +106,7 @@ set(SOURCES
     )
 
 
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} ${RESOURCES})
-target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui Qt5::Widgets)
 
+add_subdirectory(src)
+add_subdirectory(test)
 
