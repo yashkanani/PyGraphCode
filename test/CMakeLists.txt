@@ -9,7 +9,7 @@ set(TEST_HEADER
 	#calTest.h
 	MainWindowManager.h
 	TestSearchBarWidget.h
-	TestBuilderContainer.h
+	
 )
 
 set(TEST_SOURCE
@@ -17,7 +17,7 @@ set(TEST_SOURCE
 	#calTest.cpp
 	MainWindowManager.cpp
 	TestSearchBarWidget.cpp
-	TestBuilderContainer.cpp
+	
 )
 
 set(TEST_HELPERS
