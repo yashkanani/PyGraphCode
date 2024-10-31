@@ -1,0 +1,57 @@
+# This is a basic workflow to help you get started with Actions
+
+name: DocumentBuild
+
+on:
+  push:
+    tags:
+     - 'v[0-9]+.[0-9]+.[0-9]+.[0-9]'
+     
+
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    name: build
+    # The type of runner that the job will run on
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+       os: [ubuntu-20.04]
+       include:
+          - os: ubuntu-20.04
+            DOXYGEN_FILE_NAME: Doxyfile
+            WORKING_DIRECTORY: ./Doc
+            PATH_OF_DESTINATION: ./Doc/output
+            BUNDLE_NAME: Documents
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+    #Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        submodules: true
+        #token: ${{ secrets.ACTIONS_CI }}
+
+    - name: Checkout submodules
+      run: git submodule update --init
+
+    - name: Build with Doxygen
+      uses: mattnotmitt/doxygen-action@v1.9.5
+      with:
+        working-directory: ${{ matrix.WORKING_DIRECTORY }}
+        doxyfile-path: ${{ matrix.DOXYGEN_FILE_NAME }}
+        enable-latex: true
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ matrix.BUNDLE_NAME }}
+        path: |
+          ${{ matrix.PATH_OF_DESTINATION }}/html
+          ${{ matrix.PATH_OF_DESTINATION }}/latex/refman.pdf
+        retention-days: 5
+    
+        
+   
