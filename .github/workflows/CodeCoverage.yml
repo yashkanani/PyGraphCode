@@ -64,7 +64,7 @@ jobs:
     # Run Unit Tests first
     - name: Run Unit Tests
       run: |
-        cd $(pwd)/build/Debug
+        cd $(pwd)/build/Debug/test
         ctest --output-on-failure || true
     
     
