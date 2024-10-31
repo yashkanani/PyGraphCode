@@ -1,0 +1,93 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Code Coverage
+
+on:
+  workflow_dispatch:  
+  push:
+    tags:
+     - 'v[0-9]+.[0-9]+.[0-9]+.[0-9]'
+  
+  
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+       os: [ubuntu-20.04]
+       include:
+          - os: ubuntu-20.04
+            CMAKE_FLAGS_DEBUG: cmake -DCMAKE_BUILD_TYPE:STRING=Debug -H$"$(pwd)" -B$"$(pwd)/build/Debug"
+            CMAKE_BUILD_DEBUG: cmake --build "$(pwd)/build/Debug" --config Debug --target all -- -j 2
+            BUNDLE_NAME: CodeCoverage
+            NAME_OF_DIRECTORY: CodeCoverage
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        submodules: true
+        #token: ${{ secrets.ACTIONS_CI }}
+
+    - name: Checkout submodules
+      run: git submodule update --init
+    
+    - name: Cache Qt
+      id: cache-qt
+      uses: actions/cache@v1
+      with:  
+        path: ../Qt
+        key: ${{ runner.os }}-QtCache-Linux
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
+      with:
+        version: '5.15.2'
+        cached: ${{ steps.cache-qt.outputs.cache-hit }}
+    
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install libudev-dev libusb-1.0-0-dev lcov gcovr
+
+    - name: Build Project
+      run: |
+        ${{ matrix.CMAKE_FLAGS_DEBUG }}
+        ${{ matrix.CMAKE_BUILD_DEBUG }}
+
+    # Run Unit Tests first
+    - name: Run Unit Tests
+      run: |
+        cd $(pwd)/build/Debug
+        ctest --output-on-failure || true
+    
+    
+    # Generate Coverage Data after tests run
+    - name: Collect Coverage Data
+      run: |
+        lcov --directory "$(pwd)/build/" --capture --output-file "$(pwd)/build/coverage.info"
+        lcov --remove "$(pwd)/build/coverage.info" "*Qt*.framework*" "*.h" "*/tests/*" "*Xcode.app*" "*.moc" "*moc_*.cpp" "*/test/*" "/usr/*" --output-file "$(pwd)/build/coverage_filter.info" # Remove system files
+        lcov --list "$(pwd)/build/coverage_filter.info"
+        
+        
+    # Generate HTML report for coverage
+    - name: Generate HTML Coverage Report
+      run: |
+        genhtml "$(pwd)/build/coverage_filter.info" --output-directory "$(pwd)/build/CodeCoverage"
+        echo "Coverage report generated in $(pwd)/build/CodeCoverage"
+    
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ matrix.BUNDLE_NAME }}
+        path: build/${{ matrix.NAME_OF_DIRECTORY }}/*
+        retention-days: 5
+
+  
