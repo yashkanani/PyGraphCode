@@ -56,6 +56,7 @@ void TestSearchBarWidget::testSearchBarInitialization()
     QVERIFY(searchLineEdit->text().isEmpty() == true); // Check if the text is empty initially
     QCOMPARE(searchLineEdit->placeholderText(), QString("Search"));
 
+    mainWindow->close();
     
 }
 
@@ -131,6 +132,8 @@ void TestSearchBarWidget::testSearchBarText()
             }
         }
     }
+
+    mainWindow->close();
 }
 
 const static TestSearchBarWidget testSearchBarWidget;
