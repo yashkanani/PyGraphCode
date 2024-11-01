@@ -23,12 +23,12 @@ Pygraphcode offers a variety of tools to simplify the creation and customization
 
 ## Documentation
 
-- **Automated Documentation**: Documentation is automatically generated using Doxygen to ensure all project details and code usage are consistently updated and available.
+- **Automated Documentation**: Documentation is automatically generated using Doxygen to ensure all project details and code usage are consistently updated and available. You can view the documentation [here](https://yashkanani.github.io/PyGraphCode/Documents/html/index.html).
 
 ## Code Coverage
 
 - **GitHub Actions for Coverage**: Includes GitHub Actions for automated code coverage reports.
-- **Coverage Tools**: Utilizes LCOV and GCOV for accurate coverage metrics.
+- **Coverage Tools**: Utilizes LCOV and GCOV for accurate coverage metrics. The code coverage report can be accessed [here](https://yashkanani.github.io/PyGraphCode/CodeCoverage/index.html).
 
 ## GUI Availability
 
@@ -37,3 +37,5 @@ Pygraphcode provides a graphical user interface (GUI) compatible with:
 - **Windows**
 - **Linux**
 - **macOS**
+
+For additional information, you can visit the project homepage [here](https://yashkanani.github.io/PyGraphCode/).
