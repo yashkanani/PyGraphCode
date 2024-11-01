@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PygraphCode - Directory Navigator</title>
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Body and Layout */
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-color: #DAE0E9; /* Light background color */
+      color: #333;
+    }
+
+    header, footer {
+      background-color: #1c344f; /* Dark navy color */
+      color: #fff; /* White text */
+      padding: 1rem;
+      text-align: center;
+    }
+
+    /* Header and Footer Styling */
+    header h1 {
+      font-size: 2rem;
+    }
+
+    footer p {
+      font-size: 0.9rem;
+      margin: 0.3rem;
+    }
+
+    /* Main Content Styling */
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .container h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Button Styles */
+    .button {
+      display: inline-block;
+      margin: 0.5rem;
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+      background-color: #1c344f; /* Matches header and footer color */
+    }
+
+    .button:hover {
+      background-color: #2a4c71; /* Slightly lighter on hover */
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Section -->
+  <header>
+    <h1>PygraphCode - Directory Navigator</h1>
+  </header>
+
+  <!-- Main Content Section -->
+  <div class="container">
+    <h2>Select a Directory</h2>
+    <a href="Documents/html/index.html" class="button">Go to Documents</a>
+    <a href="CodeCoverage/index.html" class="button">Go to CodeCoverage</a>
+  </div>
+
+  <!-- Footer Section -->
+  <footer>
+    <p>&copy; 2024 PygraphCode.</p>
+    <p>Created by Yash Kanani</p>
+    <p>Contact: <a href="mailto:kananiyash92@outlook.com" style="color: #fff; text-decoration: underline;">kananiyash92@outlook.com</a></p>
+  </footer>
+</body>
+</html>
