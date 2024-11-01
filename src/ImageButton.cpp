@@ -1,4 +1,4 @@
-#include "imagebutton.h"
+#include "ImageButton.h"
 #include <QPushButton>
 #include <QLabel>
 #include <QVBoxLayout>
