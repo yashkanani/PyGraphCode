@@ -34,7 +34,7 @@ Pygraphcode offers a variety of tools to simplify the creation and customization
 
 Pygraphcode provides a graphical user interface (GUI) compatible with:
 
-- **Windows**
+- [**Windows Arm64**](https://github.com/yashkanani/PyGraphCode/raw/gh-pages/Release/Windows_arm64.zip)
 - **Linux**
 - **macOS**
 
